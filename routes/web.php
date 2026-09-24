@@ -15,6 +15,7 @@ Route::controller(FrontendController::class)->group(function () {
     Route::get('/activity', 'activity')->name('activity');
     Route::get('/service', 'service')->name('service');
     Route::get('/contact', 'contact')->name('contact');
+    Route::get('/form', 'form')->name('form');
     // cache clear from browser (local only)
     Route::get('/clear-cache', 'clearCache')->name('clear.cache');
 });

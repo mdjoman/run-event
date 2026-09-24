@@ -152,47 +152,46 @@
         </div>
     </section>
 
-    <section class="events-section">
-        <div class="container">
-            <div class="flex items-end gap-5 w-full mb-6">
-                <div class="flex flex-col">
-                    <span class="text-[15px] font-bold text-[#7bb526] tracking-wider uppercase mb-1">FEATURED EVENTS</span>
-                    <h2 class="section-title">Upcoming Running Events</h2>
+<section class="events-section">
+    <div class="container">
+        <div class="flex items-end gap-5 w-full mb-6">
+            <div class="flex flex-col">
+                <span class="text-[15px] font-bold text-[#7bb526] tracking-wider uppercase mb-1">FEATURED EVENTS</span>
+                <h2 class="section-title">Upcoming Running Events</h2>
+            </div>
+            <a href="#" class="text-xs font-bold text-[#031b33] whitespace-nowrap flex items-center gap-1.5 pb-2">
+                View All Events <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <div class="flex-grow h-[1px] bg-[#e2e8f0] mb-3"></div>
+        </div>
+
+        <div class="unique-slider-wrap" style="display: flex; gap: 20px; align-items: center; overflow: hidden;">
+            <div class="unique-card" style="flex-shrink: 0;">
+                <div class="event-img">
+                    <img src="{{asset('img/ur1.jpeg')}}" alt="Event">
+                    <div class="date-badge">
+                        <span class="day">18</span>
+                        <span class="month">Dec</span>
+                        <span class="year">2026</span>
+                    </div>
                 </div>
-                <a href="#" class="text-xs font-bold text-[#031b33] whitespace-nowrap flex items-center gap-1.5 pb-2">
-                    View All Events <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                <div class="flex-grow h-[1px] bg-[#e2e8f0] mb-3"></div>
+                <div class="event-content">
+                    <h3>Winter Half Marathon 2026</h3>
+                    <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
+                    <div class="tags">
+                        <span>7.5K</span>
+                        <span>15K</span>
+                        <span>21.5K</span>
+                        <span>30K</span>
+                    </div>
+                    <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
+                    <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
             </div>
 
-            <div class="unique-slider-wrap">
-                <div class="unique-track">
-                    <!-- Event Card 1 -->
-                    <div class="unique-card">
-                        <div class="event-img">
-                            <img src="{{asset('img/ur1.jpeg')}}" alt="Event">
-                            <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
-                            </div>
-                        </div>
-                        <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
-                            <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
-                            </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Event Card 2 -->
-                    <div class="unique-card">
+            <div style="overflow: hidden; width: 100%;">
+                <div class="unique-track" style="display: flex; gap: 20px; width: max-content;">
+                    <div class="unique-card" style="flex-shrink: 0;">
                         <div class="event-img">
                             <img src="{{asset('img/ur2.jpeg')}}" alt="Event">
                             <div class="date-badge">
@@ -211,12 +210,12 @@
                                 <span>30K</span>
                             </div>
                             <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
+                            {{-- <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a> --}}
                         </div>
                     </div>
 
                     <!-- Event Card 3 -->
-                    <div class="unique-card">
+                    <div class="unique-card" style="flex-shrink: 0;">
                         <div class="event-img">
                             <img src="{{asset('img/ur3.jpeg')}}" alt="Event">
                             <div class="date-badge">
@@ -235,12 +234,12 @@
                                 <span>30K</span>
                             </div>
                             <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
+                            {{-- <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a> --}}
                         </div>
                     </div>
 
                     <!-- Event Card 4 -->
-                    <div class="unique-card">
+                    <div class="unique-card" style="flex-shrink: 0;">
                         <div class="event-img">
                             <img src="{{asset('img/ur4.jpeg')}}" alt="Event">
                             <div class="date-badge">
@@ -259,12 +258,12 @@
                                 <span>30K</span>
                             </div>
                             <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
+                            {{-- <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a> --}}
                         </div>
                     </div>
 
                     <!-- Event Card 5 -->
-                    <div class="unique-card">
+                    <div class="unique-card" style="flex-shrink: 0;">
                         <div class="event-img">
                             <img src="{{asset('img/ur5.jpeg')}}" alt="Event">
                             <div class="date-badge">
@@ -283,13 +282,16 @@
                                 <span>30K</span>
                             </div>
                             <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
+                            {{-- <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a> --}}
                         </div>
                     </div>
+
                 </div>
             </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="features-section">
         <div class="container features-grid">

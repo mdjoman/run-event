@@ -171,6 +171,7 @@
             <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
             <a href="#">Results</a>
             <a href="#">Gallery</a>
+            <a class="nav-link {{ request()->routeIs('form') ? 'active' : '' }}" href="{{ route('form') }}">Form</a>
         </nav>
 
         <div class="nav-actions">
@@ -256,12 +257,7 @@
             </div>
         </div>
 
-        <form class="modal-body"
-              id="registrationForm"
-              method="POST"
-              action="{{ route('registrations.store') }}"
-              enctype="multipart/form-data"
-              novalidate>
+        <form class="modal-body" id="registrationForm" method="POST" action="{{ route('registrations.store') }}" enctype="multipart/form-data" novalidate>
 
             @csrf
             <input type="hidden" name="event_id" id="event_id_field" value="1">
@@ -346,10 +342,33 @@
                         <label>Mobile Number <span class="required">*</span></label>
                         <input type="tel" name="phone" id="phoneInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
                     </div>
+
+                    {{-- Added WhatsApp Number Field --}}
+                    <div class="form-group">
+                        <label>WhatsApp Number <span class="required">*</span></label>
+                        <input type="tel" name="whatsapp_number" id="whatsappInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
+                    </div>
+
                     <div class="form-group">
                         <label>Email Address <span class="optional">(Optional)</span></label>
                         <input type="email" name="email" placeholder="example@email.com">
                     </div>
+
+                    <div class="form-group">
+                        <label>Blood Group <span class="required">*</span></label>
+                        <select name="blood_group" required style="padding:8px; width:100%;font-size: 13px;">
+                            <option value="" disabled selected>Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label>Gender <span class="required">*</span></label>
                         <div class="radio-options-group">
@@ -364,11 +383,18 @@
                     </div>
                 </div>
 
-                <div class="form-grid-1" style="margin-top: 12px;">
+                <div class="form-grid-2" style="margin-top: 12px;">
                     <div class="form-group">
                         <label>NID / Any Identification Number <span class="required">*</span></label>
                         <input type="text" name="nid" placeholder="National ID or Passport Number" required>
                     </div>
+                    <div class="form-group">
+                        <label>Preferred BIB Number <span class="optional">(Optional)</span></label>
+                        <input type="text" name="bib_number" placeholder="e.g. 101 or preferred number">
+                    </div>
+                </div>
+
+                <div class="form-grid-1" style="margin-top: 12px;">
                     <div class="form-group">
                         <label>Address <span class="optional">(Optional)</span></label>
                         <input type="text" name="address" placeholder="House/Street, Area, City">
@@ -376,7 +402,6 @@
                 </div>
             </div>
 
-            {{-- SECTION 2 --}}
             <div class="section-card">
                 <div class="section-header">
                     <div class="step-number">2</div>
@@ -393,12 +418,11 @@
                     </div>
                     <div class="form-group">
                         <label>Emergency Contact Number <span class="required">*</span></label>
-                        <input type="tel" name="phone" id="phoneInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
+                        <input type="tel" name="emergency_phone" id="emergencyPhoneInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
                     </div>
                 </div>
             </div>
 
-            {{-- SECTION 3 --}}
             <div class="section-card">
                 <div class="section-header">
                     <div class="step-number">3</div>
@@ -411,13 +435,14 @@
                 <div class="form-grid-2">
                     <div class="form-group">
                         <label>Race Categories / Ticket Type <span class="required">*</span></label>
-                        <select name="category" required style="padding:5px;">
+                        <select name="category" required style="padding:5px; font-size:13px;">
                             <option value="" disabled selected>Select Category</option>
-                            <option value="5k">7.5K Run</option>
-                            <option value="10k">15K Run</option>
-                            <option value="10k">21.5K Run</option>
+                            <option value="7.5k">7.5K Run</option>
+                            <option value="15k">15K Run</option>
+                            <option value="21.5k">21.5K Run</option>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label>T-Shirt Size <span class="required">*</span></label>
                         <div class="radio-options-group">
@@ -430,8 +455,6 @@
                     </div>
                 </div>
             </div>
-
-            {{-- SECTION 4 --}}
             <div class="section-card">
                 <div class="section-header">
                     <div class="step-number">4</div>

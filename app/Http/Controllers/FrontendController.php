@@ -35,6 +35,10 @@ class FrontendController extends Controller
     {
         return view('contact');
     }
+    public function form()
+    {
+        return view('form');
+    }
 
     /**
      * TEMPORARY: Clear all caches from browser.
