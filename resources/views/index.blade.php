@@ -33,6 +33,9 @@
         min-width: calc(100vw - 50px) !important;
         flex: 0 0 calc(100vw - 50px) !important;
     }
+     .action-buttons {
+        flex-direction: column;
+    }
 }
     /* ====================Number========================= */
     .stats-section {
@@ -63,6 +66,48 @@
         min-width: auto !important;
         flex: unset !important;
     }
+}
+
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.action-buttons .btn-primary {
+    flex: 1;                 /* equal width, fills the row */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    white-space: nowrap;
+    transition: 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+/* Share button — different color */
+.action-buttons .shareBtn {
+    background: #1877f2;     /* Facebook blue */
+}
+
+.action-buttons .shareBtn:hover {
+    background: #0f5ecb;
+}
+
+/* Register button */
+.action-buttons .proceedRegistrationBtn {
+    background: #6bad3f;     /* orange – matches your theme */
+}
+
+.action-buttons .proceedRegistrationBtn:hover {
+    background: #58d803;
 }
 </style>
 @section('body')
@@ -166,126 +211,95 @@
         </div>
 
         <div class="unique-slider-wrap" style="display: flex; gap: 20px; align-items: center; overflow: hidden;">
-            <div class="unique-card" style="flex-shrink: 0;">
-                <div class="event-img">
-                    <img src="{{asset('img/ur1.jpeg')}}" alt="Event">
-                    <div class="date-badge">
-                        <span class="day">18</span>
-                        <span class="month">Dec</span>
-                        <span class="year">2026</span>
-                    </div>
+            @if ($active_event = $events->where('status', 'active')->first())
+                <div class="unique-card" style="flex-shrink: 0;">
+                      <div class="event-img">
+                            <img src="{{asset('img/ur2.jpeg')}}" alt="Event">
+                            <div class="date-badge">
+                                <span class="day">{{ date('d', strtotime($active_event->event_date)) }}</span>
+                                <span class="month">{{ date('M', strtotime($active_event->event_date)) }}</span>
+                                <span class="year">{{ date('Y', strtotime($active_event->event_date)) }}</span>
+                            </div>
+                        </div>
+                        <div class="event-content">
+                            <h3>{{ $active_event->title }}</h3>
+                            <p class="location"><i class="fa-solid fa-location-dot"></i> {{ $active_event->location }}</p>
+                            <div class="tags">
+                                <span>{{ $active_event->category }}</span>
+                            </div>
+                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK {{ $active_event->fee }}</p>
+                            @if($active_event->status == 'active')
+                             <div class="action-buttons">
+                                {{-- Share Button --}}
+                                <a href="javascript:void(0)"
+                                class="btn-primary shareBtn"
+                                data-url="{{ route('form', $active_event->id) }}"
+                                data-title="Winter Half Marathon 2026">
+                                    Share <i class="fa-solid fa-share-nodes"></i>
+                                </a>
+
+                                {{-- Register Button --}}
+                                <a href="#"
+                                class="btn-primary proceedRegistrationBtn"
+                                data-title="{{$active_event->title }}"
+                                data-price="{{ $active_event->fee }}"
+                                data-event_id="{{ $active_event->id }}">
+                                    Register Now <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                            @endif
+                       
+                        </div>
                 </div>
-                <div class="event-content">
-                    <h3>Winter Half Marathon 2026</h3>
-                    <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
-                    <div class="tags">
-                        <span>7.5K</span>
-                        <span>15K</span>
-                        <span>21.5K</span>
-                        <span>30K</span>
-                    </div>
-                    <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                    <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            </div>
+            @endif
+                    
 
             <div style="overflow: hidden; width: 100%;">
                 <div class="unique-track" style="display: flex; gap: 20px; width: max-content;">
+                    @foreach ($events as $event)
                     <div class="unique-card" style="flex-shrink: 0;">
                         <div class="event-img">
                             <img src="{{asset('img/ur2.jpeg')}}" alt="Event">
                             <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
+                                <span class="day">{{ date('d', strtotime($event->event_date)) }}</span>
+                                <span class="month">{{ date('M', strtotime($event->event_date)) }}</span>
+                                <span class="year">{{ date('Y', strtotime($event->event_date)) }}</span>
                             </div>
                         </div>
                         <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
+                            <h3>{{ $event->title }}</h3>
+                            <p class="location"><i class="fa-solid fa-location-dot"></i> {{ $event->location }}</p>
                             <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
+                                <span>{{ $event->category }}</span>
                             </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            {{-- <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a> --}}
+                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK {{ $event->fee }}</p>
+                            @if($event->status == 'active')
+                             <div class="action-buttons">
+                                {{-- Share Button --}}
+                                <a href="javascript:void(0)"
+                                class="btn-primary shareBtn"
+                                data-url="{{ route('form', $event->id) }}"
+                                data-title="Winter Half Marathon 2026">
+                                    Share <i class="fa-solid fa-share-nodes"></i>
+                                </a>
+
+                                {{-- Register Button --}}
+                                <a href="#"
+                                class="btn-primary proceedRegistrationBtn"
+                                data-title="{{$event->title }}"
+                                data-price="{{ $event->fee }}"
+                                data-event_id="{{ $event->id }}">
+                                    Register Now <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                            @endif
+                       
                         </div>
                     </div>
-
-                    <!-- Event Card 3 -->
-                    <div class="unique-card" style="flex-shrink: 0;">
-                        <div class="event-img">
-                            <img src="{{asset('img/ur3.jpeg')}}" alt="Event">
-                            <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
-                            </div>
-                        </div>
-                        <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
-                            <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
-                            </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            {{-- <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a> --}}
-                        </div>
-                    </div>
-
-                    <!-- Event Card 4 -->
-                    <div class="unique-card" style="flex-shrink: 0;">
-                        <div class="event-img">
-                            <img src="{{asset('img/ur4.jpeg')}}" alt="Event">
-                            <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
-                            </div>
-                        </div>
-                        <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
-                            <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
-                            </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            {{-- <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a> --}}
-                        </div>
-                    </div>
-
-                    <!-- Event Card 5 -->
-                    <div class="unique-card" style="flex-shrink: 0;">
-                        <div class="event-img">
-                            <img src="{{asset('img/ur5.jpeg')}}" alt="Event">
-                            <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
-                            </div>
-                        </div>
-                        <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
-                            <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
-                            </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            {{-- <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a> --}}
-                        </div>
-                    </div>
-
+                        
+                    @endforeach
+                    
+                 
                 </div>
             </div>
 
