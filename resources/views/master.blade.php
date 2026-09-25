@@ -958,37 +958,65 @@
     /*==============================================================
     ==================================================================*/
     document.addEventListener('DOMContentLoaded', function () {
-        const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
-        registerBtns.forEach(function (btn) {
-            btn.addEventListener('click', function (e) {
-                e.preventDefault();
+    const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
+    registerBtns.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
 
-                Swal.fire({
-                    title: '<span style="color: #e11d48;">Payment Instruction</span>',
-                    html: '<p style="color: #475569; font-size: 14px;">Please complete your payment to our Personal bKash Number (<strong style="color: #e11d52;">+880 1711808026</strong>) first, then enter the verification details below.</p>',
-                    background: '#fff5f7',
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonText: 'I am ready, OK',
-                    cancelButtonText: 'Go Back',
-                    confirmButtonColor: '#e11d48',
-                    cancelButtonColor: '#64748b',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const registrationModal = document.getElementById('registrationModal');
-                        if (registrationModal) {
-                            registrationModal.style.display = 'flex';
-                            registrationModal.classList.add('active');
-                        }
+            const title   = this.dataset.title || 'Event';
+            const price   = this.dataset.price || '0';
+            const eventId = this.dataset.event_id || '';
+
+            Swal.fire({
+                title: '<span style="color: #0284c7;">Payment Instruction</span>',
+                html: `
+                    <div style="text-align:left; color:#475569; font-size:14px; line-height:1.6;">
+                        <p style="margin-bottom:12px;">
+                            <strong style="color:#102c55;">Event:</strong> ${title}
+                        </p>
+                        <p style="margin-bottom:12px;">
+                            <strong style="color:#102c55;">Amount:</strong>
+                            <span style="color:#0284c7; font-weight:800;">BDT ${price}</span>
+                        </p>
+                        <p>
+                            Please complete your payment to our Personal bKash Number
+                            (<strong style="color:#0284c7;">+880 1711808026</strong>)
+                            first, then enter the verification details below.
+                        </p>
+                    </div>
+                `,
+                background: '#f0f9ff',
+                icon: 'info',
+                iconColor: '#0284c7',
+                showCancelButton: true,
+                confirmButtonText: 'I am ready, OK',
+                cancelButtonText: 'Go Back',
+                confirmButtonColor: '#0284c7',
+                cancelButtonColor: '#64748b',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const registrationModal = document.getElementById('registrationModal');
+                    if (registrationModal) {
+                        registrationModal.style.display = 'flex';
+                        registrationModal.classList.add('active');
+
+                        const titleField = registrationModal.querySelector('[name="event_title"], #eventTitle');
+                        const priceField = registrationModal.querySelector('[name="event_price"], #eventPrice');
+                        const idField    = registrationModal.querySelector('[name="event_id"], #eventId');
+
+                        if (titleField) titleField.value = title;
+                        if (priceField) priceField.value = price;
+                        if (idField)    idField.value    = eventId;
                     }
-                });
+                }
             });
         });
     });
+});
 
     // share script
-    document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
     const modal   = document.getElementById('shareModal');
     const closeBtn= document.getElementById('closeShare');
 
@@ -1008,20 +1036,56 @@
             document.getElementById('shareTw').href =
                 `https://twitter.com/intent/tweet?text=${encTitle}&url=${encUrl}`;
 
+            // ============ FIXED COPY CODE ============
             document.getElementById('copyLink').onclick = () => {
-                navigator.clipboard.writeText(url).then(() => {
-                    const msg = document.getElementById('copyMsg');
+                const msg = document.getElementById('copyMsg');
+
+                const showMsg = (text) => {
+                    if (!msg) return;
+                    msg.textContent = text;
                     msg.style.display = 'block';
-                    setTimeout(() => msg.style.display = 'none', 2000);
-                });
+                    clearTimeout(msg._timer);
+                    msg._timer = setTimeout(() => {
+                        msg.style.display = 'none';
+                    }, 2000);
+                };
+
+                const legacyCopy = (text) => {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.top = '-9999px';
+                    ta.setAttribute('readonly', '');
+                    document.body.appendChild(ta);
+                    ta.select();
+                    ta.setSelectionRange(0, ta.value.length);
+                    let ok = false;
+                    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+                    document.body.removeChild(ta);
+                    return ok;
+                };
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(url)
+                        .then(() => showMsg('✅ Link Copied!'))
+                        .catch(() => {
+                            if (legacyCopy(url)) showMsg('✅ Link Copied!');
+                            else showMsg('❌ Copy Failed');
+                        });
+                } else {
+                    if (legacyCopy(url)) showMsg('✅ Link Copied!');
+                    else showMsg('❌ Copy Failed');
+                }
             };
+            // ============ END FIXED COPY CODE ============
 
             modal.style.display = 'flex';
         });
     });
+
     closeBtn.onclick = () => modal.style.display = 'none';
-        modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-    });
+    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+  });
 </script>
 </body>
 </html>

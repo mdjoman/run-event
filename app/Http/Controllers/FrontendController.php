@@ -10,7 +10,10 @@ class FrontendController extends Controller
     public function index()
     {
         $events = Event::latest()->take(10)->get();
-        return view('index', compact('events'));
+        $active_event = Event::where('event_date', '>=', now())
+        ->orderBy('event_date', 'asc')
+        ->first();
+        return view('index', compact('events', 'active_event'));
     }
 
     public function about()
@@ -21,7 +24,10 @@ class FrontendController extends Controller
     public function event()
     {
         $events = Event::latest()->paginate(10);
-        return view('event', compact('events'));
+         $active_event = Event::where('event_date', '>=', now())
+        ->orderBy('event_date', 'asc')
+        ->first();
+        return view('event', compact('events' , 'active_event'));
     }
 
     public function activity()
@@ -40,7 +46,10 @@ class FrontendController extends Controller
     }
     public function form()
     {
-        return view('form');
+         $active_event = Event::where('event_date', '>=', now())
+        ->orderBy('event_date', 'asc')
+        ->first();
+        return view('form', compact('active_event'));
     }
 
     /**

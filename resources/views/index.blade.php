@@ -211,7 +211,7 @@
         </div>
 
         <div class="unique-slider-wrap" style="display: flex; gap: 20px; align-items: center; overflow: hidden;">
-            @if ($active_event = $events->where('status', 'active')->first())
+            @if ($active_event)
                 <div class="unique-card" style="flex-shrink: 0;">
                       <div class="event-img">
                             <img src="{{asset('img/ur2.jpeg')}}" alt="Event">
