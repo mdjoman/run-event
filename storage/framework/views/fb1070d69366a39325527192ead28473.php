@@ -171,6 +171,7 @@
             <a class="nav-link <?php echo e(request()->routeIs('contact') ? 'active' : ''); ?>" href="<?php echo e(route('contact')); ?>">Contact</a>
             <a href="#">Results</a>
             <a href="#">Gallery</a>
+            <a class="nav-link <?php echo e(request()->routeIs('form') ? 'active' : ''); ?>" href="<?php echo e(route('form')); ?>">Form</a>
         </nav>
 
         <div class="nav-actions">
@@ -256,12 +257,7 @@
             </div>
         </div>
 
-        <form class="modal-body"
-              id="registrationForm"
-              method="POST"
-              action="<?php echo e(route('registrations.store')); ?>"
-              enctype="multipart/form-data"
-              novalidate>
+        <form class="modal-body" id="registrationForm" method="POST" action="<?php echo e(route('registrations.store')); ?>" enctype="multipart/form-data" novalidate>
 
             <?php echo csrf_field(); ?>
             <input type="hidden" name="event_id" id="event_id_field" value="1">
@@ -346,10 +342,33 @@
                         <label>Mobile Number <span class="required">*</span></label>
                         <input type="tel" name="phone" id="phoneInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
                     </div>
+
+                    
+                    <div class="form-group">
+                        <label>WhatsApp Number <span class="required">*</span></label>
+                        <input type="tel" name="whatsapp_number" id="whatsappInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
+                    </div>
+
                     <div class="form-group">
                         <label>Email Address <span class="optional">(Optional)</span></label>
                         <input type="email" name="email" placeholder="example@email.com">
                     </div>
+
+                    <div class="form-group">
+                        <label>Blood Group <span class="required">*</span></label>
+                        <select name="blood_group" required style="padding:8px; width:100%;font-size: 13px;">
+                            <option value="" disabled selected>Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label>Gender <span class="required">*</span></label>
                         <div class="radio-options-group">
@@ -364,11 +383,18 @@
                     </div>
                 </div>
 
-                <div class="form-grid-1" style="margin-top: 12px;">
+                <div class="form-grid-2" style="margin-top: 12px;">
                     <div class="form-group">
                         <label>NID / Any Identification Number <span class="required">*</span></label>
                         <input type="text" name="nid" placeholder="National ID or Passport Number" required>
                     </div>
+                    <div class="form-group ">
+                        <label>Preferred BIB Number <span class="optional">(Optional)</span></label>
+                        <input type="text" name="bib_number" placeholder="e.g. 101 or preferred number">
+                    </div>
+                </div>
+
+                <div class="form-grid-1" style="margin-top: 12px;">
                     <div class="form-group">
                         <label>Address <span class="optional">(Optional)</span></label>
                         <input type="text" name="address" placeholder="House/Street, Area, City">
@@ -376,7 +402,6 @@
                 </div>
             </div>
 
-            
             <div class="section-card">
                 <div class="section-header">
                     <div class="step-number">2</div>
@@ -393,12 +418,11 @@
                     </div>
                     <div class="form-group">
                         <label>Emergency Contact Number <span class="required">*</span></label>
-                        <input type="tel" name="phone" id="phoneInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
+                        <input type="tel" name="emergency_phone" id="emergencyPhoneInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
                     </div>
                 </div>
             </div>
 
-            
             <div class="section-card">
                 <div class="section-header">
                     <div class="step-number">3</div>
@@ -411,13 +435,14 @@
                 <div class="form-grid-2">
                     <div class="form-group">
                         <label>Race Categories / Ticket Type <span class="required">*</span></label>
-                        <select name="category" required style="padding:5px;">
+                        <select name="category" required style="padding:5px; font-size:13px;">
                             <option value="" disabled selected>Select Category</option>
-                            <option value="5k">7.5K Run</option>
-                            <option value="10k">15K Run</option>
-                            <option value="10k">21.5K Run</option>
+                            <option value="7.5k">7.5K Run</option>
+                            <option value="15k">15K Run</option>
+                            <option value="21.5k">21.5K Run</option>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label>T-Shirt Size <span class="required">*</span></label>
                         <div class="radio-options-group">
@@ -430,8 +455,6 @@
                     </div>
                 </div>
             </div>
-
-            
             <div class="section-card">
                 <div class="section-header">
                     <div class="step-number">4</div>
@@ -489,6 +512,23 @@
         </form>
     </div>
 </div>
+ 
+<div id="shareModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; padding:20px; border-radius:12px; width:340px; max-width:90%; text-align:center; position:relative;">
+        <span id="closeShare" style="position:absolute; right:12px; top:8px; cursor:pointer; font-size:20px;">&times;</span>
+        <h3 style="margin-bottom:14px;">Share Event</h3>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <a id="shareFb" target="_blank" class="btn-primary full-width" style="background:#1877f2;">Facebook</a>
+            <a id="shareWa" target="_blank" class="btn-primary full-width" style="background:#25d366;">WhatsApp</a>
+            <a id="shareLi" target="_blank" class="btn-primary full-width" style="background:#0a66c2;">LinkedIn</a>
+            <a id="shareTw" target="_blank" class="btn-primary full-width" style="background:#000;">X (Twitter)</a>
+            <button id="copyLink" class="btn-primary full-width" style="background:#555;">Copy Link</button>
+        </div>
+
+        <p id="copyMsg" style="color:green; font-size:13px; margin-top:8px; display:none;">Link copied!</p>
+    </div>
+</div>
 
 
 <div id="successModal">
@@ -514,8 +554,6 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     // Tailwind config
-
-
     document.addEventListener('DOMContentLoaded', function () {
 
         /* ============================================================
@@ -921,20 +959,39 @@
     ==================================================================*/
     document.addEventListener('DOMContentLoaded', function () {
     const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
-
     registerBtns.forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
 
+            const title   = this.dataset.title || 'Event';
+            const price   = this.dataset.price || '0';
+            const eventId = this.dataset.event_id || '';
+
             Swal.fire({
-                title: '<span style="color: #e11d48;">Payment Instruction</span>',
-                html: '<p style="color: #475569; font-size: 14px;">Please complete your payment to our Personal bKash Number (<strong style="color: #e11d52;">+880 1711808026</strong>) first, then enter the verification details below.</p>',
-                background: '#fff5f7',
+                title: '<span style="color: #0284c7;">Payment Instruction</span>',
+                html: `
+                    <div style="text-align:left; color:#475569; font-size:14px; line-height:1.6;">
+                        <p style="margin-bottom:12px;">
+                            <strong style="color:#102c55;">Event:</strong> ${title}
+                        </p>
+                        <p style="margin-bottom:12px;">
+                            <strong style="color:#102c55;">Amount:</strong>
+                            <span style="color:#0284c7; font-weight:800;">BDT ${price}</span>
+                        </p>
+                        <p>
+                            Please complete your payment to our Personal bKash Number
+                            (<strong style="color:#0284c7;">+880 1711808026</strong>)
+                            first, then enter the verification details below.
+                        </p>
+                    </div>
+                `,
+                background: '#f0f9ff',
                 icon: 'info',
+                iconColor: '#0284c7',
                 showCancelButton: true,
                 confirmButtonText: 'I am ready, OK',
                 cancelButtonText: 'Go Back',
-                confirmButtonColor: '#e11d48',
+                confirmButtonColor: '#0284c7',
                 cancelButtonColor: '#64748b',
                 reverseButtons: true
             }).then((result) => {
@@ -943,12 +1000,92 @@
                     if (registrationModal) {
                         registrationModal.style.display = 'flex';
                         registrationModal.classList.add('active');
+
+                        const titleField = registrationModal.querySelector('[name="event_title"], #eventTitle');
+                        const priceField = registrationModal.querySelector('[name="event_price"], #eventPrice');
+                        const idField    = registrationModal.querySelector('[name="event_id"], #eventId');
+
+                        if (titleField) titleField.value = title;
+                        if (priceField) priceField.value = price;
+                        if (idField)    idField.value    = eventId;
                     }
                 }
             });
         });
     });
 });
+
+    // share script
+  document.addEventListener('DOMContentLoaded', function () {
+    const modal   = document.getElementById('shareModal');
+    const closeBtn= document.getElementById('closeShare');
+
+    document.querySelectorAll('.shareBtn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const url   = this.dataset.url;
+            const title = this.dataset.title;
+            const encUrl   = encodeURIComponent(url);
+            const encTitle = encodeURIComponent(title);
+
+            document.getElementById('shareFb').href =
+                `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
+            document.getElementById('shareWa').href =
+                `https://api.whatsapp.com/send?text=${encTitle}%20${encUrl}`;
+            document.getElementById('shareLi').href =
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`;
+            document.getElementById('shareTw').href =
+                `https://twitter.com/intent/tweet?text=${encTitle}&url=${encUrl}`;
+
+            // ============ FIXED COPY CODE ============
+            document.getElementById('copyLink').onclick = () => {
+                const msg = document.getElementById('copyMsg');
+
+                const showMsg = (text) => {
+                    if (!msg) return;
+                    msg.textContent = text;
+                    msg.style.display = 'block';
+                    clearTimeout(msg._timer);
+                    msg._timer = setTimeout(() => {
+                        msg.style.display = 'none';
+                    }, 2000);
+                };
+
+                const legacyCopy = (text) => {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.top = '-9999px';
+                    ta.setAttribute('readonly', '');
+                    document.body.appendChild(ta);
+                    ta.select();
+                    ta.setSelectionRange(0, ta.value.length);
+                    let ok = false;
+                    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+                    document.body.removeChild(ta);
+                    return ok;
+                };
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(url)
+                        .then(() => showMsg('✅ Link Copied!'))
+                        .catch(() => {
+                            if (legacyCopy(url)) showMsg('✅ Link Copied!');
+                            else showMsg('❌ Copy Failed');
+                        });
+                } else {
+                    if (legacyCopy(url)) showMsg('✅ Link Copied!');
+                    else showMsg('❌ Copy Failed');
+                }
+            };
+            // ============ END FIXED COPY CODE ============
+
+            modal.style.display = 'flex';
+        });
+    });
+
+    closeBtn.onclick = () => modal.style.display = 'none';
+    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+  });
 </script>
 </body>
 </html>

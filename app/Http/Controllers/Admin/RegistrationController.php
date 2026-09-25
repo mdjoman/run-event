@@ -49,12 +49,15 @@ class RegistrationController extends Controller
      */
     public function store(Request $request)
     {
+        
         // ---------- 1. VALIDATION ----------
         $validated = $request->validate([
             // Personal
             'first_name'        => 'required|string|max:100',
             'last_name'         => 'required|string|max:100',
             'phone'             => 'required|string|max:20',
+            'whatsapp_number'   => 'required|string|max:20',
+            'blood_group'       => 'required|string|max:20',
             'email'             => 'nullable|email|max:255',
             'gender'            => 'required|in:Male,Female,Other',
             'dob'               => 'required|date|before:today',
@@ -104,6 +107,8 @@ class RegistrationController extends Controller
             'first_name'         => $validated['first_name'],
             'last_name'          => $validated['last_name'],
             'phone'              => $validated['phone'],
+            'whatsapp_number'    => $validated['whatsapp_number'],
+            'blood_group'        => $validated['blood_group'],
             'email'              => $validated['email'] ?? null,
             'gender'             => $validated['gender'],
             'dob'                => $validated['dob'],
@@ -192,6 +197,27 @@ class RegistrationController extends Controller
             'status'     => 'required|in:pending,approved,rejected,cancelled',
             'admin_note' => 'nullable|string|max:500',
         ]);
+
+        // ✅ Generate bib number when approved (only once)
+        if ($data['status'] === 'approved' && empty($registration->bib_number)) {
+
+            // Get first digit of category (7.5K → 7, 15K → 1, 21.5K → 2)
+            $code = substr(trim($registration->category), 0, 1);
+
+            // Find last bib for this event + category
+            $lastBib = Registration::where('event_id', $registration->event_id)
+                ->where('category', $registration->category)
+                ->whereNotNull('bib_number')
+                ->where('bib_number', 'like', $code . '%')
+                ->orderByDesc('id')
+                ->value('bib_number');
+
+            // Increment number (7001 → 7002)
+            $next = $lastBib ? (int) substr($lastBib, 1) + 1 : 1;
+           
+            // Final bib: 7001, 1001, 2001...
+            $data['bib_number'] = $code . str_pad($next, 3, '0', STR_PAD_LEFT);
+        }
 
         $registration->update($data);
 

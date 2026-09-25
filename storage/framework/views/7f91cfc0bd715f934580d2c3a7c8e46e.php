@@ -32,6 +32,9 @@
         min-width: calc(100vw - 50px) !important;
         flex: 0 0 calc(100vw - 50px) !important;
     }
+     .action-buttons {
+        flex-direction: column;
+    }
 }
     /* ====================Number========================= */
     .stats-section {
@@ -62,6 +65,48 @@
         min-width: auto !important;
         flex: unset !important;
     }
+}
+
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.action-buttons .btn-primary {
+    flex: 1;                 /* equal width, fills the row */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    white-space: nowrap;
+    transition: 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+/* Share button — different color */
+.action-buttons .shareBtn {
+    background: #1877f2;     /* Facebook blue */
+}
+
+.action-buttons .shareBtn:hover {
+    background: #0f5ecb;
+}
+
+/* Register button */
+.action-buttons .proceedRegistrationBtn {
+    background: #6bad3f;     /* orange – matches your theme */
+}
+
+.action-buttons .proceedRegistrationBtn:hover {
+    background: #58d803;
 }
 </style>
 <?php $__env->startSection('body'); ?>
@@ -151,144 +196,115 @@
         </div>
     </section>
 
-    <section class="events-section">
-        <div class="container">
-            <div class="flex items-end gap-5 w-full mb-6">
-                <div class="flex flex-col">
-                    <span class="text-[15px] font-bold text-[#7bb526] tracking-wider uppercase mb-1">FEATURED EVENTS</span>
-                    <h2 class="section-title">Upcoming Running Events</h2>
-                </div>
-                <a href="#" class="text-xs font-bold text-[#031b33] whitespace-nowrap flex items-center gap-1.5 pb-2">
-                    View All Events <i class="fa-solid fa-arrow-right"></i>
-                </a>
-                <div class="flex-grow h-[1px] bg-[#e2e8f0] mb-3"></div>
+<section class="events-section">
+    <div class="container">
+        <div class="flex items-end gap-5 w-full mb-6">
+            <div class="flex flex-col">
+                <span class="text-[15px] font-bold text-[#7bb526] tracking-wider uppercase mb-1">FEATURED EVENTS</span>
+                <h2 class="section-title">Upcoming Running Events</h2>
             </div>
+            <a href="#" class="text-xs font-bold text-[#031b33] whitespace-nowrap flex items-center gap-1.5 pb-2">
+                View All Events <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <div class="flex-grow h-[1px] bg-[#e2e8f0] mb-3"></div>
+        </div>
 
-            <div class="unique-slider-wrap">
-                <div class="unique-track">
-                    <!-- Event Card 1 -->
-                    <div class="unique-card">
-                        <div class="event-img">
-                            <img src="<?php echo e(asset('img/ur1.jpeg')); ?>" alt="Event">
+        <div class="unique-slider-wrap" style="display: flex; gap: 20px; align-items: center; overflow: hidden;">
+            <?php if($active_event): ?>
+                <div class="unique-card" style="flex-shrink: 0;">
+                      <div class="event-img">
+                            <img src="<?php echo e(asset('img/ur2.jpeg')); ?>" alt="Event">
                             <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
+                                <span class="day"><?php echo e(date('d', strtotime($active_event->event_date))); ?></span>
+                                <span class="month"><?php echo e(date('M', strtotime($active_event->event_date))); ?></span>
+                                <span class="year"><?php echo e(date('Y', strtotime($active_event->event_date))); ?></span>
                             </div>
                         </div>
                         <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
+                            <h3><?php echo e($active_event->title); ?></h3>
+                            <p class="location"><i class="fa-solid fa-location-dot"></i> <?php echo e($active_event->location); ?></p>
                             <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
+                                <span><?php echo e($active_event->category); ?></span>
                             </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
+                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK <?php echo e($active_event->fee); ?></p>
+                            <?php if($active_event->status == 'active'): ?>
+                             <div class="action-buttons">
+                                
+                                <a href="javascript:void(0)"
+                                class="btn-primary shareBtn"
+                                data-url="<?php echo e(route('form', $active_event->id)); ?>"
+                                data-title="Winter Half Marathon 2026">
+                                    Share <i class="fa-solid fa-share-nodes"></i>
+                                </a>
 
-                    <!-- Event Card 2 -->
-                    <div class="unique-card">
+                                
+                                <a href="#"
+                                class="btn-primary proceedRegistrationBtn"
+                                data-title="<?php echo e($active_event->title); ?>"
+                                data-price="<?php echo e($active_event->fee); ?>"
+                                data-event_id="<?php echo e($active_event->id); ?>">
+                                    Register Now <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                            <?php endif; ?>
+                       
+                        </div>
+                </div>
+            <?php endif; ?>
+                    
+
+            <div style="overflow: hidden; width: 100%;">
+                <div class="unique-track" style="display: flex; gap: 20px; width: max-content;">
+                    <?php $__currentLoopData = $events; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="unique-card" style="flex-shrink: 0;">
                         <div class="event-img">
                             <img src="<?php echo e(asset('img/ur2.jpeg')); ?>" alt="Event">
                             <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
+                                <span class="day"><?php echo e(date('d', strtotime($event->event_date))); ?></span>
+                                <span class="month"><?php echo e(date('M', strtotime($event->event_date))); ?></span>
+                                <span class="year"><?php echo e(date('Y', strtotime($event->event_date))); ?></span>
                             </div>
                         </div>
                         <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
+                            <h3><?php echo e($event->title); ?></h3>
+                            <p class="location"><i class="fa-solid fa-location-dot"></i> <?php echo e($event->location); ?></p>
                             <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
+                                <span><?php echo e($event->category); ?></span>
                             </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
+                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK <?php echo e($event->fee); ?></p>
+                            <?php if($event->status == 'active'): ?>
+                             <div class="action-buttons">
+                                
+                                <a href="javascript:void(0)"
+                                class="btn-primary shareBtn"
+                                data-url="<?php echo e(route('form', $event->id)); ?>"
+                                data-title="Winter Half Marathon 2026">
+                                    Share <i class="fa-solid fa-share-nodes"></i>
+                                </a>
 
-                    <!-- Event Card 3 -->
-                    <div class="unique-card">
-                        <div class="event-img">
-                            <img src="<?php echo e(asset('img/ur3.jpeg')); ?>" alt="Event">
-                            <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
+                                
+                                <a href="#"
+                                class="btn-primary proceedRegistrationBtn"
+                                data-title="<?php echo e($event->title); ?>"
+                                data-price="<?php echo e($event->fee); ?>"
+                                data-event_id="<?php echo e($event->id); ?>">
+                                    Register Now <i class="fa-solid fa-arrow-right"></i>
+                                </a>
                             </div>
-                        </div>
-                        <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
-                            <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
-                            </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
+                            <?php endif; ?>
+                       
                         </div>
                     </div>
-
-                    <!-- Event Card 4 -->
-                    <div class="unique-card">
-                        <div class="event-img">
-                            <img src="<?php echo e(asset('img/ur4.jpeg')); ?>" alt="Event">
-                            <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
-                            </div>
-                        </div>
-                        <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
-                            <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
-                            </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Event Card 5 -->
-                    <div class="unique-card">
-                        <div class="event-img">
-                            <img src="<?php echo e(asset('img/ur5.jpeg')); ?>" alt="Event">
-                            <div class="date-badge">
-                                <span class="day">18</span>
-                                <span class="month">Dec</span>
-                                <span class="year">2026</span>
-                            </div>
-                        </div>
-                        <div class="event-content">
-                            <h3>Winter Half Marathon 2026</h3>
-                            <p class="location"><i class="fa-solid fa-location-dot"></i> Hard Point, Sirajganj</p>
-                            <div class="tags">
-                                <span>7.5K</span>
-                                <span>15K</span>
-                                <span>21.5K</span>
-                                <span>30K</span>
-                            </div>
-                            <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK 500</p>
-                            <a href="#" class="btn-primary full-width proceedRegistrationBtn">Register Now <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </div>
+                        
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    
+                 
                 </div>
             </div>
+
         </div>
-    </section>
+    </div>
+</section>
 
     <section class="features-section">
         <div class="container features-grid">

@@ -1,13 +1,12 @@
-@extends('master')
-@section('body')
+<?php $__env->startSection('body'); ?>
 <div class="page-wrapper" style="min-height: 100vh; background: #f8fafc; padding: 40px 20px; display: flex; justify-content: center; align-items: center;">
     <div class="page-container" style="width: 100%; max-width: 800px; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); overflow: hidden; border: 1px solid #e2e8f0;">
 
-        {{-- ============ BANNER HEADER ============ --}}
+        
         <div class="banner-header" style="background: linear-gradient(135deg, #fff 0%, #6bad3f 100%); color: #fff; padding: 30px 40px;">
             <div class="brand-section" style="display: flex; align-items: center; justify-content: space-between;">
                 <div class="logo-area" style="display: flex; align-items: center; gap: 16px;">
-                    <img src="{{asset('img/logo.png')}}" alt="" style="height: 100px;">
+                    <img src="<?php echo e(asset('img/logo.png')); ?>" alt="" style="height: 100px;">
                     <div class="header-title-area">
                         <h1 style="margin: 0; font-size: 29px; font-weight: 800; letter-spacing: 0.5px; color: #2a2850;">EVENT REGISTRATION</h1>
                         <p style="margin: 6px 0 0 0; font-size: 14px; opacity: 0.9; color: #2a2850;">Complete the form below to confirm your official participation</p>
@@ -16,109 +15,115 @@
             </div>
         </div>
 
-        {{-- ============ EVENT INFO STRIP ============ --}}
+        
         <div class="event-info-strip" style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfccb 100%); border-bottom: 1px solid #d9f99d; padding: 18px 40px;">
 
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;">
                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                     <span style="display:inline-flex; align-items:center; gap:6px; background:#459f0a; color:#fff; font-size:10.5px; font-weight:800; letter-spacing:.08em; padding:5px 12px; border-radius:999px; text-transform:uppercase;">
                         <i class="fa-solid fa-circle-check" style="font-size:10px;"></i>
-                        @if($active_event->status === 'active') Registration Open
-                        @else Registration Closed
-                        @endif
+                        <?php if($active_event->status === 'active'): ?> Registration Open
+                        <?php else: ?> Registration Closed
+                        <?php endif; ?>
                     </span>
 
-                    @if(isset($active_event->slots) && isset($active_event->registered))
+                    <?php if(isset($active_event->slots) && isset($active_event->registered)): ?>
                         <span style="font-size:11.5px; color:#166534; font-weight:700;">
                             <i class="fa-solid fa-users"></i>
-                            {{ $active_event->registered }} / {{ $active_event->slots }} slots filled
+                            <?php echo e($active_event->registered); ?> / <?php echo e($active_event->slots); ?> slots filled
                         </span>
-                    @endif
+                    <?php endif; ?>
                 </div>
 
-                @if(isset($active_event->event_date))
-                     @php
+                <?php if(isset($active_event->event_date)): ?>
+                     <?php
                         $days = now()->diffInDays(\Carbon\Carbon::parse($active_event->event_date), false);
-                    @endphp
-                    @if($days > 0)
+                    ?>
+                    <?php if($days > 0): ?>
                         <span style="font-size:11.5px; color:#166534; font-weight:800; background:#fff; padding:5px 12px; border-radius:999px; border:1px solid #bbf7d0;">
                             <i class="fa-solid fa-hourglass-half"></i>
-                            {{ $days }} {{ $days == 1 ? 'day' : 'days' }} left
+                            <?php echo e($days); ?> <?php echo e($days == 1 ? 'day' : 'days'); ?> left
                         </span>
-                    @elseif($days == 0)
+                    <?php elseif($days == 0): ?>
                         <span style="font-size:11.5px; color:#b91c1c; font-weight:800; background:#fff; padding:5px 12px; border-radius:999px; border:1px solid #fecaca;">
                             <i class="fa-solid fa-fire"></i> Race Day!
                         </span>
-                    @endif
-                @endif
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
 
-                {{-- Event --}}
+                
                 <div style="background:#fff; padding:10px 14px; border-radius:10px; border:1px solid #d9f99d; display:flex; align-items:center; gap:5px;">
                     <i class="fa-solid fa-flag-checkered" style="color:#459f0a; font-size:14px; width:16px; text-align:center;"></i>
                     <div style="min-width:0;">
                         <p style="margin:0; font-size:9.5px; font-weight:800; color:#65a30d; text-transform:uppercase; letter-spacing:.08em;">Event</p>
                         <p style="margin:1px 0 0; font-size:12.5px; font-weight:700; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                            {{ $active_event->title }}
+                            <?php echo e($active_event->title); ?>
+
                         </p>
                     </div>
                 </div>
 
-                {{-- Date --}}
+                
                 <div style="background:#fff; padding:10px 14px; border-radius:10px; border:1px solid #d9f99d; display:flex; align-items:center; gap:5px;">
                     <i class="fa-regular fa-calendar-days" style="color:#459f0a; font-size:14px; width:16px; text-align:center;"></i>
                     <div style="min-width:0;">
                         <p style="margin:0; font-size:9.5px; font-weight:800; color:#65a30d; text-transform:uppercase; letter-spacing:.08em;">Date</p>
                         <p style="margin:1px 0 0; font-size:12.5px; font-weight:700; color:#0f172a;">
-                            {{ \Carbon\Carbon::parse($active_event->event_date)->format('d M Y') }}
+                            <?php echo e(\Carbon\Carbon::parse($active_event->event_date)->format('d M Y')); ?>
+
                         </p>
                     </div>
                 </div>
 
-                {{-- Start Time --}}
-                @if($active_event->start_time)
+                
+                <?php if($active_event->start_time): ?>
                 <div style="background:#fff; padding:10px 14px; border-radius:10px; border:1px solid #d9f99d; display:flex; align-items:center; gap:5px;">
                     <i class="fa-regular fa-clock" style="color:#459f0a; font-size:14px; width:16px; text-align:center;"></i>
                     <div style="min-width:0;">
                         <p style="margin:0; font-size:9.5px; font-weight:800; color:#65a30d; text-transform:uppercase; letter-spacing:.08em;">Start Time</p>
                         <p style="margin:1px 0 0; font-size:12.5px; font-weight:700; color:#0f172a;">
-                            {{ \Carbon\Carbon::parse($active_event->start_time)->format('h:i A') }}
+                            <?php echo e(\Carbon\Carbon::parse($active_event->start_time)->format('h:i A')); ?>
+
                         </p>
                     </div>
                 </div>
-                @endif
+                <?php endif; ?>
 
-                {{-- Location --}}
+                
                 <div style="background:#fff; padding:10px 14px; border-radius:10px; border:1px solid #d9f99d; display:flex; align-items:center; gap:5px;">
                     <i class="fa-solid fa-location-dot" style="color:#459f0a; font-size:14px; width:16px; text-align:center;"></i>
                     <div style="min-width:0;">
                         <p style="margin:0; font-size:9.5px; font-weight:800; color:#65a30d; text-transform:uppercase; letter-spacing:.08em;">Location</p>
                         <p style="margin:1px 0 0; font-size:12.5px; font-weight:700; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
-                            {{ $active_event->location }}
+                            <?php echo e($active_event->location); ?>
+
                         </p>
                     </div>
                 </div>
 
-                {{-- Categories --}}
+                
                 <div style="background:#fff; padding:10px 14px; border-radius:10px; border:1px solid #d9f99d; display:flex; align-items:center; gap:1px;">
                     <i class="fa-solid fa-person-running" style="color:#459f0a; font-size:14px; width:16px; text-align:center;"></i>
                     <div style="min-width:0;">
                         <p style="margin:0; font-size:9.5px; font-weight:800; color:#65a30d; text-transform:uppercase; letter-spacing:.08em;">Categories</p>
                         <p style="margin:1px 0 0; font-size:12.5px; font-weight:700; color:#0f172a;">
-                            {{ $active_event->category }}
+                            <?php echo e($active_event->category); ?>
+
                         </p>
                     </div>
                 </div>
 
-                {{-- Fee --}}
+                
                 <div style="background:#fff; padding:10px 14px; border-radius:10px; border:1px solid #d9f99d; display:flex; align-items:center; gap:5px;">
                     <i class="fa-solid fa-ticket" style="color:#459f0a; font-size:14px; width:16px; text-align:center;"></i>
                     <div style="min-width:0;">
                         <p style="margin:0; font-size:9.5px; font-weight:800; color:#65a30d; text-transform:uppercase; letter-spacing:.08em;">Fee</p>
                         <p style="margin:1px 0 0; font-size:12.5px; font-weight:800; color:#166534;">
-                            BDT {{ number_format($active_event->fee) }}
+                            BDT <?php echo e(number_format($active_event->fee)); ?>
+
                         </p>
                     </div>
                 </div>
@@ -126,13 +131,13 @@
             </div>
         </div>
 
-        {{-- ============ FORM BODY ============ --}}
-        <form class="modal-body" id="registrationForm" method="POST" action="{{ route('registrations.store') }}" enctype="multipart/form-data" novalidate style="padding: 40px;">
+        
+        <form class="modal-body" id="registrationForm" method="POST" action="<?php echo e(route('registrations.store')); ?>" enctype="multipart/form-data" novalidate style="padding: 40px;">
 
-            @csrf
-            <input type="hidden" name="event_id" id="event_id_field" value="{{ $active_event->id }}">
+            <?php echo csrf_field(); ?>
+            <input type="hidden" name="event_id" id="event_id_field" value="<?php echo e($active_event->id); ?>">
 
-            {{-- ================= SECTION 1: PERSONAL DETAILS ================= --}}
+            
             <div class="section-card" style="margin-bottom: 30px;">
                 <div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">1</div>
@@ -143,7 +148,7 @@
                 </div>
 
                 <div class="form-grid-2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
-                    {{-- Profile Image --}}
+                    
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 8px;">Profile Image <span class="optional" style="color: #94a3b8; font-weight: 400;">(Optional, max 50 MB)</span></label>
 
@@ -267,7 +272,7 @@
                 </div>
             </div>
 
-            {{-- ================= SECTION 2: EMERGENCY CONTACT ================= --}}
+            
             <div class="section-card" style="margin-bottom: 30px;">
                 <div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">2</div>
@@ -289,7 +294,7 @@
                 </div>
             </div>
 
-            {{-- ================= SECTION 3: EVENT & T-SHIRT ================= --}}
+            
             <div class="section-card" style="margin-bottom: 30px;">
                 <div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">3</div>
@@ -304,16 +309,16 @@
                         <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Race Categories / Ticket Type <span class="required" style="color: #e11d48;">*</span></label>
                         <select name="category" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #fff;">
                             <option value="" disabled selected>Select Category</option>
-                            @php
+                            <?php
                                 $cats = array_filter(array_map('trim', explode('/', $active_event->category ?? '')));
-                            @endphp
-                            @forelse($cats as $cat)
-                                <option value="{{ $cat }}">{{ $cat }} Run</option>
-                            @empty
+                            ?>
+                            <?php $__empty_1 = true; $__currentLoopData = $cats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <option value="<?php echo e($cat); ?>"><?php echo e($cat); ?> Run</option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <option value="7.5K">7.5K Run</option>
                                 <option value="15K">15K Run</option>
                                 <option value="21.5K">21.5K Run</option>
-                            @endforelse
+                            <?php endif; ?>
                         </select>
                     </div>
 
@@ -330,7 +335,7 @@
                 </div>
             </div>
 
-            {{-- ================= SECTION 4: PAYMENT ================= --}}
+            
             <div class="section-card" style="margin-bottom: 30px;">
                 <div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">4</div>
@@ -355,7 +360,7 @@
                         <i class="fa-solid fa-paper-plane"></i> bKash Payment Verification
                     </div>
                     <div class="bkash-sub" style="font-size: 13px; color: #475569; margin-bottom: 16px;">
-                        <strong style="font-size: 13px !important; color: #1e293b;">Please complete your payment of <span style="color:#be123c;">BDT {{ number_format($active_event->fee) }}</span> to our Personal bKash Number (+880 1711808026) first</strong>, then enter the verification details below.
+                        <strong style="font-size: 13px !important; color: #1e293b;">Please complete your payment of <span style="color:#be123c;">BDT <?php echo e(number_format($active_event->fee)); ?></span> to our Personal bKash Number (+880 1711808026) first</strong>, then enter the verification details below.
                     </div>
 
                     <div class="form-grid-2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
@@ -371,7 +376,7 @@
                 </div>
             </div>
 
-            {{-- Terms --}}
+            
             <div class="confirmation-box" style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 25px;">
                 <input type="checkbox" id="confirm_terms" name="confirm_terms" value="1" required style="margin-top: 3px;">
                 <label for="confirm_terms" style="font-size: 13px; color: #475569; line-height: 1.5; cursor: pointer;">
@@ -380,7 +385,7 @@
                 </label>
             </div>
 
-            {{-- Submit Button --}}
+            
             <button type="submit" class="submit-btn" id="submitBtn" style="width: 100%; background: #459f0a; color: #fff; border: none; padding: 14px 20px; font-size: 16px; font-weight: 700; border-radius: 10px; cursor: pointer; transition: background 0.2s;">
                 <span id="submitBtnText">Complete Registration</span>
                 <span id="submitBtnSpinner" style="display:none; margin-left:8px;">
@@ -390,4 +395,5 @@
         </form>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\run-event\resources\views/form.blade.php ENDPATH**/ ?>

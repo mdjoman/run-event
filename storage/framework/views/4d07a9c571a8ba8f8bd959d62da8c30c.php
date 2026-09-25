@@ -1,4 +1,3 @@
-@extends('master')
 <style>
     b, strong {
         font-size: 16px !important;
@@ -30,15 +29,8 @@
             flex: 0 0 calc(25% - 15px) !important;
         }
     }
-    .action-buttons .shareBtn {
-    background: #1877f2;     /* Facebook blue */
-}
-
-.action-buttons .shareBtn:hover {
-    background: #0f5ecb;
-}
 </style>
-@section('body')
+<?php $__env->startSection('body'); ?>
 <section class="ev-hero-section" style="background-image: url('img/event.jpg');">
     <div class="ev-hero-overlay"></div>
     <div class="container ev-hero-content">
@@ -53,11 +45,11 @@
         <button class="ev-tab-btn ev-active-tab"><i class="fa-regular fa-calendar-check"></i> Upcoming Events</button>
         <button class="ev-tab-btn"><i class="fa-regular fa-clock"></i> Previous Events</button>
     </div>
-    @if ($active_event)
+
     <div class="ev-section-header">
         <div>
             <span class="ev-section-tag">UPCOMING EVENT</span>
-            <h2 class="ev-section-title">{{ $active_event->title }}</h2>
+            <h2 class="ev-section-title">Winter Half Marathon 2026</h2>
             <p class="ev-sub-text">Run through the city of dreams!</p>
         </div>
         <a href="#" class="ev-view-all-link">View All Upcoming <i class="fa-solid fa-arrow-right"></i></a>
@@ -66,22 +58,22 @@
     <div class="ev-main-event-card">
         <div class="ev-event-left-box">
             <div class="ev-event-img-wrap">
-                <img src="{{asset('img/dhakarun.jpeg')}}" alt="Sirajganj City Marathon" onclick="openEventModal()">
+                <img src="<?php echo e(asset('img/dhakarun.jpeg')); ?>" alt="Sirajganj City Marathon" onclick="openEventModal()">
                 <div class="ev-date-badge">
-                     <span class="day">{{ date('d', strtotime($active_event->event_date)) }}</span>
-                     <span class="month">{{ date('M', strtotime($active_event->event_date)) }}</span>
-                     <span class="year">{{ date('Y', strtotime($active_event->event_date)) }}</span>
+                    <span class="ev-day">18</span>
+                    <span class="ev-month">DEC</span>
+                    <span class="ev-year">2026</span>
                 </div>
             </div>
 
             <div class="ev-meta-grid">
                 <div class="ev-meta-item">
                     <i class="fa-solid fa-location-dot"></i>
-                    <div><strong>Location</strong><br><small>{{ $active_event->location }}</small></div>
+                    <div><strong>Location</strong><br><small>Hard Point, Sirajgang</small></div>
                 </div>
                 <div class="ev-meta-item">
                     <i class="fa-solid fa-route"></i>
-                    <div><strong>Distance</strong><br><small>{{ $active_event->category }}</small></div>
+                    <div><strong>Distance</strong><br><small>7.5K / 15K / 21.5K </small></div>
                 </div>
                 <div class="ev-meta-item">
                     <i class="fa-solid fa-clock"></i>
@@ -123,74 +115,32 @@
 
             <div class="ev-total-box">
                 <span>Total Amount</span>
-                <h3 class="ev-total-price">BDT {{ $active_event->fee }}</h3>
+                <h3 class="ev-total-price">BDT 500</h3>
             </div>
-                   @if($active_event->status == 'active')
-                             <div class="action-buttons">
-                                {{-- Share Button --}}
-                                <a href="javascript:void(0)"
-                                class="btn-primary shareBtn"
-                                data-url="{{ route('form', $active_event->id) }}"
-                                data-title="Winter Half Marathon 2026">
-                                    Share <i class="fa-solid fa-share-nodes"></i>
-                                </a>
 
-                                {{-- Register Button --}}
-                                <a href="#"
-                                class="btn-primary proceedRegistrationBtn"
-                                data-title="{{$active_event->title }}"
-                                data-price="{{ $active_event->fee }}"
-                                data-event_id="{{ $active_event->id }}">
-                                    Proceed to Registration <i class="fa-solid fa-arrow-right"></i></i>
-                                </a>
-                            </div>
-                            @endif
-
+            <a href="#" class="ev-btn-proceed  proceedRegistrationBtn">Proceed to Registration <i class="fa-solid fa-arrow-right"></i></a>
 
             <div class="ev-payment-brands">
-                <!--<span><img src="{{asset('img/visa.webp')}}" alt="Visa"></span>-->
-                {{-- <span><img src="{{asset('img/bkash.png')}}" alt="bKash" style="width:60px;"></span> --}}
-                <!--<span><img src="{{asset('img/nagod.png')}}" alt="Nagad"></span>-->
+                <!--<span><img src="<?php echo e(asset('img/visa.webp')); ?>" alt="Visa"></span>-->
+                
+                <!--<span><img src="<?php echo e(asset('img/nagod.png')); ?>" alt="Nagad"></span>-->
             </div>
         </div>
     </div>
-    @else
-
-    {{-- ============ NO EVENT FALLBACK ============ --}}
-    <div class="ev-section-header">
-        <div>
-            <span class="ev-section-tag">UPCOMING EVENT</span>
-            <h2 class="ev-section-title">No Upcoming Events</h2>
-            <p class="ev-sub-text">Stay tuned! New events will be announced soon.</p>
-        </div>
-    </div>
-
-    <div class="ev-no-event-box">
-        <div class="ev-no-event-icon">
-            <i class="fa-regular fa-calendar-xmark"></i>
-        </div>
-        <h3>No Events Available Right Now</h3>
-        <p>We're preparing something exciting. Check back later or follow us for updates.</p>
-        <a href="#" class="ev-btn-notify">
-            <i class="fa-regular fa-bell"></i> Notify Me
-        </a>
-    </div>
-
-@endif
 
     <div class="ev-section-header ev-mt-50">
         <div>
             <span class="ev-section-tag">EVENT HIGHLIGHTS</span>
             <h2 class="ev-section-title">Our Previous Events</h2>
         </div>
-        {{-- <a href="#" class="ev-view-all-link">View All <i class="fa-solid fa-arrow-right"></i></a> --}}
+        
     </div>
 
     <div class="unique-past-wrapper">
         <div class="unique-past-grid">
             <div class="unique-past-card">
                 <div class="ev-past-img-box">
-                    <img src="{{asset('img/ur1.jpeg')}}" alt="Run Burjowan">
+                    <img src="<?php echo e(asset('img/ur1.jpeg')); ?>" alt="Run Burjowan">
                     <span class="ev-past-date">16 JUL 2026</span>
                 </div>
                 <div class="ev-past-card-body">
@@ -203,7 +153,7 @@
 
             <div class="unique-past-card">
                 <div class="ev-past-img-box">
-                    <img src="{{asset('img/ur2.jpeg')}}" alt="Desert Run">
+                    <img src="<?php echo e(asset('img/ur2.jpeg')); ?>" alt="Desert Run">
                     <span class="ev-past-date">16 JUL 2026</span>
                 </div>
                 <div class="ev-past-card-body">
@@ -216,7 +166,7 @@
 
             <div class="unique-past-card">
                 <div class="ev-past-img-box">
-                    <img src="{{asset('img/ur3.jpeg')}}" alt="Community Run">
+                    <img src="<?php echo e(asset('img/ur3.jpeg')); ?>" alt="Community Run">
                     <span class="ev-past-date">16 JUL 2026</span>
                 </div>
                 <div class="ev-past-card-body">
@@ -229,7 +179,7 @@
 
             <div class="unique-past-card">
                 <div class="ev-past-img-box">
-                    <img src="{{asset('img/ur4.jpeg')}}" alt="Night Run">
+                    <img src="<?php echo e(asset('img/ur4.jpeg')); ?>" alt="Night Run">
                     <span class="ev-past-date">16 JUL 2026</span>
                 </div>
                 <div class="ev-past-card-body">
@@ -242,7 +192,7 @@
 
             <div class="unique-past-card">
                 <div class="ev-past-img-box">
-                    <img src="{{asset('img/ur5.jpeg')}}" alt="Extra Run">
+                    <img src="<?php echo e(asset('img/ur5.jpeg')); ?>" alt="Extra Run">
                     <span class="ev-past-date">16 JUL 2026</span>
                 </div>
                 <div class="ev-past-card-body">
@@ -289,7 +239,7 @@
         </div>
     </div>
 </div>
-{{-- ===================Modal========================= --}}
+
 <title>Run BURJOWAN - Event Details</title>
 
 <style>
@@ -1095,9 +1045,7 @@
      OPEN BUTTON
 ========================== -->
 
-{{-- <button class="open-event-btn" onclick="openEventModal()">
-    View Event Details
-</button> --}}
+
 
 
 <!-- =========================
@@ -1116,13 +1064,10 @@
             <section class="event-hero">
                 <div class="hero-content">
                     <div class="brand">
-                        {{-- <div class="brand-runner">🏃</div> --}}
-                        <img src="{{asset('img/logo.png')}}" alt="" style="height: 100px;">
+                        
+                        <img src="<?php echo e(asset('img/logo.png')); ?>" alt="" style="height: 100px;">
 
-                        {{-- <div class="brand-text">
-                            <strong>RUN BURJOWAN</strong>
-                            <span>RUN • CONNECT • INSPIRE</span>
-                        </div> --}}
+                        
                     </div>
                     <div class="event-label">
                         EVENT DETAILS
@@ -1143,7 +1088,7 @@
                     <span>Bigger Together</span>
                 </div>
                 <div class="runners">
-                    <img src="{{asset('img/event2.png')}}" alt="">
+                    <img src="<?php echo e(asset('img/event2.png')); ?>" alt="">
                 </div>
             </section>
             <div class="event-content">
@@ -1677,4 +1622,6 @@
 
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\run-event\resources\views/event.blade.php ENDPATH**/ ?>

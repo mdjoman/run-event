@@ -388,7 +388,7 @@
                         <label>NID / Any Identification Number <span class="required">*</span></label>
                         <input type="text" name="nid" placeholder="National ID or Passport Number" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group ">
                         <label>Preferred BIB Number <span class="optional">(Optional)</span></label>
                         <input type="text" name="bib_number" placeholder="e.g. 101 or preferred number">
                     </div>
@@ -512,6 +512,23 @@
         </form>
     </div>
 </div>
+ {{-- share popup  --}}
+<div id="shareModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; padding:20px; border-radius:12px; width:340px; max-width:90%; text-align:center; position:relative;">
+        <span id="closeShare" style="position:absolute; right:12px; top:8px; cursor:pointer; font-size:20px;">&times;</span>
+        <h3 style="margin-bottom:14px;">Share Event</h3>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <a id="shareFb" target="_blank" class="btn-primary full-width" style="background:#1877f2;">Facebook</a>
+            <a id="shareWa" target="_blank" class="btn-primary full-width" style="background:#25d366;">WhatsApp</a>
+            <a id="shareLi" target="_blank" class="btn-primary full-width" style="background:#0a66c2;">LinkedIn</a>
+            <a id="shareTw" target="_blank" class="btn-primary full-width" style="background:#000;">X (Twitter)</a>
+            <button id="copyLink" class="btn-primary full-width" style="background:#555;">Copy Link</button>
+        </div>
+
+        <p id="copyMsg" style="color:green; font-size:13px; margin-top:8px; display:none;">Link copied!</p>
+    </div>
+</div>
 
 {{-- ============================= CUSTOM SUCCESS MODAL ============================= --}}
 <div id="successModal">
@@ -537,8 +554,6 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     // Tailwind config
-
-
     document.addEventListener('DOMContentLoaded', function () {
 
         /* ============================================================
@@ -944,20 +959,39 @@
     ==================================================================*/
     document.addEventListener('DOMContentLoaded', function () {
     const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
-
     registerBtns.forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
 
+            const title   = this.dataset.title || 'Event';
+            const price   = this.dataset.price || '0';
+            const eventId = this.dataset.event_id || '';
+
             Swal.fire({
-                title: '<span style="color: #e11d48;">Payment Instruction</span>',
-                html: '<p style="color: #475569; font-size: 14px;">Please complete your payment to our Personal bKash Number (<strong style="color: #e11d52;">+880 1711808026</strong>) first, then enter the verification details below.</p>',
-                background: '#fff5f7',
+                title: '<span style="color: #0284c7;">Payment Instruction</span>',
+                html: `
+                    <div style="text-align:left; color:#475569; font-size:14px; line-height:1.6;">
+                        <p style="margin-bottom:12px;">
+                            <strong style="color:#102c55;">Event:</strong> ${title}
+                        </p>
+                        <p style="margin-bottom:12px;">
+                            <strong style="color:#102c55;">Amount:</strong>
+                            <span style="color:#0284c7; font-weight:800;">BDT ${price}</span>
+                        </p>
+                        <p>
+                            Please complete your payment to our Personal bKash Number
+                            (<strong style="color:#0284c7;">+880 1711808026</strong>)
+                            first, then enter the verification details below.
+                        </p>
+                    </div>
+                `,
+                background: '#f0f9ff',
                 icon: 'info',
+                iconColor: '#0284c7',
                 showCancelButton: true,
                 confirmButtonText: 'I am ready, OK',
                 cancelButtonText: 'Go Back',
-                confirmButtonColor: '#e11d48',
+                confirmButtonColor: '#0284c7',
                 cancelButtonColor: '#64748b',
                 reverseButtons: true
             }).then((result) => {
@@ -966,12 +1000,92 @@
                     if (registrationModal) {
                         registrationModal.style.display = 'flex';
                         registrationModal.classList.add('active');
+
+                        const titleField = registrationModal.querySelector('[name="event_title"], #eventTitle');
+                        const priceField = registrationModal.querySelector('[name="event_price"], #eventPrice');
+                        const idField    = registrationModal.querySelector('[name="event_id"], #eventId');
+
+                        if (titleField) titleField.value = title;
+                        if (priceField) priceField.value = price;
+                        if (idField)    idField.value    = eventId;
                     }
                 }
             });
         });
     });
 });
+
+    // share script
+  document.addEventListener('DOMContentLoaded', function () {
+    const modal   = document.getElementById('shareModal');
+    const closeBtn= document.getElementById('closeShare');
+
+    document.querySelectorAll('.shareBtn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const url   = this.dataset.url;
+            const title = this.dataset.title;
+            const encUrl   = encodeURIComponent(url);
+            const encTitle = encodeURIComponent(title);
+
+            document.getElementById('shareFb').href =
+                `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
+            document.getElementById('shareWa').href =
+                `https://api.whatsapp.com/send?text=${encTitle}%20${encUrl}`;
+            document.getElementById('shareLi').href =
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`;
+            document.getElementById('shareTw').href =
+                `https://twitter.com/intent/tweet?text=${encTitle}&url=${encUrl}`;
+
+            // ============ FIXED COPY CODE ============
+            document.getElementById('copyLink').onclick = () => {
+                const msg = document.getElementById('copyMsg');
+
+                const showMsg = (text) => {
+                    if (!msg) return;
+                    msg.textContent = text;
+                    msg.style.display = 'block';
+                    clearTimeout(msg._timer);
+                    msg._timer = setTimeout(() => {
+                        msg.style.display = 'none';
+                    }, 2000);
+                };
+
+                const legacyCopy = (text) => {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.top = '-9999px';
+                    ta.setAttribute('readonly', '');
+                    document.body.appendChild(ta);
+                    ta.select();
+                    ta.setSelectionRange(0, ta.value.length);
+                    let ok = false;
+                    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+                    document.body.removeChild(ta);
+                    return ok;
+                };
+
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(url)
+                        .then(() => showMsg('✅ Link Copied!'))
+                        .catch(() => {
+                            if (legacyCopy(url)) showMsg('✅ Link Copied!');
+                            else showMsg('❌ Copy Failed');
+                        });
+                } else {
+                    if (legacyCopy(url)) showMsg('✅ Link Copied!');
+                    else showMsg('❌ Copy Failed');
+                }
+            };
+            // ============ END FIXED COPY CODE ============
+
+            modal.style.display = 'flex';
+        });
+    });
+
+    closeBtn.onclick = () => modal.style.display = 'none';
+    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+  });
 </script>
 </body>
 </html>

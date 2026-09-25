@@ -16,7 +16,10 @@ class Registration extends Model
         'category', 'tshirt_size', 'amount',
         'payment_method', 'trx_id', 'sender_phone_last3',
         'status', 'admin_note',
-        'profile_image',        // ← add this
+        'profile_image', 
+        'bib_number',
+        'blood_group', 
+        'whatsapp_number',     // ← add this
     ];
     protected $casts = [
         'dob' => 'date',
