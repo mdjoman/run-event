@@ -262,7 +262,7 @@
             <?php echo csrf_field(); ?>
             <input type="hidden" name="event_id" id="event_id_field" value="1">
 
-            
+
             <div class="section-card">
                 <div class="section-header">
                     <div class="step-number">1</div>
@@ -273,7 +273,7 @@
                 </div>
 
                 <div class="form-grid-2">
-                    
+
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label>Profile Image <span class="optional">(Optional, max 50 MB)</span></label>
 
@@ -343,7 +343,7 @@
                         <input type="tel" name="phone" id="phoneInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
                     </div>
 
-                    
+
                     <div class="form-group">
                         <label>WhatsApp Number <span class="required">*</span></label>
                         <input type="tel" name="whatsapp_number" id="whatsappInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
@@ -388,7 +388,7 @@
                         <label>NID / Any Identification Number <span class="required">*</span></label>
                         <input type="text" name="nid" placeholder="National ID or Passport Number" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group ">
                         <label>Preferred BIB Number <span class="optional">(Optional)</span></label>
                         <input type="text" name="bib_number" placeholder="e.g. 101 or preferred number">
                     </div>
@@ -439,7 +439,7 @@
                             <option value="" disabled selected>Select Category</option>
                             <option value="7.5k">7.5K Run</option>
                             <option value="15k">15K Run</option>
-                            <option value="21.5k">21.5K Run</option>
+                            <option value="21.1k">21.1K Run</option>
                         </select>
                     </div>
 
@@ -513,6 +513,23 @@
     </div>
 </div>
 
+<div id="shareModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; padding:20px; border-radius:12px; width:340px; max-width:90%; text-align:center; position:relative;">
+        <span id="closeShare" style="position:absolute; right:12px; top:8px; cursor:pointer; font-size:20px;">&times;</span>
+        <h3 style="margin-bottom:14px;">Share Event</h3>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <a id="shareFb" target="_blank" class="btn-primary full-width" style="background:#1877f2;">Facebook</a>
+            <a id="shareWa" target="_blank" class="btn-primary full-width" style="background:#25d366;">WhatsApp</a>
+            <a id="shareLi" target="_blank" class="btn-primary full-width" style="background:#0a66c2;">LinkedIn</a>
+            <a id="shareTw" target="_blank" class="btn-primary full-width" style="background:#000;">X (Twitter)</a>
+            <button id="copyLink" class="btn-primary full-width" style="background:#555;">Copy Link</button>
+        </div>
+
+        <p id="copyMsg" style="color:green; font-size:13px; margin-top:8px; display:none;">Link copied!</p>
+    </div>
+</div>
+
 
 <div id="successModal">
     <div class="success-card">
@@ -537,8 +554,6 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     // Tailwind config
-
-
     document.addEventListener('DOMContentLoaded', function () {
 
         /* ============================================================
@@ -943,35 +958,70 @@
     /*==============================================================
     ==================================================================*/
     document.addEventListener('DOMContentLoaded', function () {
-    const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
+        const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
+        registerBtns.forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
 
-    registerBtns.forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            Swal.fire({
-                title: '<span style="color: #e11d48;">Payment Instruction</span>',
-                html: '<p style="color: #475569; font-size: 14px;">Please complete your payment to our Personal bKash Number (<strong style="color: #e11d52;">+880 1711808026</strong>) first, then enter the verification details below.</p>',
-                background: '#fff5f7',
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'I am ready, OK',
-                cancelButtonText: 'Go Back',
-                confirmButtonColor: '#e11d48',
-                cancelButtonColor: '#64748b',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const registrationModal = document.getElementById('registrationModal');
-                    if (registrationModal) {
-                        registrationModal.style.display = 'flex';
-                        registrationModal.classList.add('active');
+                Swal.fire({
+                    title: '<span style="color: #e11d48;">Payment Instruction</span>',
+                    html: '<p style="color: #475569; font-size: 14px;">Please complete your payment to our Personal bKash Number (<strong style="color: #e11d52;">+880 1711808026</strong>) first, then enter the verification details below.</p>',
+                    background: '#fff5f7',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'I am ready, OK',
+                    cancelButtonText: 'Go Back',
+                    confirmButtonColor: '#e11d48',
+                    cancelButtonColor: '#64748b',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const registrationModal = document.getElementById('registrationModal');
+                        if (registrationModal) {
+                            registrationModal.style.display = 'flex';
+                            registrationModal.classList.add('active');
+                        }
                     }
-                }
+                });
             });
         });
     });
-});
+
+    // share script
+    document.addEventListener('DOMContentLoaded', function () {
+    const modal   = document.getElementById('shareModal');
+    const closeBtn= document.getElementById('closeShare');
+
+    document.querySelectorAll('.shareBtn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const url   = this.dataset.url;
+            const title = this.dataset.title;
+            const encUrl   = encodeURIComponent(url);
+            const encTitle = encodeURIComponent(title);
+
+            document.getElementById('shareFb').href =
+                `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
+            document.getElementById('shareWa').href =
+                `https://api.whatsapp.com/send?text=${encTitle}%20${encUrl}`;
+            document.getElementById('shareLi').href =
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`;
+            document.getElementById('shareTw').href =
+                `https://twitter.com/intent/tweet?text=${encTitle}&url=${encUrl}`;
+
+            document.getElementById('copyLink').onclick = () => {
+                navigator.clipboard.writeText(url).then(() => {
+                    const msg = document.getElementById('copyMsg');
+                    msg.style.display = 'block';
+                    setTimeout(() => msg.style.display = 'none', 2000);
+                });
+            };
+
+            modal.style.display = 'flex';
+        });
+    });
+    closeBtn.onclick = () => modal.style.display = 'none';
+        modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+    });
 </script>
 </body>
 </html>

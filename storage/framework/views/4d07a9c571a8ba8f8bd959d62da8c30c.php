@@ -42,161 +42,164 @@
 
 <div class="container ev-main-wrapper">
     <div class="ev-tabs-bar">
-        <button class="ev-tab-btn ev-active-tab" onclick="switchTab('upcoming', this)"><i class="fa-regular fa-calendar-check"></i> Upcoming Events</button>
-        <button class="ev-tab-btn" onclick="switchTab('previous', this)"><i class="fa-regular fa-clock"></i> Previous Events</button>
+        <button class="ev-tab-btn ev-active-tab"><i class="fa-regular fa-calendar-check"></i> Upcoming Events</button>
+        <button class="ev-tab-btn"><i class="fa-regular fa-clock"></i> Previous Events</button>
     </div>
 
-    <div id="upcoming-section">
-        <div class="ev-section-header">
-            <div>
-                <span class="ev-section-tag">UPCOMING EVENT</span>
-                <h2 class="ev-section-title">Winter Half Marathon 2026</h2>
-                <p class="ev-sub-text">Run through the city of dreams!</p>
+    <div class="ev-section-header">
+        <div>
+            <span class="ev-section-tag">UPCOMING EVENT</span>
+            <h2 class="ev-section-title">Winter Half Marathon 2026</h2>
+            <p class="ev-sub-text">Run through the city of dreams!</p>
+        </div>
+        <a href="#" class="ev-view-all-link">View All Upcoming <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <div class="ev-main-event-card">
+        <div class="ev-event-left-box">
+            <div class="ev-event-img-wrap">
+                <img src="<?php echo e(asset('img/dhakarun.jpeg')); ?>" alt="Sirajganj City Marathon" onclick="openEventModal()">
+                <div class="ev-date-badge">
+                    <span class="ev-day">18</span>
+                    <span class="ev-month">DEC</span>
+                    <span class="ev-year">2026</span>
+                </div>
             </div>
-            <a href="#" class="ev-view-all-link">View All Upcoming <i class="fa-solid fa-arrow-right"></i></a>
+
+            <div class="ev-meta-grid">
+                <div class="ev-meta-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div><strong>Location</strong><br><small>Hard Point, Sirajgang</small></div>
+                </div>
+                <div class="ev-meta-item">
+                    <i class="fa-solid fa-route"></i>
+                    <div><strong>Distance</strong><br><small>7.5K / 15K / 21.1K </small></div>
+                </div>
+                <div class="ev-meta-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <div><strong>Start Time</strong><br><small>6:00 AM</small></div>
+                </div>
+            </div>
+
+            <div class="ev-features-list" style="font-size: 14px !important;">
+                <span><i class="fa-solid fa-award"></i> Medal</span>
+                <span><i class="fa-solid fa-shirt"></i> T-shirt</span>
+                <span><i class="fa-solid fa-glass-water"></i> Refreshments</span>
+                <span><i class="fa-solid fa-user-nurse"></i> Hydration</span>
+            </div>
         </div>
 
-        <div class="ev-main-event-card">
-            <div class="ev-event-left-box">
-                <div class="ev-event-img-wrap">
-                    <img src="<?php echo e(asset('img/dhakarun.jpeg')); ?>" alt="Sirajganj City Marathon" onclick="openEventModal()">
-                    <div class="ev-date-badge">
-                        <span class="ev-day">18</span>
-                        <span class="ev-month">DEC</span>
-                        <span class="ev-year">2026</span>
-                    </div>
-                </div>
+        <div class="ev-widget-right-box">
+            <div class="ev-offer-banner">
+                <p>Register before 18 Nov 2026</p>
+            </div>
 
-                <div class="ev-meta-grid">
-                    <div class="ev-meta-item">
-                        <i class="fa-solid fa-location-dot"></i>
-                        <div><strong>Location</strong><br><small>Hard Point, Sirajgang</small></div>
-                    </div>
-                    <div class="ev-meta-item">
-                        <i class="fa-solid fa-route"></i>
-                        <div><strong>Distance</strong><br><small>7.5K / 15K / 21.1K </small></div>
-                    </div>
-                    <div class="ev-meta-item">
-                        <i class="fa-solid fa-clock"></i>
-                        <div><strong>Start Time</strong><br><small>6:00 AM</small></div>
-                    </div>
-                </div>
-
-                <div class="ev-features-list" style="font-size: 14px !important;">
-                    <span><i class="fa-solid fa-award"></i> Medal</span>
-                    <span><i class="fa-solid fa-shirt"></i> T-shirt</span>
-                    <span><i class="fa-solid fa-glass-water"></i> Refreshments</span>
-                    <span><i class="fa-solid fa-user-nurse"></i> Hydration</span>
+            <div class="ev-widget-group">
+                <label class="ev-label">Select Your Category</label>
+                <div class="ev-category-grid">
+                    <button class="ev-cat-btn">7.5K<br><span>BDT 500</span></button>
+                    <button class="ev-cat-btn ev-cat-active">15K<br><span>BDT 500</span></button>
+                    <button class="ev-cat-btn">21.1K<br><span>BDT 500</span></button>
+                    <button class="ev-cat-btn ev-cat-disabled" disabled>42K<br><span>BDT 500</span></button>
                 </div>
             </div>
 
-            <div class="ev-widget-right-box">
-                <div class="ev-offer-banner">
-                    <p>Register before 18 Nov 2026</p>
+            <div class="ev-widget-group">
+                <label class="ev-label">Participant</label>
+                <div class="ev-qty-picker">
+                    <button class="ev-qty-btn">-</button>
+                    <input type="text" value="1" readonly class="ev-qty-input">
+                    <button class="ev-qty-btn">+</button>
                 </div>
+            </div>
 
-                <div class="ev-widget-group">
-                    <label class="ev-label">Select Your Category</label>
-                    <div class="ev-category-grid">
-                        <button class="ev-cat-btn">7.5K<br><span>BDT 500</span></button>
-                        <button class="ev-cat-btn ev-cat-active">15K<br><span>BDT 500</span></button>
-                        <button class="ev-cat-btn">21.1K<br><span>BDT 500</span></button>
-                        <button class="ev-cat-btn ev-cat-disabled" disabled>42K<br><span>BDT 500</span></button>
-                    </div>
-                </div>
+            <div class="ev-total-box">
+                <span>Total Amount</span>
+                <h3 class="ev-total-price">BDT 500</h3>
+            </div>
 
-                <div class="ev-widget-group">
-                    <label class="ev-label">Participant</label>
-                    <div class="ev-qty-picker">
-                        <button class="ev-qty-btn">-</button>
-                        <input type="text" value="1" readonly class="ev-qty-input">
-                        <button class="ev-qty-btn">+</button>
-                    </div>
-                </div>
+            <a href="#" class="ev-btn-proceed  proceedRegistrationBtn">Proceed to Registration <i class="fa-solid fa-arrow-right"></i></a>
 
-                <div class="ev-total-box">
-                    <span>Total Amount</span>
-                    <h3 class="ev-total-price">BDT 500</h3>
-                </div>
+            <div class="ev-payment-brands">
+                <!--<span><img src="<?php echo e(asset('img/visa.webp')); ?>" alt="Visa"></span>-->
 
-                <a href="#" class="ev-btn-proceed proceedRegistrationBtn">Proceed to Registration <i class="fa-solid fa-arrow-right"></i></a>
+                <!--<span><img src="<?php echo e(asset('img/nagod.png')); ?>" alt="Nagad"></span>-->
             </div>
         </div>
     </div>
 
-    <div id="previous-section" style="display: none;">
-        <div class="ev-section-header">
-            <div>
-                <span class="ev-section-tag">EVENT HIGHLIGHTS</span>
-                <h2 class="ev-section-title">Our Previous Events</h2>
-            </div>
+    <div class="ev-section-header ev-mt-50">
+        <div>
+            <span class="ev-section-tag">EVENT HIGHLIGHTS</span>
+            <h2 class="ev-section-title">Our Previous Events</h2>
         </div>
 
-        <div class="unique-past-wrapper">
-            <div class="unique-past-grid">
-                <div class="unique-past-card">
-                    <div class="ev-past-img-box">
-                        <img src="<?php echo e(asset('img/ur1.jpeg')); ?>" alt="Run Burjowan">
-                        <span class="ev-past-date">16 JUL 2026</span>
-                    </div>
-                    <div class="ev-past-card-body">
-                        <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
-                        <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
-                        <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
-                        <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </div>
+    </div>
 
-                <div class="unique-past-card">
-                    <div class="ev-past-img-box">
-                        <img src="<?php echo e(asset('img/ur2.jpeg')); ?>" alt="Desert Run">
-                        <span class="ev-past-date">16 JUL 2026</span>
-                    </div>
-                    <div class="ev-past-card-body">
-                        <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
-                        <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
-                        <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
-                        <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
+    <div class="unique-past-wrapper">
+        <div class="unique-past-grid">
+            <div class="unique-past-card">
+                <div class="ev-past-img-box">
+                    <img src="<?php echo e(asset('img/ur1.jpeg')); ?>" alt="Run Burjowan">
+                    <span class="ev-past-date">16 JUL 2026</span>
                 </div>
-
-                <div class="unique-past-card">
-                    <div class="ev-past-img-box">
-                        <img src="<?php echo e(asset('img/ur3.jpeg')); ?>" alt="Community Run">
-                        <span class="ev-past-date">16 JUL 2026</span>
-                    </div>
-                    <div class="ev-past-card-body">
-                        <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
-                        <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
-                        <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
-                        <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
+                <div class="ev-past-card-body">
+                    <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
+                    <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
+                    <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
+                    <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
+            </div>
 
-                <div class="unique-past-card">
-                    <div class="ev-past-img-box">
-                        <img src="<?php echo e(asset('img/ur4.jpeg')); ?>" alt="Night Run">
-                        <span class="ev-past-date">16 JUL 2026</span>
-                    </div>
-                    <div class="ev-past-card-body">
-                        <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
-                        <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
-                        <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
-                        <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
+            <div class="unique-past-card">
+                <div class="ev-past-img-box">
+                    <img src="<?php echo e(asset('img/ur2.jpeg')); ?>" alt="Desert Run">
+                    <span class="ev-past-date">16 JUL 2026</span>
                 </div>
+                <div class="ev-past-card-body">
+                    <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
+                    <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
+                    <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
+                    <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
 
-                <div class="unique-past-card">
-                    <div class="ev-past-img-box">
-                        <img src="<?php echo e(asset('img/ur5.jpeg')); ?>" alt="Extra Run">
-                        <span class="ev-past-date">16 JUL 2026</span>
-                    </div>
-                    <div class="ev-past-card-body">
-                        <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
-                        <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
-                        <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
-                        <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
+            <div class="unique-past-card">
+                <div class="ev-past-img-box">
+                    <img src="<?php echo e(asset('img/ur3.jpeg')); ?>" alt="Community Run">
+                    <span class="ev-past-date">16 JUL 2026</span>
+                </div>
+                <div class="ev-past-card-body">
+                    <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
+                    <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
+                    <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
+                    <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="unique-past-card">
+                <div class="ev-past-img-box">
+                    <img src="<?php echo e(asset('img/ur4.jpeg')); ?>" alt="Night Run">
+                    <span class="ev-past-date">16 JUL 2026</span>
+                </div>
+                <div class="ev-past-card-body">
+                    <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
+                    <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
+                    <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
+                    <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+            <div class="unique-past-card">
+                <div class="ev-past-img-box">
+                    <img src="<?php echo e(asset('img/ur5.jpeg')); ?>" alt="Extra Run">
+                    <span class="ev-past-date">16 JUL 2026</span>
+                </div>
+                <div class="ev-past-card-body">
+                    <h3 class="ev-past-title">Sirajgang Half Marathon 2026</h3>
+                    <p class="ev-past-info"><i class="fa-solid fa-location-dot"></i> Sirajganj</p>
+                    <p class="ev-past-info"><i class="fa-solid fa-route"></i> 7.5K | 15K | 21.1K | 30K</p>
+                    <a href="#" class="ev-btn-view-more">View More <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
@@ -237,28 +240,24 @@
     </div>
 </div>
 
-<script>
-    function switchTab(type, btn) {
-        const buttons = document.querySelectorAll('.ev-tab-btn');
-        buttons.forEach(b => b.classList.remove('ev-active-tab'));
-        btn.classList.add('ev-active-tab');
-
-        const upcomingSec = document.getElementById('upcoming-section');
-        const previousSec = document.getElementById('previous-section');
-
-        if (type === 'upcoming') {
-            upcomingSec.style.display = 'block';
-            previousSec.style.display = 'none';
-        } else {
-            upcomingSec.style.display = 'none';
-            previousSec.style.display = 'block';
-        }
-    }
-</script>
-
 <title>Run BURJOWAN - Event Details</title>
 
 <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #eef2f7;
+    }
+
+    /* =========================
+       MODAL
+    ========================== */
+
     .event-modal {
         position: fixed;
         inset: 0;
@@ -298,6 +297,7 @@
     }
 
     /* CLOSE BUTTON */
+
     .modal-close {
         position: absolute;
         right: 18px;
@@ -322,6 +322,7 @@
     }
 
     /* SCROLL AREA */
+
     .event-scroll {
         max-height: 94vh;
         overflow-y: auto;
@@ -338,20 +339,66 @@
     }
 
     .event-hero {
-        min-height: auto !important;
-        padding: 22px 40px !important;
+        min-height: 310px;
         position: relative;
         overflow: hidden;
-        background: linear-gradient(90deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.88) 34%, rgba(255,255,255,.10) 72%, rgba(255,255,255,0) 100%), linear-gradient(180deg, #a9dcff 0%, #f9d49c 62%, #b5d6d7 100%);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        padding: 32px 55px;
+
+        background:
+            linear-gradient(
+                90deg,
+                rgba(255,255,255,.98) 0%,
+                rgba(255,255,255,.88) 34%,
+                rgba(255,255,255,.10) 72%,
+                rgba(255,255,255,0) 100%
+            ),
+            linear-gradient(
+                180deg,
+                #a9dcff 0%,
+                #f9d49c 62%,
+                #b5d6d7 100%
+            );
+    }
+
+    .bridge {
+        position: absolute;
+        right: -40px;
+        bottom: 55px;
+        width: 58%;
+        height: 80px;
+        opacity: .30;
+    }
+
+    .bridge::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 12px;
+        height: 6px;
+        background: #17365f;
+        box-shadow: 0 18px 0 #17365f;
+    }
+
+    .bridge::after {
+        content: "";
+        position: absolute;
+        left: 8%;
+        right: 8%;
+        bottom: 0;
+        height: 65px;
+        border-top: 4px solid #17365f;
+        border-radius: 50% 50% 0 0;
+        box-shadow:
+            100px 0 0 -2px #17365f,
+            200px 0 0 -2px #17365f,
+            300px 0 0 -2px #17365f;
     }
 
     .hero-content {
         position: relative;
         z-index: 2;
-        width: 100% !important;
+        width: 58%;
     }
 
     .brand {
@@ -404,23 +451,31 @@
         margin-bottom: 4px;
     }
 
-    #eventModal .hero-title {
+    .hero-title {
         display: inline-block;
         background: #102f59;
         color: white;
-        padding: 6px 18px;
-        font-size: clamp(20px, 2.5vw, 42px) !important;
-        line-height: 1.1;
+        padding: 8px 25px 12px;
+        font-size: clamp(35px, 4vw, 62px);
+        line-height: .9;
         font-weight: 950;
-        letter-spacing: -1px;
+        letter-spacing: -2px;
+        position: relative;
     }
 
-    #eventModal .hero-title span {
+    .hero-title span {
         color: #6bad3f;
         display: inline;
     }
 
-    #eventModal .hero-tagline {
+    .hero-year {
+        color: #102f59;
+        font-size: 42px;
+        font-weight: 900;
+        margin-top: 3px;
+    }
+
+    .hero-tagline {
         position: absolute;
         right: 60px;
         top: 35px;
@@ -433,25 +488,70 @@
         font-style: italic;
     }
 
-    #eventModal .hero-tagline span {
+    .hero-tagline span {
         color: #6bad3f;
     }
 
     /* RUNNERS */
-    #eventModal .runners {
+
+    .runners {
         position: absolute;
-        right: 50px;
-        bottom: 0 !important;
+        right: 4%;
+        bottom: 48px;
         display: flex;
         align-items: flex-end;
+        gap: 12px;
         z-index: 3;
     }
 
-    .runners img {
-        max-height: 240px;
-        width: auto;
-        display: block;
-        margin-bottom: 0;
+    .runner {
+        width: 50px;
+        height: 125px;
+        position: relative;
+    }
+
+    .runner::before {
+        content: "";
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        background: #102f59;
+        border-radius: 50%;
+        left: 14px;
+        top: 0;
+    }
+
+    .runner::after {
+        content: "";
+        position: absolute;
+        width: 25px;
+        height: 75px;
+        background: #102f59;
+        border-radius: 12px;
+        left: 14px;
+        top: 24px;
+        transform: rotate(-7deg);
+        box-shadow:
+            -17px 45px 0 -6px #102f59,
+            22px 50px 0 -6px #102f59;
+    }
+
+    .runner.big {
+        width: 70px;
+        height: 175px;
+    }
+
+    .runner.big::before {
+        width: 34px;
+        height: 34px;
+        left: 18px;
+    }
+
+    .runner.big::after {
+        width: 35px;
+        height: 105px;
+        left: 18px;
+        top: 32px;
     }
 
     .event-content {
@@ -486,7 +586,7 @@
         font-weight: 900;
     }
 
-    #eventModal .section-title {
+    .section-title {
         display: inline-flex;
         align-items: center;
         gap: 10px;
@@ -499,7 +599,7 @@
         margin-bottom: 15px;
     }
 
-    #eventModal .section-icon {
+    .section-icon {
         width: 36px;
         height: 36px;
         background: #6bad3f;
@@ -510,8 +610,7 @@
         font-size: 18px;
         margin-left: -8px;
     }
-
-    #eventModal .overview {
+    .overview {
         background: linear-gradient(135deg, #eef8ff, #e5f2fc);
         border: 1px solid #d4e7f5;
         border-radius: 18px;
@@ -519,13 +618,13 @@
         position: relative;
     }
 
-    #eventModal .overview-list {
+    .overview-list {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px 25px;
     }
 
-    #eventModal .overview-item {
+    .overview-item {
         display: grid;
         grid-template-columns: 28px 75px 10px 1fr;
         align-items: center;
@@ -533,25 +632,25 @@
         color: #17365f;
     }
 
-    #eventModal .overview-item .icon {
+    .overview-item .icon {
         font-size: 17px;
     }
 
-    #eventModal .overview-item b {
+    .overview-item b {
         font-weight: 800;
     }
 
-    #eventModal .race-section {
+    .race-section {
         margin-bottom: 28px;
     }
 
-    #eventModal .race-grid {
+    .race-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 18px;
     }
 
-    #eventModal .race-card {
+    .race-card {
         border-radius: 18px;
         overflow: hidden;
         border: 1px solid #d8e4ef;
@@ -559,7 +658,7 @@
         box-shadow: 0 5px 18px rgba(18,50,90,.08);
     }
 
-    #eventModal .race-header {
+    .race-header {
         min-height: 78px;
         padding: 12px 18px;
         display: flex;
@@ -722,7 +821,9 @@
 
     .schedule {
         min-height: 160px;
-        background: linear-gradient(rgba(238,248,255,.94), rgba(238,248,255,.94)), linear-gradient(120deg,#8fc4e5,#fff);
+        background:
+            linear-gradient(rgba(238,248,255,.94), rgba(238,248,255,.94)),
+            linear-gradient(120deg,#8fc4e5,#fff);
         border-radius: 18px;
         padding: 20px;
         border: 1px solid #d6e8f4;
@@ -828,624 +929,116 @@
         opacity: .8;
     }
 
-    /* ================= RESPONSIVE MEDIA QUERIES ================= */
+    .open-event-btn {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
 
-    /* ================= RESPONSIVE ================= */
-
-    /* TABLET */
-    @media (max-width: 1100px) {
-
-        .event-modal {
-            padding: 15px;
-        }
-
-        .event-modal-box {
-            width: 98vw;
-            max-height: 96vh;
-        }
-
-        .event-hero {
-            padding: 25px 30px !important;
-        }
-
-        .hero-tagline {
-            right: 30px;
-            width: 150px;
-            font-size: 17px;
-        }
-
-        .runners {
-            right: 20px;
-        }
-
-        .runners img {
-            max-height: 210px;
-        }
-
-        .intro-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .lower-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .bottom-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .race-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        .entitlement-grid {
-            grid-template-columns: repeat(5, 1fr);
-        }
+        border: 0;
+        background: #6bad3f;
+        color: white;
+        padding: 15px 28px;
+        border-radius: 30px;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(242,11,112,.3);
     }
 
 
-    /* ================= TABLET / SMALL LAPTOP ================= */
-    @media (max-width: 800px) {
+    /* =========================
+       RESPONSIVE
+    ========================== */
 
-        .event-modal {
-            padding: 10px;
-        }
+    @media(max-width: 1000px) {
 
-        .event-modal-box {
-            width: 100%;
-            max-height: 97vh;
-            border-radius: 18px;
-        }
-
-        .event-scroll {
-            max-height: 97vh;
-        }
-
-        /* HERO */
         .event-hero {
-            min-height: 230px !important;
-            padding: 22px 22px !important;
-            display: block;
+            padding: 25px;
         }
 
-        .brand {
-            margin-bottom: 18px;
-        }
-
-        .brand-runner {
-            font-size: 38px;
-        }
-
-        .brand-text strong {
-            font-size: 23px;
-        }
-
-        .brand-text span {
-            font-size: 9px;
-            letter-spacing: 2px;
-        }
-
-        .event-label {
-            font-size: 11px;
-            padding: 7px 15px;
-        }
-
-        .presented {
-            font-size: 14px;
-        }
-
-        .hero-title {
-            font-size: 27px !important;
-            line-height: 1.15;
-            max-width: 75%;
+        .hero-content {
+            width: 75%;
         }
 
         .hero-tagline {
             display: none;
         }
 
-        .runners {
-            right: 10px;
-            bottom: 0 !important;
-        }
-
-        .runners img {
-            max-height: 190px;
-        }
-
-        /* CONTENT */
-        .event-content {
-            padding: 25px 22px 30px;
-        }
-
-        .intro-grid {
-            grid-template-columns: 1fr;
-            gap: 18px;
-        }
-
-        .overview-list {
-            grid-template-columns: 1fr 1fr;
-        }
-
-        /* RACE */
-        .race-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .race-header {
-            min-height: 70px;
-            padding: 10px 14px;
-        }
-
-        .race-distance {
-            font-size: 29px;
-        }
-
-        .race-name {
-            font-size: 13px;
-        }
-
-        .race-runner-icon {
-            font-size: 38px;
-        }
-
-        /* LOWER */
+        .intro-grid,
         .lower-grid,
         .bottom-grid {
             grid-template-columns: 1fr;
         }
 
-        .entitlement-grid {
-            grid-template-columns: repeat(4, 1fr);
-        }
-
-        .event-footer {
-            padding: 25px 20px;
-            text-align: center;
-        }
-
-        .footer-main {
-            font-size: 20px;
-        }
-    }
-
-
-    /* ================= MOBILE ================= */
-    @media (max-width: 600px) {
-
-        html,
-        body {
-            overflow-x: hidden;
-        }
-
-        .event-modal {
-            padding: 6px;
-            align-items: center;
-        }
-
-        .event-modal-box {
-            width: 100%;
-            max-height: 98vh;
-            border-radius: 14px;
-        }
-
-        .event-scroll {
-            max-height: 98vh;
-        }
-
-        /* CLOSE BUTTON */
-        .modal-close {
-            top: 10px;
-            right: 10px;
-            width: 36px;
-            height: 36px;
-            font-size: 21px;
-        }
-
-
-        /* ================= HERO ================= */
-
-        .event-hero {
-            min-height: 245px !important;
-            padding: 18px 15px !important;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(255,255,255,.98) 0%,
-                    rgba(255,255,255,.93) 55%,
-                    rgba(255,255,255,.25) 100%
-                ),
-                linear-gradient(
-                    180deg,
-                    #a9dcff 0%,
-                    #f9d49c 62%,
-                    #b5d6d7 100%
-                );
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 5;
-        }
-
-        .brand {
-            gap: 7px;
-            margin-bottom: 15px;
-        }
-
-        .brand-runner {
-            font-size: 31px;
-        }
-
-        .brand-text strong {
-            font-size: 20px;
-            letter-spacing: -.5px;
-        }
-
-        .brand-text span {
-            margin-top: 5px;
-            font-size: 7px;
-            letter-spacing: 1.5px;
-        }
-
-        .event-label {
-            font-size: 9px;
-            padding: 6px 12px;
-            margin-bottom: 7px;
-        }
-
-        .presented {
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-
-        .hero-title {
-            display: inline-block;
-            max-width: 82%;
-            padding: 6px 11px;
-            font-size: 21px !important;
-            line-height: 1.12;
-            letter-spacing: -.5px;
-        }
-
-        .hero-title span {
-            display: inline;
-        }
-
-        /* RUNNERS */
-        .runners {
-            right: -5px;
-            bottom: 0 !important;
-            z-index: 2;
-            opacity: .20;
-        }
-
-        .runners img {
-            max-height: 175px;
-            width: auto;
-        }
-
-
-        /* ================= CONTENT ================= */
-
-        .event-content {
-            padding: 20px 12px 25px;
-        }
-
-        .intro-grid {
-            display: block;
-            margin-bottom: 20px;
-        }
-
-        .intro-text {
-            padding: 5px 4px;
-        }
-
-        .intro-text p {
-            font-size: 12px;
-            line-height: 1.55;
-            margin-bottom: 12px;
-        }
-
-        /* SECTION TITLE */
-        .section-title {
-            font-size: 14px;
-            padding: 3px 15px 3px 8px;
-            margin-bottom: 12px;
-        }
-
-        .section-icon {
-            width: 31px;
-            height: 31px;
-            font-size: 15px;
-            margin-left: -5px;
-        }
-
-
-        /* ================= OVERVIEW ================= */
-
-        .overview {
-            padding: 14px 12px;
-            border-radius: 14px;
+        .race-grid {
+            grid-template-columns: 1fr;
         }
 
         .overview-list {
             grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .overview-item {
-            grid-template-columns: 25px 65px 8px 1fr;
-            font-size: 11px;
-        }
-
-        .overview-item .icon {
-            font-size: 15px;
-        }
-
-
-        /* ================= RACE ================= */
-
-        .race-section {
-            margin-bottom: 20px;
-        }
-
-        .race-grid {
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .race-card {
-            border-radius: 14px;
-        }
-
-        .race-header {
-            min-height: 65px;
-            padding: 10px 14px;
-        }
-
-        .race-distance {
-            font-size: 28px;
-        }
-
-        .race-name {
-            font-size: 12px;
-            margin-top: 3px;
-        }
-
-        .race-runner-icon {
-            font-size: 35px;
-        }
-
-        .race-body {
-            padding: 13px;
-            min-height: auto;
-        }
-
-        .race-body h4 {
-            font-size: 13px;
-            margin-bottom: 6px;
-        }
-
-        .race-body p {
-            font-size: 11px;
-            line-height: 1.45;
-        }
-
-        .cutoff {
-            margin-top: 10px;
-            padding: 8px;
-            font-size: 10px;
-        }
-
-        .cutoff strong {
-            font-size: 12px;
-        }
-
-
-        /* ================= LOWER PANELS ================= */
-
-        .lower-grid {
-            display: block;
-            margin-top: 18px;
-        }
-
-        .bottom-grid {
-            display: block;
-            margin-top: 18px;
-        }
-
-        .panel,
-        .rules,
-        .schedule {
-            padding: 14px;
-            border-radius: 14px;
-            margin-bottom: 14px;
-        }
-
-
-        /* ================= ENTITLEMENTS ================= */
-
-        .entitlement-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px 5px;
-        }
-
-        .entitlement {
-            font-size: 9px;
-            line-height: 1.3;
-        }
-
-        .entitlement-icon {
-            width: 42px;
-            height: 42px;
-            border-width: 4px;
-            font-size: 17px;
-            margin-bottom: 6px;
-        }
-
-
-        /* ================= AWARDS ================= */
-
-        .award-intro {
-            font-size: 10px;
-            line-height: 1.45;
-        }
-
-        .award-table {
-            width: 100%;
-            border-spacing: 3px;
-            font-size: 9px;
-        }
-
-        .award-table th {
-            padding: 7px 3px;
-            font-size: 9px;
-        }
-
-        .award-table td {
-            padding: 6px 2px;
-            font-size: 9px;
-        }
-
-        .notes {
-            font-size: 9px;
-            line-height: 1.45;
-            padding: 8px;
-        }
-
-
-        /* ================= SCHEDULE ================= */
-
-        .schedule {
-            min-height: 120px;
-            padding: 15px;
-        }
-
-        .tba {
-            font-size: 32px;
-            margin-top: 18px;
-        }
-
-
-        /* ================= RULES ================= */
-
-        .rules {
-            padding: 15px;
-        }
-
-        .rules li {
-            font-size: 10px;
-            padding-left: 22px;
-            margin-bottom: 8px;
-            line-height: 1.4;
-        }
-
-        .rules li::before {
-            width: 15px;
-            height: 15px;
-            font-size: 9px;
-        }
-
-
-        /* ================= FOOTER ================= */
-
-        .event-footer {
-            margin-top: 18px;
-            padding: 22px 14px 28px;
-            border-radius: 14px;
-            text-align: center;
-        }
-
-        .footer-main {
-            font-size: 17px;
-            line-height: 1.3;
-        }
-
-        .footer-brand {
-            margin-top: 10px;
-            font-size: 12px;
-            letter-spacing: 3px;
-        }
-
-        .footer-small {
-            font-size: 7px;
-            letter-spacing: 1.5px;
         }
     }
 
-
-    /* ================= VERY SMALL MOBILE ================= */
-
-    @media (max-width: 380px) {
+    @media(max-width: 650px) {
 
         .event-modal {
-            padding: 3px;
+            padding: 8px;
         }
 
         .event-modal-box {
-            border-radius: 11px;
-        }
-
-        .event-hero {
-            min-height: 225px !important;
-            padding: 15px 12px !important;
-        }
-
-        .brand-text strong {
-            font-size: 18px;
-        }
-
-        .brand-text span {
-            font-size: 6px;
-        }
-
-        .hero-title {
-            max-width: 88%;
-            font-size: 18px !important;
-            padding: 5px 9px;
-        }
-
-        .runners img {
-            max-height: 145px;
+            width: 100%;
+            border-radius: 15px;
         }
 
         .event-content {
-            padding: 17px 10px 20px;
+            padding: 20px 15px 25px;
         }
 
-        .overview-item {
-            grid-template-columns: 22px 60px 7px 1fr;
-            font-size: 10px;
+        .event-hero {
+            min-height: 280px;
+        }
+
+        .hero-content {
+            width: 100%;
+        }
+
+        .brand-text strong {
+            font-size: 22px;
+        }
+
+        .hero-title {
+            font-size: 36px;
+        }
+
+        .hero-year {
+            font-size: 30px;
+        }
+
+        .runners {
+            opacity: .25;
         }
 
         .entitlement-grid {
             grid-template-columns: repeat(3, 1fr);
         }
 
-        .entitlement-icon {
-            width: 38px;
-            height: 38px;
-            font-size: 15px;
+        .lower-grid {
+            grid-template-columns: 1fr;
         }
 
-        .award-table {
-            border-spacing: 2px;
+        .bottom-grid {
+            grid-template-columns: 1fr;
         }
 
-        .award-table th,
-        .award-table td {
-            font-size: 8px;
-            padding: 5px 1px;
-        }
-
-        .footer-main {
+        .section-title {
             font-size: 15px;
         }
     }
 </style>
+</head>
+
+<body>
 
 
 <!-- =========================
@@ -1460,13 +1053,21 @@
 ========================== -->
 
 <div class="event-modal" id="eventModal">
+
     <div class="event-modal-box">
-        <button class="modal-close" onclick="closeEventModal()">&times;</button>
+
+        <button class="modal-close" onclick="closeEventModal()">
+            ×
+        </button>
+
         <div class="event-scroll">
             <section class="event-hero">
                 <div class="hero-content">
                     <div class="brand">
-                        <img src="<?php echo e(asset('img/logo.png')); ?>" alt="" style="height: 70px;">
+
+                        <img src="<?php echo e(asset('img/logo.png')); ?>" alt="" style="height: 100px;">
+
+
                     </div>
                     <div class="event-label">
                         EVENT DETAILS
@@ -1474,11 +1075,17 @@
                     <div class="presented">
                         Run BURJOWAN Proudly Presents
                     </div>
-                    <div style="display: flex; align-items: center; flex-wrap: nowrap; gap: 10px;">
-                        <div class="hero-title">
-                            WINTER <span>HALF MARATHON</span> 2026
-                        </div>
+                    <div class="hero-title">
+                        WINTER <span>HALF MARATHON</span>
                     </div>
+                    <div class="hero-year">
+                        2026
+                    </div>
+                </div>
+                <div class="hero-tagline">
+                    Same Roads<br>
+                    New Dreams<br>
+                    <span>Bigger Together</span>
                 </div>
                 <div class="runners">
                     <img src="<?php echo e(asset('img/event2.png')); ?>" alt="">
@@ -1736,12 +1343,12 @@
 
                             <div class="entitlement">
                                 <div class="entitlement-icon">🎟️</div>
-                                Race BIB
+                                Race Bib
                             </div>
 
                             <div class="entitlement">
                                 <div class="entitlement-icon">🏅</div>
-                                Imported<br> Medal
+                                Imported<br>Finisher Medal
                             </div>
 
                             <div class="entitlement">
@@ -1839,6 +1446,10 @@
                             <br>• Podium positions will be determined
                             based on Gun Time.
 
+                            <br>• This event is exclusively for amateur
+                            runners. Professional athletes are not eligible
+                            for awards.
+
                         </div>
 
                     </div>
@@ -1884,13 +1495,13 @@
                             </li>
 
                             <li>
-                                BIBs are strictly non-transferable.
-                                Running under another participant's BIB
+                                Bibs are strictly non-transferable.
+                                Running under another participant's Bib
                                 will result in disqualification.
                             </li>
 
                             <li>
-                                Medals will be awarded only to
+                                Finisher medals will be awarded only to
                                 participants who complete their respective
                                 races within the official cut-off time.
                             </li>
@@ -1937,7 +1548,9 @@
             </div>
 
         </div>
+
     </div>
+
 </div>
 <script>
     document.querySelectorAll('.ev-category-grid .ev-cat-btn:not([disabled])').forEach(button => {
@@ -2011,4 +1624,4 @@
 
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\run-event\resources\views/event.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\run-event\resources\views/event.blade.php ENDPATH**/ ?>

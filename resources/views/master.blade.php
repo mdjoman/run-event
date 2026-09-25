@@ -151,6 +151,10 @@
         .success-close-btn:active {
             transform: translateY(0);
         }
+        /* ====================tooltip=========================== */
+        .tshirt-hover {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -161,24 +165,32 @@
         <a href="{{ route('home') }}" class="logo">
             <img src="{{ asset('img/logo.png') }}" alt="Run Burjowan">
         </a>
-
-        <nav class="nav-links">
+        <nav class="nav-links" id="navMenu">
             <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
             <a class="nav-link {{ request()->routeIs('event') ? 'active' : '' }}" href="{{ route('event') }}">Events</a>
             <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
             <a class="nav-link {{ request()->routeIs('activity') ? 'active' : '' }}" href="{{ route('activity') }}">Activities</a>
             <a class="nav-link {{ request()->routeIs('service') ? 'active' : '' }}" href="{{ route('service') }}">Services</a>
             <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
-            <a href="#">Results</a>
-            <a href="#">Gallery</a>
+            <a class="nav-link" href="#">Results</a>
+            <a class="nav-link {{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">Gallery</a>
             <a class="nav-link {{ request()->routeIs('form') ? 'active' : '' }}" href="{{ route('form') }}">Form</a>
         </nav>
 
         <div class="nav-actions">
-            <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button class="search-btn">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+
             <a href="#" class="btn-login">Login</a>
             <a href="#" class="btn-primary">Join Us</a>
         </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" type="button">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
     </div>
 </header>
 
@@ -286,24 +298,10 @@
                             <input type="file" name="profile_image" id="profile_image_input"
                                    accept="image/*" style="display:none;">
 
-                            <div id="profile_preview_wrapper"
-                                 style="position:relative; width:72px; height:72px; border-radius:50%;
-                                        background:linear-gradient(135deg,#fce7f3 0%,#fbcfe8 100%);
-                                        display:flex; align-items:center; justify-content:center;
-                                        flex-shrink:0; overflow:hidden;
-                                        box-shadow:0 4px 14px rgba(225,29,72,.15);
-                                        border:3px solid #fff; transition:all .25s ease;">
-                                <img id="profile_preview_img" src="" alt=""
-                                     style="display:none; width:100%; height:100%; object-fit:cover;">
-                                <i id="profile_placeholder_icon" class="fa-solid fa-user"
-                                   style="font-size:26px; color:#e11d48; opacity:.55;"></i>
-                                <button type="button" id="profile_remove_btn"
-                                        style="display:none; position:absolute; top:-3px; right:-3px;
-                                               width:22px; height:22px; border-radius:50%;
-                                               background:#e11d48; color:#fff; border:2px solid #fff;
-                                               cursor:pointer; align-items:center; justify-content:center;
-                                               font-size:11px; line-height:1; padding:0;
-                                               box-shadow:0 2px 6px rgba(0,0,0,.15);">
+                            <div id="profile_preview_wrapper" style="position:relative; width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg,#fce7f3 0%,#fbcfe8 100%); display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; box-shadow:0 4px 14px rgba(225,29,72,.15);  border:3px solid #fff; transition:all .25s ease;">
+                                <img id="profile_preview_img" src="" alt="" style="display:none; width:100%; height:100%; object-fit:cover;">
+                                <i id="profile_placeholder_icon" class="fa-solid fa-user" style="font-size:26px; color:#e11d48; opacity:.55;"></i>
+                                <button type="button" id="profile_remove_btn" style="display:none; position:absolute; top:-3px; right:-3px; width:22px; height:22px; border-radius:50%; background:#e11d48; color:#fff; border:2px solid #fff; cursor:pointer; align-items:center; justify-content:center; font-size:11px; line-height:1; padding:0;  box-shadow:0 2px 6px rgba(0,0,0,.15);">
                                     &times;
                                 </button>
                             </div>
@@ -326,8 +324,7 @@
                             </span>
                         </div>
 
-                        <small id="profile_error"
-                               style="display:none; color:#dc2626; font-size:12px; margin-top:6px; font-weight:500;"></small>
+                        <small id="profile_error" style="display:none; color:#dc2626; font-size:12px; margin-top:6px; font-weight:500;"></small>
                     </div>
 
                     <div class="form-group">
@@ -389,8 +386,8 @@
                         <input type="text" name="nid" placeholder="National ID or Passport Number" required>
                     </div>
                     <div class="form-group">
-                        <label>Preferred BIB Number <span class="optional">(Optional)</span></label>
-                        <input type="text" name="bib_number" placeholder="e.g. 101 or preferred number">
+                        <label>BIB Number <span class="optional">(Optional)</span></label>
+                        <input type="text" name="bib_number" value="" disabled>
                     </div>
                 </div>
 
@@ -439,20 +436,74 @@
                             <option value="" disabled selected>Select Category</option>
                             <option value="7.5k">7.5K Run</option>
                             <option value="15k">15K Run</option>
-                            <option value="21.5k">21.5K Run</option>
+                            <option value="21.1k">21.1K Run</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>T-Shirt Size <span class="required">*</span></label>
-                        <div class="radio-options-group">
-                            <label class="radio-card"><input type="radio" name="tshirt" value="S" required> S</label>
-                            <label class="radio-card"><input type="radio" name="tshirt" value="M"> M</label>
-                            <label class="radio-card"><input type="radio" name="tshirt" value="L"> L</label>
-                            <label class="radio-card"><input type="radio" name="tshirt" value="XL"> XL</label>
-                            <label class="radio-card"><input type="radio" name="tshirt" value="XXL"> XXL</label>
+                        <div class="radio-options-group" style="display: flex; gap: 10px;">
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="S" required> S
+                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="M"> M
+                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="L"> L
+                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="XL"> XL
+                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="XXL"> XXL
+                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
+                            </label>
+
                         </div>
                     </div>
+                    <style>
+                        .tshirt-parent {
+                            position: relative;
+                            cursor: pointer;
+                        }
+
+                        .tshirt-tooltip {
+                            display: none;
+                            position: absolute;
+                            bottom: 115%;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 500px;
+                            background: #ffffff;
+                            padding: 6px;
+                            border: 1px solid #cbd5e1;
+                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+                            border-radius: 6px;
+                            z-index: 99999;
+                            text-align: center;
+                        }
+
+                        .tshirt-tooltip img {
+                            width: 100%;
+                            height: auto;
+                            display: block;
+                            border-radius: 4px;
+                        }
+
+                        .tshirt-parent:hover .tshirt-tooltip {
+                            display: block;
+                        }
+                    </style>
                 </div>
             </div>
             <div class="section-card">
@@ -512,6 +563,23 @@
         </form>
     </div>
 </div>
+ {{-- share popup  --}}
+<div id="shareModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; padding:20px; border-radius:12px; width:340px; max-width:90%; text-align:center; position:relative;">
+        <span id="closeShare" style="position:absolute; right:12px; top:8px; cursor:pointer; font-size:20px;">&times;</span>
+        <h3 style="margin-bottom:14px;">Share Event</h3>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+            <a id="shareFb" target="_blank" class="btn-primary full-width" style="background:#1877f2;">Facebook</a>
+            <a id="shareWa" target="_blank" class="btn-primary full-width" style="background:#25d366;">WhatsApp</a>
+            <a id="shareLi" target="_blank" class="btn-primary full-width" style="background:#0a66c2;">LinkedIn</a>
+            <a id="shareTw" target="_blank" class="btn-primary full-width" style="background:#000;">X (Twitter)</a>
+            <button id="copyLink" class="btn-primary full-width" style="background:#555;">Copy Link</button>
+        </div>
+
+        <p id="copyMsg" style="color:green; font-size:13px; margin-top:8px; display:none;">Link copied!</p>
+    </div>
+</div>
 
 {{-- ============================= CUSTOM SUCCESS MODAL ============================= --}}
 <div id="successModal">
@@ -537,8 +605,6 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     // Tailwind config
-
-
     document.addEventListener('DOMContentLoaded', function () {
 
         /* ============================================================
@@ -943,35 +1009,121 @@
     /*==============================================================
     ==================================================================*/
     document.addEventListener('DOMContentLoaded', function () {
-    const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
+        const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
+        registerBtns.forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
 
-    registerBtns.forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            Swal.fire({
-                title: '<span style="color: #e11d48;">Payment Instruction</span>',
-                html: '<p style="color: #475569; font-size: 14px;">Please complete your payment to our Personal bKash Number (<strong style="color: #e11d52;">+880 1711808026</strong>) first, then enter the verification details below.</p>',
-                background: '#fff5f7',
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonText: 'I am ready, OK',
-                cancelButtonText: 'Go Back',
-                confirmButtonColor: '#e11d48',
-                cancelButtonColor: '#64748b',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const registrationModal = document.getElementById('registrationModal');
-                    if (registrationModal) {
-                        registrationModal.style.display = 'flex';
-                        registrationModal.classList.add('active');
+                Swal.fire({
+                    title: '<span style="color: #e11d48;">Payment Instruction</span>',
+                    html: '<p style="color: #475569; font-size: 14px;">Please complete your payment to our Personal bKash Number (<strong style="color: #e11d52;">+880 1711808026</strong>) first, then enter the verification details below.</p>',
+                    background: '#fff5f7',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: 'I am ready, OK',
+                    cancelButtonText: 'Go Back',
+                    confirmButtonColor: '#e11d48',
+                    cancelButtonColor: '#64748b',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const registrationModal = document.getElementById('registrationModal');
+                        if (registrationModal) {
+                            registrationModal.style.display = 'flex';
+                            registrationModal.classList.add('active');
+                        }
                     }
-                }
+                });
             });
         });
     });
-});
+
+    // share script
+    document.addEventListener('DOMContentLoaded', function () {
+    const modal   = document.getElementById('shareModal');
+    const closeBtn= document.getElementById('closeShare');
+
+    document.querySelectorAll('.shareBtn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const url   = this.dataset.url;
+            const title = this.dataset.title;
+            const encUrl   = encodeURIComponent(url);
+            const encTitle = encodeURIComponent(title);
+
+            document.getElementById('shareFb').href =
+                `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
+            document.getElementById('shareWa').href =
+                `https://api.whatsapp.com/send?text=${encTitle}%20${encUrl}`;
+            document.getElementById('shareLi').href =
+                `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`;
+            document.getElementById('shareTw').href =
+                `https://twitter.com/intent/tweet?text=${encTitle}&url=${encUrl}`;
+
+            document.getElementById('copyLink').onclick = () => {
+                navigator.clipboard.writeText(url).then(() => {
+                    const msg = document.getElementById('copyMsg');
+                    msg.style.display = 'block';
+                    setTimeout(() => msg.style.display = 'none', 2000);
+                });
+            };
+
+            modal.style.display = 'flex';
+        });
+    });
+    closeBtn.onclick = () => modal.style.display = 'none';
+        modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+    });
+    /*=========================================Tooltip==================================================*/
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltip = document.getElementById('custom-tooltip');
+        const tooltipImg = document.getElementById('tooltip-img');
+        const items = document.querySelectorAll('.tshirt-hover');
+
+        items.forEach(item => {
+            item.addEventListener('mouseenter', function (e) {
+                const imgSrc = this.getAttribute('data-img');
+                tooltipImg.src = imgSrc;
+                tooltip.style.display = 'block';
+            });
+
+            item.addEventListener('mousemove', function (e) {
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY + 15) + 'px';
+            });
+
+            item.addEventListener('mouseleave', function () {
+                tooltip.style.display = 'none';
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+
+        if (!menuBtn || !navMenu) return;
+        menuBtn.addEventListener('click', function () {
+            navMenu.classList.toggle('active');
+            const icon = menuBtn.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+        navMenu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                navMenu.classList.remove('active');
+                const icon = menuBtn.querySelector('i');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            });
+        });
+    });
 </script>
 </body>
 </html>

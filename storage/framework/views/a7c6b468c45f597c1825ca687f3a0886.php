@@ -1,11 +1,10 @@
-@extends('master')
-@section('body')
+<?php $__env->startSection('body'); ?>
 <div class="page-wrapper" style="min-height: 100vh; background: #f8fafc; padding: 40px 20px; display: flex; justify-content: center; align-items: center;">
     <div class="page-container" style="width: 100%; max-width: 800px; background: #ffffff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); overflow: hidden; border: 1px solid #e2e8f0;">
         <div class="banner-header" style="background: linear-gradient(135deg, #fff 0%, #6bad3f  100%); color: #fff; padding: 30px 40px;">
             <div class="brand-section" style="display: flex; align-items: center; justify-content: space-between;">
                 <div class="logo-area" style="display: flex; align-items: center; gap: 16px;">
-                    <img src="{{asset('img/logo.png')}}" alt="" style="height: 100px;">
+                    <img src="<?php echo e(asset('img/logo.png')); ?>" alt="" style="height: 100px;">
                     <div class="header-title-area">
                         <h1 style="margin: 0; font-size: 29px; font-weight: 800; letter-spacing: 0.5px;color: #2a2850; ">EVENT REGISTRATION</h1>
                         <p style="margin: 6px 0 0 0; font-size: 14px; opacity: 0.9;color: #2a2850; ">Complete the form below to confirm your official participation</p>
@@ -15,12 +14,12 @@
         </div>
 
         <!-- Form Body -->
-        <form class="modal-body" id="registrationForm" method="POST" action="{{ route('registrations.store') }}" enctype="multipart/form-data" novalidate style="padding: 40px;">
+        <form class="modal-body" id="registrationForm" method="POST" action="<?php echo e(route('registrations.store')); ?>" enctype="multipart/form-data" novalidate style="padding: 40px;">
 
-            @csrf
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="event_id" id="event_id_field" value="1">
 
-            {{-- SECTION 1 --}}
+
             <div class="section-card" style="margin-bottom: 30px;">
                 <div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">1</div>
@@ -31,7 +30,7 @@
                 </div>
 
                 <div class="form-grid-2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
-                    {{-- Profile Image --}}
+
                     <div class="form-group" style="grid-column: 1 / -1;">
                         <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 8px;">Profile Image <span class="optional" style="color: #94a3b8; font-weight: 400;">(Optional, max 50 MB)</span></label>
 
@@ -136,7 +135,7 @@
                     </div>
                 </div>
 
-                {{-- NID and BIB Number side-by-side --}}
+
                 <div class="form-grid-2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 20px;">
                     <div class="form-group">
                         <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">NID / Any Identification Number <span class="required" style="color: #e11d48;">*</span></label>
@@ -156,7 +155,7 @@
                 </div>
             </div>
 
-            {{-- SECTION 2 --}}
+
             <div class="section-card" style="margin-bottom: 30px;">
                 <div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">2</div>
@@ -178,7 +177,7 @@
                 </div>
             </div>
 
-            {{-- SECTION 3 --}}
+
             <div class="section-card" style="margin-bottom: 30px;">
                 <div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">3</div>
@@ -200,73 +199,19 @@
                     </div>
 
                     <div class="form-group">
-                        <label>T-Shirt Size <span class="required">*</span></label>
-                        <div class="radio-options-group" style="display: flex; gap: 10px;">
-
-                            <label class="radio-card tshirt-parent">
-                                <input type="radio" name="tshirt" value="S" required> S
-                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
-                            </label>
-
-                            <label class="radio-card tshirt-parent">
-                                <input type="radio" name="tshirt" value="M"> M
-                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
-                            </label>
-
-                            <label class="radio-card tshirt-parent">
-                                <input type="radio" name="tshirt" value="L"> L
-                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
-                            </label>
-
-                            <label class="radio-card tshirt-parent">
-                                <input type="radio" name="tshirt" value="XL"> XL
-                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
-                            </label>
-
-                            <label class="radio-card tshirt-parent">
-                                <input type="radio" name="tshirt" value="XXL"> XXL
-                                <div class="tshirt-tooltip"><img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt"></div>
-                            </label>
-
+                        <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">T-Shirt Size <span class="required" style="color: #e11d48;">*</span></label>
+                        <div class="radio-options-group" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="S" required> S</label>
+                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="M"> M</label>
+                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="L"> L</label>
+                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="XL"> XL</label>
+                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="XXL"> XXL</label>
                         </div>
                     </div>
-                    <style>
-                        .tshirt-parent {
-                            position: relative;
-                            cursor: pointer;
-                        }
-
-                        .tshirt-tooltip {
-                            display: none;
-                            position: absolute;
-                            bottom: 115%;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            width: 500px;
-                            background: #ffffff;
-                            padding: 6px;
-                            border: 1px solid #cbd5e1;
-                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
-                            border-radius: 6px;
-                            z-index: 99999;
-                            text-align: center;
-                        }
-
-                        .tshirt-tooltip img {
-                            width: 100%;
-                            height: auto;
-                            display: block;
-                            border-radius: 4px;
-                        }
-
-                        .tshirt-parent:hover .tshirt-tooltip {
-                            display: block;
-                        }
-                    </style>
                 </div>
             </div>
 
-            {{-- SECTION 4 --}}
+
             <div class="section-card" style="margin-bottom: 30px;">
                 <div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">4</div>
@@ -324,4 +269,6 @@
         </form>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\run-event\resources\views/form.blade.php ENDPATH**/ ?>

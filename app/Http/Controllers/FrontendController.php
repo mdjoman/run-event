@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class FrontendController extends Controller
 {
     public function index()
     {
-        return view('index');
+        $events = Event::latest()->take(10)->get();
+        return view('index', compact('events'));
     }
 
     public function about()
@@ -18,7 +20,8 @@ class FrontendController extends Controller
 
     public function event()
     {
-        return view('event');
+        $events = Event::latest()->paginate(10);
+        return view('event', compact('events'));
     }
 
     public function activity()
@@ -38,6 +41,10 @@ class FrontendController extends Controller
     public function form()
     {
         return view('form');
+    }
+    public function gallery()
+    {
+        return view('gallery');
     }
 
     /**
