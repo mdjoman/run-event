@@ -372,28 +372,32 @@ Event        : ${d.event}
 Date         : ${eventDate}
 Location     : ${d.location || 'To be announced'}
 Category     : ${d.category}
-Bib Number   : ${d.bib}
+BiB Number   : ${d.bib}
 
 ━━━━━━━━━━━━━━━━━━━━━━
 📌 IMPORTANT INSTRUCTIONS
 ━━━━━━━━━━━━━━━━━━━━━━
-• Please collect your Bib and Race Kit before race day.
-• Bring a valid photo ID for verification.
-• Keep your Bib Number safe — it is required on race day.
-• Report to the venue at least 30 minutes before start time.
+* Please collect your BIB and Race Kit just before race day.
+* Bring a valid photo ID / Mobile phone carrying this messege.
+* Keep your BIB Number safe — it is required on race day.
+* Report to the venue at least 30 minutes before start time.
 
 For any queries, feel free to contact us.
 
-We look forward to seeing you at the starting line!
+We look forward to seeing you at the starting line !
 
 Warm regards,
 Run BURJOWAN Team
-"More Than a Race, It's a Movement."`;
+"More Than a Race, It's a Movement."
+
+Contact (WhatsApp):
++880 19 1146 9861
++880 17 1154 3414"`;
     }
 
     // Short SMS message
     function buildSmsMessage(d) {
-        return `Dear ${d.name}, your registration for ${d.event} is APPROVED. Category: ${d.category}, Bib No: ${d.bib}. Please collect your kit before race day. - Run BURJOWAN Team`;
+        return `Dear ${d.name}, Your registration for ${d.event} is APPROVED. Category: ${d.category}, BiB No: ${d.bib}. Please collect your kit before race day. - Run BURJOWAN Team`;
     }
 
     document.querySelectorAll('.notifyBtn').forEach(btn => {

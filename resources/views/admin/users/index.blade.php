@@ -122,7 +122,7 @@
                             @endif
                         </td>
                         <td class="px-5 py-4 text-slate-500 text-xs">
-                            {{ $user->created_at->format('d M Y') }}
+                            {{ $user->created_at?->format('d M Y') }}
                         </td>
                         <td class="px-5 py-4">
                             <div class="flex items-center justify-end gap-2">

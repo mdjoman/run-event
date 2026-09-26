@@ -7,6 +7,11 @@ use App\Models\Event;
 use App\Models\Registration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\NewRegistrationAdminMail;
+use App\Mail\RegistrationConfirmationMail;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class RegistrationController extends Controller
 {
@@ -49,10 +54,8 @@ class RegistrationController extends Controller
      */
     public function store(Request $request)
     {
-
         // ---------- 1. VALIDATION ----------
         $validated = $request->validate([
-            // Personal
             'first_name'        => 'required|string|max:100',
             'last_name'         => 'required|string|max:100',
             'phone'             => 'required|string|max:20',
@@ -64,41 +67,34 @@ class RegistrationController extends Controller
             'nid'               => 'required|string|max:50',
             'address'           => 'nullable|string|max:500',
 
-            // Emergency
             'emergency_name'    => 'required|string|max:100',
             'emergency_phone'   => 'required|string|max:20',
 
-            // Event
             'event_id'          => 'required|exists:events,id',
             'category'          => 'required|string|max:50',
             'tshirt'            => 'required|in:S,M,L,XL,XXL',
 
-            // Payment
             'payment_method'    => 'required|in:bKash,Card,Cash',
             'sender_phone_last3'=> 'required|string|max:3',
             'trx_id'            => 'required|string|max:100',
 
-            // Profile image
-            'profile_image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:51200', // 50 MB
+            'profile_image'     => 'nullable|image|mimes:jpg,jpeg,png,webp|max:51200',
 
-            // Terms
             'confirm_terms'     => 'accepted',
         ], [
-            // Custom messages (optional)
             'confirm_terms.accepted' => 'You must agree to the event rules and regulations.',
             'profile_image.max'      => 'Profile image must not exceed 50 MB.',
             'profile_image.image'    => 'Profile image must be a valid image file.',
         ]);
 
-        // ---------- 2. HANDLE PROFILE IMAGE UPLOAD ----------
+        // ---------- 2. HANDLE PROFILE IMAGE ----------
         $profileImagePath = null;
-
         if ($request->hasFile('profile_image')) {
             $profileImagePath = $request->file('profile_image')
                 ->store('registrations/profiles', 'public');
         }
 
-        // ---------- 3. FETCH EVENT (for fee) ----------
+        // ---------- 3. FETCH EVENT ----------
         $event = Event::findOrFail($validated['event_id']);
 
         // ---------- 4. PREPARE DATA ----------
@@ -118,21 +114,54 @@ class RegistrationController extends Controller
             'emergency_phone'    => $validated['emergency_phone'],
             'category'           => $validated['category'],
             'tshirt_size'        => $validated['tshirt'],
-            'amount'             => $event->fee,           // pull fee from the event
+            'amount'             => $event->fee,
             'payment_method'     => $validated['payment_method'],
             'sender_phone_last3' => $validated['sender_phone_last3'],
             'trx_id'             => $validated['trx_id'],
-            'status'             => 'pending',             // default status
-            'profile_image' => $profileImagePath ?? null,       // nullable
+            'status'             => 'pending',
+            'profile_image'      => $profileImagePath,
         ];
 
         // ---------- 5. SAVE ----------
         $registration = Registration::create($data);
 
-        // ---------- 6. INCREMENT EVENT REGISTERED COUNT ----------
+        // ---------- 6. INCREMENT COUNT ----------
         $event->increment('registered');
 
-        // ---------- 7. REDIRECT WITH SUCCESS ----------
+        // Load relation for mail views
+        $registration->loadMissing('event');
+
+        // ---------- 7. SEND CONFIRMATION TO SUBMITTER ----------
+        if (!empty($registration->email)) {
+            try {
+                Mail::to($registration->email)
+                    ->send(new RegistrationConfirmationMail($registration));
+            } catch (\Throwable $e) {
+                Log::error('Confirmation email to submitter failed: ' . $e->getMessage(), [
+                    'registration_id' => $registration->id,
+                    'email'           => $registration->email,
+                ]);
+            }
+        }
+
+        // ---------- 8. NOTIFY ADMINS + EVENT CREATOR ----------
+        try {
+            $adminEmails = User::where('role', 'admin')
+                ->whereNotNull('email')
+                ->pluck('email')
+                ->unique()
+                ->all();
+
+            if (!empty($adminEmails)) {
+                Mail::to($adminEmails)->send(new NewRegistrationAdminMail($registration));
+            }
+        } catch (\Throwable $e) {
+            Log::error('Admin notification email failed: ' . $e->getMessage(), [
+                'registration_id' => $registration->id,
+            ]);
+        }
+
+        // ---------- 9. RESPOND ----------
         if ($request->expectsJson()) {
             return response()->json([
                 'success'  => true,
@@ -140,6 +169,9 @@ class RegistrationController extends Controller
                 'redirect' => route('home'),
             ]);
         }
+
+        return redirect()->route('home')
+            ->with('success', "Registration #{$registration->id} created successfully! Awaiting review.");
     }
 
     public function show(Registration $registration)
