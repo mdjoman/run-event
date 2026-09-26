@@ -7,16 +7,18 @@ use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\RegistrationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 
 Route::controller(FrontendController::class)->group(function () {
     Route::get('/', 'index')->name('home');
     Route::get('/about', 'about')->name('about');
     Route::get('/event', 'event')->name('event');
     Route::get('/activity', 'activity')->name('activity');
-    Route::get('/service', 'service')->name('service');
     Route::get('/contact', 'contact')->name('contact');
     Route::get('/form', 'form')->name('form');
-    // cache clear from browser (local only)
+    Route::get('/gallery', 'gallery')->name('gallery');
+    Route::get('/blog', 'blog')->name('blog');
+    Route::post('/blog/store', 'storeBlog')->name('blog.store');
     Route::get('/clear-cache', 'clearCache')->name('clear.cache');
 });
 
@@ -38,14 +40,12 @@ Route::post('/registrations', [RegistrationController::class, 'store'])
     ->middleware('throttle:10,1')
     ->name('registrations.store');
 
-Route::prefix('admin')->name('admin.') ->middleware(['auth'])   ->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // Events — full resource
     Route::resource('events', EventController::class);
 
-    // Registrations — everything except store
     Route::resource('registrations', RegistrationController::class)
         ->except(['store']);
 
@@ -53,10 +53,13 @@ Route::prefix('admin')->name('admin.') ->middleware(['auth'])   ->group(function
                 [RegistrationController::class, 'updateStatus'])
         ->name('registrations.updateStatus');
 
-    // User Management
     Route::resource('users', UserController::class);
 
     Route::patch('users/{user}/toggle-status',
                 [UserController::class, 'toggleStatus'])
         ->name('users.toggleStatus');
+
+    Route::get('/blogs', [AdminBlogController::class, 'index'])->name('blogs.index');
+    Route::post('/blogs/approve/{id}', [AdminBlogController::class, 'approve'])->name('blogs.approve');
+    Route::delete('/blogs/delete/{id}', [AdminBlogController::class, 'destroy'])->name('blogs.destroy');
 });

@@ -151,6 +151,20 @@
         .success-close-btn:active {
             transform: translateY(0);
         }
+        /* =============Modal popup============= */
+        /* #registrationModal {
+            z-index: 50 !important;
+        } */
+
+
+        .swal2-container {
+            z-index: 99999 !important;
+        }
+        .form-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
     </style>
 </head>
 <body>
@@ -167,11 +181,13 @@
             <a class="nav-link <?php echo e(request()->routeIs('event') ? 'active' : ''); ?>" href="<?php echo e(route('event')); ?>">Events</a>
             <a class="nav-link <?php echo e(request()->routeIs('about') ? 'active' : ''); ?>" href="<?php echo e(route('about')); ?>">About</a>
             <a class="nav-link <?php echo e(request()->routeIs('activity') ? 'active' : ''); ?>" href="<?php echo e(route('activity')); ?>">Activities</a>
-            <a class="nav-link <?php echo e(request()->routeIs('service') ? 'active' : ''); ?>" href="<?php echo e(route('service')); ?>">Services</a>
+            <a class="nav-link <?php echo e(request()->routeIs('blog') ? 'active' : ''); ?>" href="<?php echo e(route('blog')); ?>">Blog</a>
             <a class="nav-link <?php echo e(request()->routeIs('contact') ? 'active' : ''); ?>" href="<?php echo e(route('contact')); ?>">Contact</a>
             <a href="#">Results</a>
-            <a href="#">Gallery</a>
-            <a class="nav-link <?php echo e(request()->routeIs('form') ? 'active' : ''); ?>" href="<?php echo e(route('form')); ?>">Form</a>
+            <a class="nav-link <?php echo e(request()->routeIs('gallery') ? 'active' : ''); ?>" href="<?php echo e(route('gallery')); ?>">Gallery</a>
+            <?php if($active_event): ?>
+                <a class="nav-link shareBtn" href="javascript:void(0)" data-url="<?php echo e(route('form', $active_event->id)); ?>" data-title="<?php echo e($active_event->title); ?>">Event Share</a>
+            <?php endif; ?>
         </nav>
 
         <div class="nav-actions">
@@ -215,10 +231,10 @@
             <a href="<?php echo e(route('event')); ?>">Events</a>
             <a href="<?php echo e(route('activity')); ?>">Activities</a>
             <a href="<?php echo e(route('about')); ?>">About</a>
-            <a href="<?php echo e(route('service')); ?>">Services</a>
+            <a href="<?php echo e(route('blog')); ?>">Blog</a>
             <a href="<?php echo e(route('contact')); ?>">Contact</a>
             <a href="#">Results</a>
-            <a href="#">Gallery</a>
+            <a href="<?php echo e(route('gallery')); ?>">Gallery</a>
         </div>
 
         <div class="footer-contact">
@@ -388,18 +404,14 @@
                         <label>NID / Any Identification Number <span class="required">*</span></label>
                         <input type="text" name="nid" placeholder="National ID or Passport Number" required>
                     </div>
-                    <div class="form-group ">
-                        <label>Preferred BIB Number <span class="optional">(Optional)</span></label>
-                        <input type="text" name="bib_number" placeholder="e.g. 101 or preferred number">
-                    </div>
-                </div>
-
-                <div class="form-grid-1" style="margin-top: 12px;">
                     <div class="form-group">
+                        
                         <label>Address <span class="optional">(Optional)</span></label>
                         <input type="text" name="address" placeholder="House/Street, Area, City">
                     </div>
                 </div>
+
+                
             </div>
 
             <div class="section-card">
@@ -439,20 +451,74 @@
                             <option value="" disabled selected>Select Category</option>
                             <option value="7.5k">7.5K Run</option>
                             <option value="15k">15K Run</option>
-                            <option value="21.5k">21.5K Run</option>
+                            <option value="21.1k">21.1K Run</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>T-Shirt Size <span class="required">*</span></label>
-                        <div class="radio-options-group">
-                            <label class="radio-card"><input type="radio" name="tshirt" value="S" required> S</label>
-                            <label class="radio-card"><input type="radio" name="tshirt" value="M"> M</label>
-                            <label class="radio-card"><input type="radio" name="tshirt" value="L"> L</label>
-                            <label class="radio-card"><input type="radio" name="tshirt" value="XL"> XL</label>
-                            <label class="radio-card"><input type="radio" name="tshirt" value="XXL"> XXL</label>
+                        <div class="radio-options-group" style="display: flex; gap: 10px;">
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="S" required> S
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="M"> M
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="L"> L
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="XL"> XL
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="XXL"> XXL
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
                         </div>
                     </div>
+                    <style>
+                        .tshirt-parent {
+                            position: relative;
+                            cursor: pointer;
+                        }
+
+                        .tshirt-tooltip {
+                            display: none;
+                            position: absolute;
+                            bottom: 115%;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 500px;
+                            background: #ffffff;
+                            padding: 6px;
+                            border: 1px solid #cbd5e1;
+                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+                            border-radius: 6px;
+                            z-index: 99999;
+                            text-align: center;
+                        }
+
+                        .tshirt-tooltip img {
+                            width: 100%;
+                            height: auto;
+                            display: block;
+                            border-radius: 4px;
+                        }
+
+                        .tshirt-parent:hover .tshirt-tooltip {
+                            display: block;
+                        }
+                    </style>
                 </div>
             </div>
             <div class="section-card">
@@ -471,22 +537,32 @@
                             <input type="radio" name="payment_method" value="bKash" checked required>
                             <i class="fa-solid fa-paper-plane" style="color:#e11d48;"></i> bKash
                         </label>
+                        <label class="radio-card">
+                            <input type="radio" name="payment_method" value="Nagad" required>
+                            <i class="fa-solid fa-paper-plane" style="color:#e11d48;"></i> Nagad
+                        </label>
                     </div>
                 </div>
 
                 <div class="bkash-box">
                     <div class="bkash-title">
-                        <i class="fa-solid fa-paper-plane"></i> bKash Payment Verification
+                        <i class="fa-solid fa-paper-plane"></i> bKash / Nagad Payment Verification
                     </div>
                     <div class="bkash-sub">
-                        <strong style="font-size: 13px !important;">Please complete your payment to our Personal bKash Number (+880 1711808026) first</strong>, then enter the verification details below.
+                        <strong style="font-size: 13px !important;">Please complete your payment to our Personal bKash / Nagad Number (+880 1911469861) first</strong>, then enter the verification details below.
                     </div>
 
-                    <div class="form-grid-2">
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label>Amount <span class=""></span></label>
+                            <input class="amount" type="text" name="event_price" placeholder="" id="eventPrice" readonly>
+                        </div>
+
                         <div class="form-group">
                             <label>Sender Phone # (Last 3 Digits) <span class="required">*</span></label>
                             <input type="text" name="sender_phone_last3" placeholder="e.g., 762" maxlength="3" required>
                         </div>
+
                         <div class="form-group">
                             <label>Transaction ID <span class="required">*</span></label>
                             <input type="text" name="trx_id" placeholder="e.g., TRX987654321" required>
@@ -552,8 +628,8 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    // Tailwind config
     document.addEventListener('DOMContentLoaded', function () {
 
         /* ============================================================
@@ -716,149 +792,163 @@
 
 
         /* ============================================================
-           AJAX SUBMIT + CUSTOM SUCCESS MODAL
-           ============================================================ */
-        const form      = document.getElementById('registrationForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const btnText   = document.getElementById('submitBtnText');
-        const btnSpin   = document.getElementById('submitBtnSpinner');
+        AJAX SUBMIT + CONFIRMATION POPUP + SUCCESS MODAL
+        ============================================================ */
+        const form        = document.getElementById('registrationForm');
+        const submitBtn   = document.getElementById('submitBtn');
+        const btnText     = document.getElementById('submitBtnText');
+        const btnSpin     = document.getElementById('submitBtnSpinner');
 
-        const successModal     = document.getElementById('successModal');
-        const successMessage   = document.getElementById('successMessage');
-        const successCloseBtn  = document.getElementById('successCloseBtn');
+        const successModal    = document.getElementById('successModal');
+        const successMessage  = document.getElementById('successMessage');
+        const successCloseBtn = document.getElementById('successCloseBtn');
+        const eventId = document.getElementById('event_id_field').value;
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
 
-        if (!form) return;
-
-        form.addEventListener('submit', async function (e) {
-            e.preventDefault();
-
-            clearFieldErrors();
-            setLoading(true);
-
-            const formData = new FormData(form);
-
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json',
-                    },
-                    body: formData,
-                });
-
-                let data;
-                try {
-                    data = await response.json();
-                } catch (parseErr) {
-                    console.error('Invalid JSON:', parseErr);
-                    setLoading(false);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Server Error',
-                        text: 'Unexpected response from server. Please try again.',
-                        confirmButtonColor: '#e11d48',
-                    });
-                    return;
-                }
-
-                /* ---------- Validation errors (422) ---------- */
-                if (response.status === 422) {
-                    displayErrors(data.errors || {});
-                    setLoading(false);
-                    scrollToFirstError();
-
-                    const firstError = Object.values(data.errors || {})[0]?.[0]
-                        || 'Please fix the highlighted fields.';
-
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Validation Error',
-                        text: firstError,
-                        confirmButtonColor: '#e11d48',
-                        confirmButtonText: 'Fix Now',
-                    });
-                    return;
-                }
-
-                /* ---------- Other HTTP errors ---------- */
-                if (!response.ok) {
-                    setLoading(false);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops!',
-                        text: data.message || 'Something went wrong. Please try again.',
-                        confirmButtonColor: '#e11d48',
-                    });
-                    return;
-                }
-
-                /* ---------- Success ---------- */
-                if (data.success) {
-                    setLoading(false);
-
-                    // Update success modal message
-                    successMessage.textContent = data.message || 'Your registration has been received.';
-
-                    // Show custom success modal
-                    successModal.classList.add('show');
-
-                    // Reset form + preview
-                    form.reset();
-                    if (typeof window.resetProfileUploader === 'function') {
-                        window.resetProfileUploader();
-                    }
-
-                    // Close registration modal behind success modal
-                    if (modal) modal.classList.remove('active');
-
-                } else {
-                    setLoading(false);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: data.message || 'Unknown error.',
-                        confirmButtonColor: '#e11d48',
-                    });
-                }
-
-            } catch (err) {
-                console.error('Fetch error:', err);
-                setLoading(false);
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Network Error',
-                    text: 'Please check your connection and try again.',
-                    confirmButtonColor: '#e11d48',
+                    title: 'Are you sure?',
+                    text: 'Please check your information carefully. Once submitted, it cannot be changed!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3a8908',
+                    cancelButtonColor: '#e11d48',
+                    confirmButtonText: 'Yes, Submit!',
+                    cancelButtonText: 'No, Review'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        clearFieldErrors();
+                        setLoading(true);
+
+                        const formData = new FormData(form);
+
+                        try {
+                            const response = await fetch(form.action, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
+                                    'X-Requested-With': 'XMLHttpRequest',
+                                    'Accept': 'application/json',
+                                },
+                                body: formData,
+                            });
+
+                            let data;
+                            try {
+                                data = await response.json();
+                            } catch (parseErr) {
+                                console.error('Invalid JSON response:', parseErr);
+                                setLoading(false);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Server Error',
+                                    text: 'Something went wrong on the server. Check Laravel logs.',
+                                    confirmButtonColor: '#e11d48',
+                                });
+                                return;
+                            }
+
+                            /* ---------- Validation errors (422) ---------- */
+                            if (response.status === 422) {
+                                displayErrors(data.errors || {});
+                                setLoading(false);
+                                scrollToFirstError();
+
+                                const firstError = Object.values(data.errors || {})[0]?.[0]
+                                    || 'Please fix the highlighted fields.';
+
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Validation Error',
+                                    text: firstError,
+                                    confirmButtonColor: '#e11d48',
+                                    confirmButtonText: 'Fix Now',
+                                });
+                                return;
+                            }
+
+                            // Success Close Button Event Listener
+                            if (successCloseBtn) {
+                                successCloseBtn.addEventListener('click', function () {
+                                    if (successModal) {
+                                        successModal.classList.remove('show');
+                                        successModal.style.display = 'none';
+                                    }
+                                    // Optional: page reload ba redirect korte chaile ekhane dite paren
+                                    // location.reload();
+                                });
+                            }
+
+                            /* ---------- Other HTTP errors ---------- */
+                            if (!response.ok) {
+                                setLoading(false);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops!',
+                                    text: data.message || 'Something went wrong. Please try again.',
+                                    confirmButtonColor: '#e11d48',
+                                });
+                                return;
+                            }
+
+                            /* ---------- Success ---------- */
+                            if (data.success) {
+                                setLoading(false);
+
+                                // Show success message inside success modal
+                                if (successMessage) {
+                                    successMessage.textContent = data.message || 'Your registration has been received.';
+                                }
+                                if (successModal) {
+                                    successModal.classList.add('show');
+                                }
+
+                                // Reset form and uploader
+                                form.reset();
+                                if (typeof window.resetProfileUploader === 'function') {
+                                    window.resetProfileUploader();
+                                }
+
+                                // Close the registration modal safely on success!
+                                const registrationModal = document.getElementById('registrationModal');
+                                if (registrationModal) {
+                                    registrationModal.classList.remove('active');
+                                    registrationModal.style.display = 'none';
+                                }
+
+                            } else {
+                                setLoading(false);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: data.message || 'Unknown error.',
+                                    confirmButtonColor: '#e11d48',
+                                });
+                            }
+
+                        } catch (err) {
+                            console.error('Fetch error:', err);
+                            setLoading(false);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Network Error',
+                                text: 'Please check your connection and try again.',
+                                confirmButtonColor: '#e11d48',
+                            });
+                        }
+                    }
                 });
-            }
-        });
-
-        // Close custom success modal
-        if (successCloseBtn) {
-            successCloseBtn.addEventListener('click', function () {
-                successModal.classList.remove('show');
             });
         }
-
-        // Close on backdrop click
-        if (successModal) {
-            successModal.addEventListener('click', function (e) {
-                if (e.target === successModal) {
-                    successModal.classList.remove('show');
-                }
-            });
-        }
-
-
         /* ============================================================
            HELPERS
            ============================================================ */
         function setLoading(isLoading) {
+            if (!submitBtn) return;
             submitBtn.disabled = isLoading;
-            btnText.style.opacity = isLoading ? '.5' : '1';
-            btnSpin.style.display = isLoading ? 'inline-block' : 'none';
+            if (btnText) btnText.style.opacity = isLoading ? '.5' : '1';
+            if (btnSpin) btnSpin.style.display = isLoading ? 'inline-block' : 'none';
             submitBtn.style.cursor = isLoading ? 'not-allowed' : 'pointer';
         }
 
@@ -903,7 +993,8 @@
 
 
         /* ============================================================
-           MISC EFFECTS           ============================================================ */
+           MISC EFFECTS
+           ============================================================ */
         document.querySelectorAll('.btn-register, .btn-search, .btn-subscribe').forEach(function (button) {
             button.addEventListener('click', function () {
                 this.style.transform = 'scale(0.95)';
@@ -938,154 +1029,191 @@
     });
 
     const phoneInput = document.getElementById('phoneInput');
-    phoneInput.addEventListener('keydown', function(e) {
-        if (this.selectionStart <= 4 && (e.key === 'Backspace' || e.key === 'Delete')) {
-            e.preventDefault();
-        }
-    });
+    if (phoneInput) {
+        phoneInput.addEventListener('keydown', function(e) {
+            if (this.selectionStart <= 4 && (e.key === 'Backspace' || e.key === 'Delete')) {
+                e.preventDefault();
+            }
+        });
 
-    phoneInput.addEventListener('click', function() {
-        if (this.selectionStart < 5) {
-            this.setSelectionRange(this.value.length, this.value.length);
-        }
-    });
+        phoneInput.addEventListener('click', function() {
+            if (this.selectionStart < 5) {
+                this.setSelectionRange(this.value.length, this.value.length);
+            }
+        });
 
-    phoneInput.addEventListener('input', function() {
-        if (!this.value.startsWith('+880 ')) {
-            this.value = '+880 ';
-        }
-    });
-    /*==============================================================
-    ==================================================================*/
+        phoneInput.addEventListener('input', function() {
+            if (!this.value.startsWith('+880 ')) {
+                this.value = '+880 ';
+            }
+        });
+    }
+
+    /* ==============================================================
+       REGISTRATION & PAYMENT MODAL PROCEED SCRIPT
+       ============================================================== */
     document.addEventListener('DOMContentLoaded', function () {
-    const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
-    registerBtns.forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
+        const registerBtns = document.querySelectorAll('.proceedRegistrationBtn');
+        registerBtns.forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
 
-            const title   = this.dataset.title || 'Event';
-            const price   = this.dataset.price || '0';
-            const eventId = this.dataset.event_id || '';
+                const title   = this.dataset.title || 'Event';
+                const price   = this.dataset.price || '0';
+                const eventId = this.dataset.event_id || '';
 
-            Swal.fire({
-                title: '<span style="color: #0284c7;">Payment Instruction</span>',
-                html: `
-                    <div style="text-align:left; color:#475569; font-size:14px; line-height:1.6;">
-                        <p style="margin-bottom:12px;">
-                            <strong style="color:#102c55;">Event:</strong> ${title}
-                        </p>
-                        <p style="margin-bottom:12px;">
-                            <strong style="color:#102c55;">Amount:</strong>
-                            <span style="color:#0284c7; font-weight:800;">BDT ${price}</span>
-                        </p>
-                        <p>
-                            Please complete your payment to our Personal bKash Number
-                            (<strong style="color:#0284c7;">+880 1711808026</strong>)
-                            first, then enter the verification details below.
-                        </p>
-                    </div>
-                `,
-                background: '#f0f9ff',
-                icon: 'info',
-                iconColor: '#0284c7',
-                showCancelButton: true,
-                confirmButtonText: 'I am ready, OK',
-                cancelButtonText: 'Go Back',
-                confirmButtonColor: '#0284c7',
-                cancelButtonColor: '#64748b',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const registrationModal = document.getElementById('registrationModal');
-                    if (registrationModal) {
-                        registrationModal.style.display = 'flex';
-                        registrationModal.classList.add('active');
+                Swal.fire({
+                    title: '<span style="color: #0284c7;">Payment Alert</span>',
+                    html: `
+                        <div style="text-align:left; color:#475569; font-size:14px; line-height:1.6;">
+                            <p style="margin-bottom:12px;">
+                                <strong style="color:#102c55;">Event:</strong> ${title}
+                            </p>
+                            <p style="margin-bottom:12px;">
+                                <strong style="color:#102c55;">Amount:</strong>
+                                <span style="color:#0284c7; font-weight:800;">BDT ${price}</span>
+                            </p>
+                            <p>
+                                Please complete your payment to our Personal bKash Number
+                                (<strong style="color:#0284c7;">+880 1911469861</strong>)
+                                first. Sender phone number (last 3 digit), and Transaction ID would be required..
+                            </p>
+                        </div>
+                    `,
+                    background: '#f0f9ff',
+                    icon: 'info',
+                    iconColor: '#0284c7',
+                    showCancelButton: true,
+                    confirmButtonText: 'I have these, OK',
+                    cancelButtonText: 'Go Back',
+                    confirmButtonColor: '#0284c7',
+                    cancelButtonColor: '#64748b',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const registrationModal = document.getElementById('registrationModal');
+                        if (registrationModal) {
+                            registrationModal.style.display = 'flex';
+                            registrationModal.classList.add('active');
 
-                        const titleField = registrationModal.querySelector('[name="event_title"], #eventTitle');
-                        const priceField = registrationModal.querySelector('[name="event_price"], #eventPrice');
-                        const idField    = registrationModal.querySelector('[name="event_id"], #eventId');
+                            const titleField = registrationModal.querySelector('[name="event_title"], #eventTitle');
+                            const priceField = registrationModal.querySelector('[name="event_price"], #eventPrice');
+                            const idField    = registrationModal.querySelector('[name="event_id"], #eventId');
 
-                        if (titleField) titleField.value = title;
-                        if (priceField) priceField.value = price;
-                        if (idField)    idField.value    = eventId;
+                            if (titleField) titleField.value = title;
+                            if (priceField) priceField.value = price;
+                            if (idField)    idField.value    = eventId;
+                        }
                     }
-                }
+                });
             });
         });
     });
-});
 
-    // share script
-  document.addEventListener('DOMContentLoaded', function () {
-    const modal   = document.getElementById('shareModal');
-    const closeBtn= document.getElementById('closeShare');
+    /* ==============================================================
+       SHARE SCRIPT
+       ============================================================== */
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal   = document.getElementById('shareModal');
+        const closeBtn= document.getElementById('closeShare');
+        if (!modal) return;
 
-    document.querySelectorAll('.shareBtn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const url   = this.dataset.url;
-            const title = this.dataset.title;
-            const encUrl   = encodeURIComponent(url);
-            const encTitle = encodeURIComponent(title);
+        document.querySelectorAll('.shareBtn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const url   = this.dataset.url;
+                const title = this.dataset.title;
+                const encUrl   = encodeURIComponent(url);
+                const encTitle = encodeURIComponent(title);
 
-            document.getElementById('shareFb').href =
-                `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
-            document.getElementById('shareWa').href =
-                `https://api.whatsapp.com/send?text=${encTitle}%20${encUrl}`;
-            document.getElementById('shareLi').href =
-                `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`;
-            document.getElementById('shareTw').href =
-                `https://twitter.com/intent/tweet?text=${encTitle}&url=${encUrl}`;
+                const shareFb = document.getElementById('shareFb');
+                const shareWa = document.getElementById('shareWa');
+                const shareLi = document.getElementById('shareLi');
+                const shareTw = document.getElementById('shareTw');
 
-            // ============ FIXED COPY CODE ============
-            document.getElementById('copyLink').onclick = () => {
-                const msg = document.getElementById('copyMsg');
+                if (shareFb) shareFb.href = `https://www.facebook.com/sharer/sharer.php?u=${encUrl}`;
+                if (shareWa) shareWa.href = `https://api.whatsapp.com/send?text=${encTitle}%20${encUrl}`;
+                if (shareLi) shareLi.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encUrl}`;
+                if (shareTw) shareTw.href = `https://twitter.com/intent/tweet?text=${encTitle}&url=${encUrl}`;
 
-                const showMsg = (text) => {
-                    if (!msg) return;
-                    msg.textContent = text;
-                    msg.style.display = 'block';
-                    clearTimeout(msg._timer);
-                    msg._timer = setTimeout(() => {
-                        msg.style.display = 'none';
-                    }, 2000);
-                };
+                const copyLinkBtn = document.getElementById('copyLink');
+                if (copyLinkBtn) {
+                    copyLinkBtn.onclick = () => {
+                        const msg = document.getElementById('copyMsg');
 
-                const legacyCopy = (text) => {
-                    const ta = document.createElement('textarea');
-                    ta.value = text;
-                    ta.style.position = 'fixed';
-                    ta.style.top = '-9999px';
-                    ta.setAttribute('readonly', '');
-                    document.body.appendChild(ta);
-                    ta.select();
-                    ta.setSelectionRange(0, ta.value.length);
-                    let ok = false;
-                    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
-                    document.body.removeChild(ta);
-                    return ok;
-                };
+                        const showMsg = (text) => {
+                            if (!msg) return;
+                            msg.textContent = text;
+                            msg.style.display = 'block';
+                            clearTimeout(msg._timer);
+                            msg._timer = setTimeout(() => {
+                                msg.style.display = 'none';
+                            }, 2000);
+                        };
 
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(url)
-                        .then(() => showMsg('✅ Link Copied!'))
-                        .catch(() => {
+                        const legacyCopy = (text) => {
+                            const ta = document.createElement('textarea');
+                            ta.value = text;
+                            ta.style.position = 'fixed';
+                            ta.style.top = '-9999px';
+                            ta.setAttribute('readonly', '');
+                            document.body.appendChild(ta);
+                            ta.select();
+                            ta.setSelectionRange(0, ta.value.length);
+                            let ok = false;
+                            try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+                            document.body.removeChild(ta);
+                            return ok;
+                        };
+
+                        if (navigator.clipboard && window.isSecureContext) {
+                            navigator.clipboard.writeText(url)
+                                .then(() => showMsg('✅ Link Copied!'))
+                                .catch(() => {
+                                    if (legacyCopy(url)) showMsg('✅ Link Copied!');
+                                    else showMsg('❌ Copy Failed');
+                                });
+                        } else {
                             if (legacyCopy(url)) showMsg('✅ Link Copied!');
                             else showMsg('❌ Copy Failed');
-                        });
-                } else {
-                    if (legacyCopy(url)) showMsg('✅ Link Copied!');
-                    else showMsg('❌ Copy Failed');
+                        }
+                    };
                 }
-            };
-            // ============ END FIXED COPY CODE ============
 
-            modal.style.display = 'flex';
+                modal.style.display = 'flex';
+            });
         });
+
+        if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
+        modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
     });
 
-    closeBtn.onclick = () => modal.style.display = 'none';
-    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
-  });
+    /* ==============================================================
+       TOOLTIP SCRIPT
+       ============================================================== */
+    document.addEventListener('DOMContentLoaded', function () {
+        const tooltip = document.getElementById('custom-tooltip');
+        const tooltipImg = document.getElementById('tooltip-img');
+        const items = document.querySelectorAll('.tshirt-hover');
+
+        if (!tooltip || !tooltipImg) return;
+
+        items.forEach(item => {
+            item.addEventListener('mouseenter', function () {
+                const imgSrc = this.getAttribute('data-img');
+                tooltipImg.src = imgSrc;
+                tooltip.style.display = 'block';
+            });
+
+            item.addEventListener('mousemove', function (e) {
+                tooltip.style.left = (e.pageX + 15) + 'px';
+                tooltip.style.top = (e.pageY + 15) + 'px';
+            });
+
+            item.addEventListener('mouseleave', function () {
+                tooltip.style.display = 'none';
+            });
+        });
+    });
 </script>
 </body>
 </html>
