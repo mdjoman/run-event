@@ -17,7 +17,6 @@
 
         
         <div class="event-info-strip" style="background: linear-gradient(135deg, #f0fdf4 0%, #ecfccb 100%); border-bottom: 1px solid #d9f99d; padding: 18px 40px;">
-
             <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;">
                 <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                     <span style="display:inline-flex; align-items:center; gap:6px; background:#459f0a; color:#fff; font-size:10.5px; font-weight:800; letter-spacing:.08em; padding:5px 12px; border-radius:999px; text-transform:uppercase;">
@@ -259,17 +258,13 @@
                         <input type="text" name="nid" placeholder="National ID or Passport Number" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
                     </div>
                     <div class="form-group">
-                        <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Preferred BIB Number <span class="optional" style="color: #94a3b8; font-weight: 400;">(Optional)</span></label>
-                        <input type="text" name="bib_number" placeholder="e.g. 101 or preferred number" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
-                    </div>
-                </div>
-
-                <div class="form-grid-1" style="margin-top: 20px;">
-                    <div class="form-group">
+                        
                         <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Address <span class="optional" style="color: #94a3b8; font-weight: 400;">(Optional)</span></label>
                         <input type="text" name="address" placeholder="House/Street, Area, City" style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
                     </div>
                 </div>
+
+                
             </div>
 
             
@@ -317,21 +312,75 @@
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <option value="7.5K">7.5K Run</option>
                                 <option value="15K">15K Run</option>
-                                <option value="21.5K">21.5K Run</option>
+                                <option value="21.1K">21.1K Run</option>
                             <?php endif; ?>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">T-Shirt Size <span class="required" style="color: #e11d48;">*</span></label>
-                        <div class="radio-options-group" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="S" required> S</label>
-                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="M"> M</label>
-                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="L"> L</label>
-                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="XL"> XL</label>
-                            <label class="radio-card" style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer;"><input type="radio" name="tshirt" value="XXL"> XXL</label>
+                        <label>T-Shirt Size <span class="required">*</span></label>
+                        <div class="radio-options-group" style="display: flex; gap: 10px;">
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="S" required> S
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="M"> M
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="L"> L
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="XL"> XL
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
+                            <label class="radio-card tshirt-parent">
+                                <input type="radio" name="tshirt" value="XXL"> XXL
+                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
+                            </label>
+
                         </div>
                     </div>
+                    <style>
+                        .tshirt-parent {
+                            position: relative;
+                            cursor: pointer;
+                        }
+
+                        .tshirt-tooltip {
+                            display: none;
+                            position: absolute;
+                            bottom: 115%;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 500px;
+                            background: #ffffff;
+                            padding: 6px;
+                            border: 1px solid #cbd5e1;
+                            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+                            border-radius: 6px;
+                            z-index: 99999;
+                            text-align: center;
+                        }
+
+                        .tshirt-tooltip img {
+                            width: 100%;
+                            height: auto;
+                            display: block;
+                            border-radius: 4px;
+                        }
+
+                        .tshirt-parent:hover .tshirt-tooltip {
+                            display: block;
+                        }
+                    </style>
                 </div>
             </div>
 
@@ -345,32 +394,42 @@
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Payment Method <span class="required" style="color: #e11d48;">*</span></label>
+                <div class="form-group">
+                    <label>Payment Method <span class="required">*</span></label>
                     <div class="radio-options-group">
-                        <label class="radio-card" style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                        <label class="radio-card">
                             <input type="radio" name="payment_method" value="bKash" checked required>
                             <i class="fa-solid fa-paper-plane" style="color:#e11d48;"></i> bKash
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="payment_method" value="Nagad" required>
+                            <i class="fa-solid fa-paper-plane" style="color:#d2640b;"></i> Nagad
                         </label>
                     </div>
                 </div>
 
-                <div class="bkash-box" style="background: #fff5f7; border: 1px solid #fbcfe8; padding: 20px; border-radius: 12px;">
-                    <div class="bkash-title" style="font-weight: 700; color: #be123c; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-                        <i class="fa-solid fa-paper-plane"></i> bKash Payment Verification
+                <div class="bkash-box">
+                    <div class="bkash-title">
+                        <i class="fa-solid fa-paper-plane"></i> bKash / Nagad Payment Verification
                     </div>
-                    <div class="bkash-sub" style="font-size: 13px; color: #475569; margin-bottom: 16px;">
-                        <strong style="font-size: 13px !important; color: #1e293b;">Please complete your payment of <span style="color:#be123c;">BDT <?php echo e(number_format($active_event->fee)); ?></span> to our Personal bKash Number (+880 1711808026) first</strong>, then enter the verification details below.
+                    <div class="bkash-sub">
+                        <strong style="font-size: 13px !important;">Please complete your payment to our Personal bKash / Nagad Number (+880 1911469861) first</strong>, then enter the verification details below.
                     </div>
 
-                    <div class="form-grid-2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+                    <div class="form-grid-3">
                         <div class="form-group">
-                            <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Sender Phone # (Last 3 Digits) <span class="required" style="color: #e11d48;">*</span></label>
-                            <input type="text" name="sender_phone_last3" placeholder="e.g., 762" maxlength="3" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #fff;">
+                            <label>Amount <span class=""></span></label>
+                            <input class="amount" type="text" name="event_price" placeholder="" id="eventPrice" value="<?php echo e(number_format($active_event->fee)); ?>" readonly>
                         </div>
+
                         <div class="form-group">
-                            <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Transaction ID <span class="required" style="color: #e11d48;">*</span></label>
-                            <input type="text" name="trx_id" placeholder="e.g., TRX987654321" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #fff;">
+                            <label>Sender Phone # (Last 3 Digits) <span class="required">*</span></label>
+                            <input type="text" name="sender_phone_last3" placeholder="e.g., 762" maxlength="3" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Transaction ID <span class="required">*</span></label>
+                            <input type="text" name="trx_id" placeholder="e.g., TRX987654321" required>
                         </div>
                     </div>
                 </div>
@@ -396,4 +455,5 @@
     </div>
 </div>
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\run-event\resources\views/form.blade.php ENDPATH**/ ?>
