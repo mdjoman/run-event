@@ -49,7 +49,7 @@ class RegistrationController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         // ---------- 1. VALIDATION ----------
         $validated = $request->validate([
             // Personal
@@ -91,11 +91,11 @@ class RegistrationController extends Controller
         ]);
 
         // ---------- 2. HANDLE PROFILE IMAGE UPLOAD ----------
-        $avatarPath = null;
+        $profileImagePath = null;
 
         if ($request->hasFile('profile_image')) {
-           $profileImagePath = $request->file('profile_image')
-            ->store('registrations/profiles', 'public');
+            $profileImagePath = $request->file('profile_image')
+                ->store('registrations/profiles', 'public');
         }
 
         // ---------- 3. FETCH EVENT (for fee) ----------
@@ -214,7 +214,7 @@ class RegistrationController extends Controller
 
             // Increment number (7001 → 7002)
             $next = $lastBib ? (int) substr($lastBib, 1) + 1 : 1;
-           
+
             // Final bib: 7001, 1001, 2001...
             $data['bib_number'] = $code . str_pad($next, 3, '0', STR_PAD_LEFT);
         }
