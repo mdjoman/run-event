@@ -41,14 +41,56 @@
         </div>
     </div>
 
-    <div class="flex items-center gap-2">
-        <button onclick="window.print()"
-                class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-[11px] font-bold text-slate-800 hover:border-brandPink hover:text-brandPink transition">
-            <i class="fa-solid fa-print"></i> Print
+    <div class="flex items-center gap-2 flex-wrap">
+
+        {{-- WhatsApp Send --}}
+        <button type="button"
+                class="notifyBtn px-3 py-1.5 rounded-lg bg-green-50 border border-green-200 text-[11px] font-bold
+                       text-green-700 hover:bg-green-500 hover:text-white hover:border-green-500 transition"
+                title="Send WhatsApp"
+                data-mode="whatsapp"
+                data-name="{{ $registration->first_name }} {{ $registration->last_name }}"
+                data-phone="{{ $registration->whatsapp_number ?? $registration->phone }}"
+                data-event="{{ $registration->event?->title ?? 'Event' }}"
+                data-event-date="{{ $registration->event?->event_date ?? '' }}"
+                data-event-location="{{ $registration->event?->location ?? '' }}"
+                data-bib="{{ $registration->bib_number ?? 'N/A' }}"
+                data-category="{{ $registration->category }}">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span class="hidden sm:inline ml-1">WhatsApp</span>
         </button>
+
+        {{-- SMS Send --}}
+        <button type="button"
+                class="notifyBtn px-3 py-1.5 rounded-lg bg-sky-50 border border-sky-200 text-[11px] font-bold
+                       text-sky-700 hover:bg-sky-500 hover:text-white hover:border-sky-500 transition"
+                title="Send SMS"
+                data-mode="sms"
+                data-name="{{ $registration->first_name }} {{ $registration->last_name }}"
+                data-phone="{{ $registration->whatsapp_number ?? $registration->phone }}"
+                data-event="{{ $registration->event?->title ?? 'Event' }}"
+                data-event-date="{{ $registration->event?->event_date ?? '' }}"
+                data-event-location="{{ $registration->event?->location ?? '' }}"
+                data-bib="{{ $registration->bib_number ?? 'N/A' }}"
+                data-category="{{ $registration->category }}">
+            <i class="fa-solid fa-comment-sms"></i>
+            <span class="hidden sm:inline ml-1">SMS</span>
+        </button>
+
+        {{-- Print --}}
+        <button onclick="window.print()"
+                class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-[11px] font-bold text-slate-800
+                       hover:border-brandPink hover:text-brandPink transition">
+            <i class="fa-solid fa-print"></i>
+            <span class="hidden sm:inline ml-1">Print</span>
+        </button>
+
+        {{-- Update Status --}}
         <button onclick='openStatusModal()'
-                class="px-3 py-1.5 rounded-lg bg-brandPink text-white text-[11px] font-bold hover:bg-pink-700 transition shadow-sm">
-            <i class="fa-solid fa-pen-to-square"></i> Update Status
+                class="px-3 py-1.5 rounded-lg bg-brandPink text-white text-[11px] font-bold
+                       hover:bg-pink-700 transition shadow-sm">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span class="hidden sm:inline ml-1">Update Status</span>
         </button>
     </div>
 </div>
@@ -59,7 +101,6 @@
     <div class="absolute -bottom-12 -right-2 w-36 h-36 rounded-full bg-white/5"></div>
 
     <div class="relative flex flex-wrap items-center gap-3">
-        {{-- Avatar --}}
         <div class="relative shrink-0">
             @if($registration->profile_image)
                 <img src="{{ asset('storage/' . $registration->profile_image) }}"
@@ -79,7 +120,6 @@
             </span>
         </div>
 
-        {{-- Name + meta --}}
         <div class="flex-1 min-w-[180px]">
             <h2 class="text-[15.5px] font-extrabold leading-tight tracking-tight">{{ $registration->full_name }}</h2>
             <p class="text-[11px] text-slate-200 mt-0.5">
@@ -112,7 +152,6 @@
             </div>
         </div>
 
-        {{-- Status badge --}}
         <div class="text-right shrink-0">
             <p class="text-[9px] uppercase tracking-[0.12em] text-slate-300 mb-0.5 font-bold">Status</p>
             <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-extrabold text-[10.5px] bg-white text-slate-900 shadow">
@@ -213,7 +252,6 @@
                     <p class="font-bold text-slate-900 leading-tight">{{ $registration->event?->title ?? '—' }}</p>
                 </div>
 
-                {{-- BIB --}}
                 <div>
                     <p class="text-[9px] uppercase tracking-[0.1em] text-slate-500 font-bold mb-0.5">BIB Number</p>
                     @if($registration->bib_number)
@@ -316,6 +354,49 @@
             @endif
         </div>
 
+        {{-- SEND NOTIFICATION --}}
+        <div class="bg-white rounded-xl shadow-sm ring-1 ring-slate-100 p-3.5">
+            <h3 class="font-extrabold text-slate-900 text-[13px] mb-2.5 tracking-tight">
+                <i class="fa-solid fa-paper-plane text-green-600 mr-1.5"></i> Send Notification
+            </h3>
+
+            <div class="space-y-1.5">
+                {{-- WhatsApp --}}
+                <button type="button"
+                        class="notifyBtn w-full flex items-center gap-2 px-2.5 py-2 rounded-lg
+                               bg-green-50 border border-green-200 hover:bg-green-500 hover:text-white
+                               hover:border-green-500 transition text-[11.5px] font-bold text-green-800"
+                        data-mode="whatsapp"
+                        data-name="{{ $registration->first_name }} {{ $registration->last_name }}"
+                        data-phone="{{ $registration->whatsapp_number ?? $registration->phone }}"
+                        data-event="{{ $registration->event?->title ?? 'Event' }}"
+                        data-event-date="{{ $registration->event?->event_date ?? '' }}"
+                        data-event-location="{{ $registration->event?->location ?? '' }}"
+                        data-bib="{{ $registration->bib_number ?? 'N/A' }}"
+                        data-category="{{ $registration->category }}">
+                    <i class="fa-brands fa-whatsapp w-4 text-sm"></i>
+                    <span>Send WhatsApp</span>
+                </button>
+
+                {{-- SMS --}}
+                <button type="button"
+                        class="notifyBtn w-full flex items-center gap-2 px-2.5 py-2 rounded-lg
+                               bg-sky-50 border border-sky-200 hover:bg-sky-500 hover:text-white
+                               hover:border-sky-500 transition text-[11.5px] font-bold text-sky-800"
+                        data-mode="sms"
+                        data-name="{{ $registration->first_name }} {{ $registration->last_name }}"
+                        data-phone="{{ $registration->whatsapp_number ?? $registration->phone }}"
+                        data-event="{{ $registration->event?->title ?? 'Event' }}"
+                        data-event-date="{{ $registration->event?->event_date ?? '' }}"
+                        data-event-location="{{ $registration->event?->location ?? '' }}"
+                        data-bib="{{ $registration->bib_number ?? 'N/A' }}"
+                        data-category="{{ $registration->category }}">
+                    <i class="fa-solid fa-comment-sms w-4 text-sm"></i>
+                    <span>Send SMS</span>
+                </button>
+            </div>
+        </div>
+
         {{-- TIMELINE --}}
         <div class="bg-white rounded-xl shadow-sm ring-1 ring-slate-100 p-3.5">
             <h3 class="font-extrabold text-slate-900 text-[13px] mb-2.5 tracking-tight">
@@ -357,7 +438,7 @@
                     <a href="https://wa.me/{{ preg_replace('/[^\d]/', '', $registration->whatsapp_number) }}"
                        target="_blank"
                        class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-green-100 hover:bg-green-700 hover:text-white transition text-[11.5px] font-bold text-green-800">
-                        <i class="fa-brands fa-whatsapp w-3.5 text-[11px]"></i> WhatsApp
+                        <i class="fa-brands fa-whatsapp w-3.5 text-[11px]"></i> WhatsApp Chat
                     </a>
                 @endif
 
@@ -435,20 +516,246 @@
     </div>
 </div>
 
+{{-- ============= NOTIFY MODAL (WhatsApp / SMS) ============= --}}
+<div id="notifyModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-[60] items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[92vh] overflow-y-auto">
+
+        {{-- Header --}}
+        <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
+            <h3 class="text-[15px] font-extrabold text-slate-900 flex items-center gap-2">
+                <i id="notifyIcon" class="fa-brands fa-whatsapp text-xl text-green-500"></i>
+                <span id="notifyTitleText">Send WhatsApp Message</span>
+            </h3>
+            <button onclick="closeNotifyModal()" class="text-slate-400 hover:text-slate-700 text-2xl leading-none">&times;</button>
+        </div>
+
+        <div class="p-5 space-y-3.5">
+            {{-- To info --}}
+            <div class="bg-slate-100 rounded-lg p-3 text-[12.5px] ring-1 ring-slate-200">
+                <p class="text-slate-500 text-[9px] uppercase tracking-[0.1em] font-extrabold mb-0.5">Send to:</p>
+                <p class="font-extrabold text-slate-900" id="notifyToName"></p>
+                <p class="text-[11px] text-slate-600 font-semibold" id="notifyToPhone"></p>
+            </div>
+
+            {{-- Message --}}
+            <div>
+                <label class="block text-[11px] font-extrabold uppercase tracking-[0.08em] text-slate-700 mb-1.5">
+                    Message Preview <span class="text-[10px] text-slate-500 font-medium normal-case">(editable)</span>
+                </label>
+                <textarea id="notifyMessage" rows="12"
+                          class="w-full px-3 py-2 border border-slate-300 rounded-lg text-[11px] font-mono leading-relaxed
+                                 focus:ring-2 focus:ring-brandPink focus:outline-none resize-y"></textarea>
+            </div>
+
+            {{-- Buttons --}}
+            <div class="flex gap-2 pt-2">
+                <button type="button" id="notifyCopyBtn"
+                        class="flex-1 px-4 py-2.5 rounded-lg text-[12px] font-extrabold
+                               bg-slate-200 text-slate-800 hover:bg-slate-900 hover:text-white transition">
+                    <i class="fa-solid fa-copy mr-1"></i> Copy Text
+                </button>
+                <a href="#" id="notifySendBtn" target="_blank"
+                   class="flex-1 px-4 py-2.5 rounded-lg text-[12px] font-extrabold text-center
+                          bg-green-500 text-white hover:bg-green-600 transition shadow-md">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Send
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Toast --}}
+<div id="notifyToast"
+     class="fixed bottom-8 left-1/2 -translate-x-1/2 translate-y-5
+            bg-slate-900 text-white px-6 py-3 rounded-full text-sm font-bold
+            shadow-2xl opacity-0 invisible transition-all duration-300 z-[70] pointer-events-none">
+    ✅ Copied!
+</div>
+
 @push('scripts')
 <script>
+    // ================= STATUS MODAL =================
     function openStatusModal() {
         const modal = document.getElementById('statusModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
     }
     function closeStatusModal() {
         const modal = document.getElementById('statusModal');
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+        document.body.style.overflow = '';
     }
     document.getElementById('statusModal')?.addEventListener('click', e => {
         if (e.target === e.currentTarget) closeStatusModal();
+    });
+
+    // ================= NOTIFY MODAL =================
+    const notifyModal  = document.getElementById('notifyModal');
+    const notifyMsg    = document.getElementById('notifyMessage');
+    const notifyToName = document.getElementById('notifyToName');
+    const notifyToPh   = document.getElementById('notifyToPhone');
+    const notifySend   = document.getElementById('notifySendBtn');
+    const notifyCopy   = document.getElementById('notifyCopyBtn');
+    const notifyIcon   = document.getElementById('notifyIcon');
+    const notifyTitle  = document.getElementById('notifyTitleText');
+    const notifyToast  = document.getElementById('notifyToast');
+
+    let notifyMode = 'whatsapp';
+
+    function buildWaMessage(d) {
+        const eventDate = d.date
+            ? new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+            : 'To be announced';
+
+        return `Dear ${d.name},
+
+Greetings from Run BURJOWAN!
+
+We are pleased to confirm that your registration has been *APPROVED* for the following event:
+
+━━━━━━━━━━━━━━━━━━━━━━
+🏃 EVENT DETAILS
+━━━━━━━━━━━━━━━━━━━━━━
+Event        : ${d.event}
+Date         : ${eventDate}
+Location     : ${d.location || 'To be announced'}
+Category     : ${d.category}
+BiB Number   : ${d.bib}
+
+━━━━━━━━━━━━━━━━━━━━━━
+📌 IMPORTANT INSTRUCTIONS
+━━━━━━━━━━━━━━━━━━━━━━
+* Please collect your BIB and Race Kit just before race day.
+* Bring a valid photo ID / Mobile phone carrying this message.
+* Keep your BIB Number safe — it is required on race day.
+* Report to the venue at least 30 minutes before start time.
+
+For any queries, feel free to contact us.
+
+We look forward to seeing you at the starting line!
+
+Warm regards,
+Run BURJOWAN Team
+"More Than a Race, It's a Movement."
+
+Contact (WhatsApp):
++880 19 1146 9861
++880 17 1154 3414`;
+    }
+
+    function buildSmsMessage(d) {
+        return `Dear ${d.name}, Your registration for ${d.event} is APPROVED. Category: ${d.category}, BiB No: ${d.bib}. Please collect your kit before race day. - Run BURJOWAN Team`;
+    }
+
+    document.querySelectorAll('.notifyBtn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            notifyMode = this.dataset.mode || 'whatsapp';
+
+            const d = {
+                name:     this.dataset.name,
+                phone:    this.dataset.phone,
+                event:    this.dataset.event,
+                date:     this.dataset.eventDate,
+                location: this.dataset.eventLocation,
+                bib:      this.dataset.bib,
+                category: this.dataset.category,
+            };
+
+            const cleanPhone = (d.phone || '').replace(/[^\d]/g, '');
+
+            if (notifyMode === 'sms') {
+                notifyTitle.textContent = 'Send SMS Confirmation';
+                notifyIcon.className    = 'fa-solid fa-comment-sms text-xl text-sky-500';
+                notifyMsg.value         = buildSmsMessage(d);
+                notifySend.className    = 'flex-1 px-4 py-2.5 rounded-lg text-[12px] font-extrabold text-center bg-sky-500 text-white hover:bg-sky-600 transition shadow-md';
+                notifySend.innerHTML    = '<i class="fa-solid fa-comment-sms mr-1"></i> Send SMS';
+            } else {
+                notifyTitle.textContent = 'Send WhatsApp Confirmation';
+                notifyIcon.className    = 'fa-brands fa-whatsapp text-xl text-green-500';
+                notifyMsg.value         = buildWaMessage(d);
+                notifySend.className    = 'flex-1 px-4 py-2.5 rounded-lg text-[12px] font-extrabold text-center bg-green-500 text-white hover:bg-green-600 transition shadow-md';
+                notifySend.innerHTML    = '<i class="fa-brands fa-whatsapp mr-1"></i> Send';
+            }
+
+            notifyToName.textContent = d.name;
+            notifyToPh.textContent   = d.phone;
+
+            updateNotifyLink(cleanPhone);
+
+            notifyModal.classList.remove('hidden');
+            notifyModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    function updateNotifyLink(phone) {
+        const msg = notifyMsg.value;
+        if (notifyMode === 'sms') {
+            notifySend.href = `sms:${phone}?body=${encodeURIComponent(msg)}`;
+        } else {
+            notifySend.href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+        }
+    }
+
+    notifyMsg.addEventListener('input', function () {
+        const phone = (notifyToPh.textContent || '').replace(/[^\d]/g, '');
+        updateNotifyLink(phone);
+    });
+
+    function closeNotifyModal() {
+        notifyModal.classList.add('hidden');
+        notifyModal.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+
+    notifyModal.addEventListener('click', (e) => {
+        if (e.target === notifyModal) closeNotifyModal();
+    });
+
+    // ================= ESC KEY =================
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeNotifyModal();
+            closeStatusModal();
+        }
+    });
+
+    // ================= COPY =================
+    notifyCopy.addEventListener('click', function () {
+        const text = notifyMsg.value;
+
+        const showToast = (m) => {
+            notifyToast.textContent = m;
+            notifyToast.classList.remove('opacity-0', 'invisible', 'translate-y-5');
+            clearTimeout(notifyToast._t);
+            notifyToast._t = setTimeout(() => {
+                notifyToast.classList.add('opacity-0', 'invisible', 'translate-y-5');
+            }, 2000);
+        };
+
+        const legacyCopy = (str) => {
+            const ta = document.createElement('textarea');
+            ta.value = str;
+            ta.style.position = 'fixed';
+            ta.style.top = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            ta.setSelectionRange(0, ta.value.length);
+            let ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta);
+            return ok;
+        };
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text)
+                .then(() => showToast('✅ Message copied!'))
+                .catch(() => showToast(legacyCopy(text) ? '✅ Message copied!' : '❌ Copy failed'));
+        } else {
+            showToast(legacyCopy(text) ? '✅ Message copied!' : '❌ Copy failed');
+        }
     });
 </script>
 @endpush

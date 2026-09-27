@@ -217,44 +217,21 @@
     </div>
 </section>
 
+<!-- event details modal  -->
 
-<footer class="footer">
-    <div class="container footer-top">
-        <div class="footer-brand">
-            <a href="<?php echo e(route('home')); ?>" class="logo">
-                <img src="<?php echo e(asset('img/logo2.png')); ?>" alt="Run Burjowan">
-            </a>
-        </div>
-
-        <div class="footer-links">
-            <a href="<?php echo e(route('home')); ?>">Home</a>
-            <a href="<?php echo e(route('event')); ?>">Events</a>
-            <a href="<?php echo e(route('activity')); ?>">Activities</a>
-            <a href="<?php echo e(route('about')); ?>">About</a>
-            <a href="<?php echo e(route('blog')); ?>">Blog</a>
-            <a href="<?php echo e(route('contact')); ?>">Contact</a>
-            <a href="#">Results</a>
-            <a href="<?php echo e(route('gallery')); ?>">Gallery</a>
-        </div>
-
-        <div class="footer-contact">
-            <div class="social-icons">
-                <a href="https://www.facebook.com/RunBujowan" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+ 
+<div class="event-modal" id="indexEventModal">
+    <div class="event-modal-box">
+        <button class="modal-close" onclick="closeEventModal()">&times;</button>
+        <div class="event-scroll" id="eventModalContent">
+            
+            <div style="padding: 60px 20px; text-align: center; color: #999;">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px;"></i>
+                <p style="margin-top: 12px; font-size: 14px;">Loading event details...</p>
             </div>
-            <p><i class="fa-regular fa-envelope"></i> info@runburjowan.com</p>
-            <p><i class="fa-solid fa-location-dot"></i> Dhaka, Bangladesh</p>
         </div>
     </div>
-
-    <div class="container footer-bottom">
-        <p><span id="year"></span> Run Burjowan. All rights reserved.</p>
-        <p>Running Together for a Healthier Tomorrow</p>
-    </div>
-</footer>
-
+</div>
 
 <div class="modal-overlay" id="registrationModal">
     <div class="modal-container">
@@ -425,11 +402,11 @@
 
                 <div class="form-grid-2">
                     <div class="form-group">
-                        <label>Emergency Contact Name <span class="required">*</span></label>
+                        <label>Contact Name <span class="required">*</span></label>
                         <input type="text" name="emergency_name" placeholder="Contact Person Name" required>
                     </div>
                     <div class="form-group">
-                        <label>Emergency Contact Number <span class="required">*</span></label>
+                        <label>Contact Number <span class="required">*</span></label>
                         <input type="tel" name="emergency_phone" id="emergencyPhoneInput" value="+880 " placeholder="+880 1XXXXXXXXX" required>
                     </div>
                 </div>
@@ -440,30 +417,24 @@
                     <div class="step-number">3</div>
                     <div class="section-header-title">
                         <i class="fa-solid fa-shirt"></i>
-                        <span>EVENT SPECIFICATIONS & T-SHIRT</span>
+                        <span>RUN SPECIFICATION & T-SHIRT</span>
                     </div>
                 </div>
 
                 <div class="form-grid-2">
                     <div class="form-group">
-                        <label>Race Categories / Ticket Type <span class="required">*</span></label>
+                        <label>Race Categories <span class="required">*</span></label>
                         <select name="category" required style="padding:5px; font-size:13px;">
                             <option value="" disabled selected>Select Category</option>
-                            <option value="7.5k">7.5K Run</option>
-                            <option value="15k">15K Run</option>
-                            <option value="21.1k">21.1K Run</option>
+                            <option value="7.5k">BOLT (7.5K) </option>
+                            <option value="15k">BLAST (15K) </option>
+                            <option value="21.1k">BEYOND (21.1K) </option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>T-Shirt Size <span class="required">*</span></label>
                         <div class="radio-options-group" style="display: flex; gap: 10px;">
-
-                            <label class="radio-card tshirt-parent">
-                                <input type="radio" name="tshirt" value="S" required> S
-                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
-                            </label>
-
                             <label class="radio-card tshirt-parent">
                                 <input type="radio" name="tshirt" value="M"> M
                                 <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
@@ -521,12 +492,12 @@
                     </style>
                 </div>
             </div>
-            <div class="section-card">
-                <div class="section-header">
-                    <div class="step-number">4</div>
-                    <div class="section-header-title">
-                        <i class="fa-solid fa-credit-card"></i>
-                        <span>PAYMENT METHOD & VERIFICATION</span>
+            <div class="section-card" style="margin-bottom: 30px;">
+                <div class="section-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px;">
+                    <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">4</div>
+                    <div class="section-header-title" style="font-weight: 700; color: #1e293b; font-size: 15px; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-credit-card" style="color: #459f0a;"></i>
+                        <span>PAYMENT VERIFICATION</span>
                     </div>
                 </div>
 
@@ -539,7 +510,7 @@
                         </label>
                         <label class="radio-card">
                             <input type="radio" name="payment_method" value="Nagad" required>
-                            <i class="fa-solid fa-paper-plane" style="color:#e11d48;"></i> Nagad
+                            <i class="fa-solid fa-paper-plane" style="color:#d2640b;"></i> Nagad
                         </label>
                     </div>
                 </div>
@@ -549,27 +520,34 @@
                         <i class="fa-solid fa-paper-plane"></i> bKash / Nagad Payment Verification
                     </div>
                     <div class="bkash-sub">
-                        <strong style="font-size: 13px !important;">Please complete your payment to our Personal bKash / Nagad Number (+880 1911469861) first</strong>, then enter the verification details below.
+                        <strong style="font-size: 13px !important;">Please complete your payment to our Personal bKash / Nagad Number (+880 1911469861) first</strong>, then enter the verification details below.
                     </div>
-
-                    <div class="form-grid-3">
-                        <div class="form-group">
-                            <label>Amount <span class=""></span></label>
-                            <input class="amount" type="text" name="event_price" placeholder="" id="eventPrice" readonly>
+                    <div class="payment-grid-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>Amount</label>
+                            <input class="amount" type="text" name="event_price" placeholder="" id="eventPrice" value="<?php echo e(number_format($active_event->fee)); ?>" readonly style="width: 100%;">
                         </div>
 
-                        <div class="form-group">
-                            <label>Sender Phone # (Last 3 Digits) <span class="required">*</span></label>
-                            <input type="text" name="sender_phone_last3" placeholder="e.g., 762" maxlength="3" required>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label>Last 3 Digit of Sender # <span class="required">*</span></label>
+                            <input type="text" name="sender_phone_last3" placeholder="e.g., 762" maxlength="3" required style="width: 100%;">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group" style="margin-bottom: 0;">
                             <label>Transaction ID <span class="required">*</span></label>
-                            <input type="text" name="trx_id" placeholder="e.g., TRX987654321" required>
+                            <input type="text" name="trx_id" placeholder="e.g., TRX987654321" required style="width: 100%;">
                         </div>
                     </div>
                 </div>
             </div>
+
+            <style>
+            @media (max-width: 768px) {
+                .payment-grid-container {
+                    grid-template-columns: 1fr !important;
+                }
+            }
+            </style>
 
             <div class="confirmation-box">
                 <input type="checkbox" id="confirm_terms" name="confirm_terms" value="1" required>
@@ -627,8 +605,54 @@
 </div>
 
 
+
+<footer class="footer">
+    <div class="container footer-top">
+        <div class="footer-brand">
+            <a href="<?php echo e(route('home')); ?>" class="logo">
+                <img src="<?php echo e(asset('img/logo2.png')); ?>" alt="Run Burjowan">
+            </a>
+        </div>
+
+        <div class="footer-links">
+            <a href="<?php echo e(route('home')); ?>">Home</a>
+            <a href="<?php echo e(route('event')); ?>">Events</a>
+            <a href="<?php echo e(route('activity')); ?>">Activities</a>
+            <a href="<?php echo e(route('about')); ?>">About</a>
+            <a href="<?php echo e(route('blog')); ?>">Blog</a>
+            <a href="<?php echo e(route('contact')); ?>">Contact</a>
+            <a href="#">Results</a>
+            <a href="<?php echo e(route('gallery')); ?>">Gallery</a>
+        </div>
+
+        <div class="footer-contact">
+            <div class="social-icons">
+                <a href="https://www.facebook.com/RunBujowan" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+            <p><i class="fa-regular fa-envelope"></i> info@runburjowan.com</p>
+            <p><i class="fa-solid fa-phone"></i> +880 19 1146 9861</p>
+            <p><i class="fa-solid fa-phone"></i> +880 17 1154 3414</p>
+            <p><i class="fa-solid fa-phone"></i> +880 17 1180 8026</p>
+            <p><i class="fa-solid fa-location-dot"></i> Dhaka, Bangladesh</p>
+        </div>
+    </div>
+
+    <div class="container footer-bottom">
+        <p><span id="year"></span> Run Burjowan. All rights reserved.</p>
+        <p>Running Together for a Healthier Tomorrow</p>
+    </div>
+</footer>
+
+
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- event details  -->
+<?php echo $__env->make('event-details-js', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 

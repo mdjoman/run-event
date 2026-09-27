@@ -9,9 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\NewRegistrationAdminMail;
 use App\Mail\RegistrationConfirmationMail;
+use App\Mail\RegistrationApprovedMail;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
 class RegistrationController extends Controller
 {
@@ -74,7 +78,7 @@ class RegistrationController extends Controller
             'category'          => 'required|string|max:50',
             'tshirt'            => 'required|in:S,M,L,XL,XXL',
 
-            'payment_method'    => 'required|in:bKash,Card,Cash',
+            'payment_method'    => 'required|in:bKash,Card,Cash,Nagad',
             'sender_phone_last3'=> 'required|string|max:3',
             'trx_id'            => 'required|string|max:100',
 
@@ -125,42 +129,55 @@ class RegistrationController extends Controller
         // ---------- 5. SAVE ----------
         $registration = Registration::create($data);
 
-        // ---------- 6. INCREMENT COUNT ----------
-        $event->increment('registered');
-
-        // Load relation for mail views
-        $registration->loadMissing('event');
-
-        // ---------- 7. SEND CONFIRMATION TO SUBMITTER ----------
-        if (!empty($registration->email)) {
-            try {
-                Mail::to($registration->email)
-                    ->send(new RegistrationConfirmationMail($registration));
-            } catch (\Throwable $e) {
-                Log::error('Confirmation email to submitter failed: ' . $e->getMessage(), [
-                    'registration_id' => $registration->id,
-                    'email'           => $registration->email,
-                ]);
+           // ---------- 7. QUEUE CONFIRMATION TO SUBMITTER ----------
+            if (!empty($registration->email)) {
+                try {
+                    Mail::to($registration->email)
+                        ->queue(new RegistrationConfirmationMail($registration));
+                } catch (\Throwable $e) {
+                    Log::error('Failed to queue confirmation email: ' . $e->getMessage(), [
+                        'registration_id' => $registration->id,
+                        'email'           => $registration->email,
+                    ]);
+                }
             }
-        }
 
-        // ---------- 8. NOTIFY ADMINS + EVENT CREATOR ----------
-        try {
+            // ---------- 8. QUEUE ADMIN NOTIFICATIONS (staggered) ----------
             $adminEmails = User::where('role', 'admin')
                 ->whereNotNull('email')
+                ->where('email', '!=', '')
                 ->pluck('email')
                 ->unique()
+                ->values()
                 ->all();
 
-            if (!empty($adminEmails)) {
-                Mail::to($adminEmails)->send(new NewRegistrationAdminMail($registration));
+            foreach ($adminEmails as $index => $email) {
+                try {
+                    Mail::to($email)
+                        ->later(now()->addSeconds($index * 5), new NewRegistrationAdminMail($registration));
+                    //     ↑ 5-second gap between each admin email to respect Hostinger rate limits
+                } catch (\Throwable $e) {
+                    Log::error('Failed to queue admin notification: ' . $e->getMessage(), [
+                        'registration_id' => $registration->id,
+                        'email'           => $email,
+                    ]);
+                }
             }
-        } catch (\Throwable $e) {
-            Log::error('Admin notification email failed: ' . $e->getMessage(), [
-                'registration_id' => $registration->id,
-            ]);
-        }
 
+           try {
+                \Illuminate\Support\Facades\Artisan::call('queue:work', [
+                    '--stop-when-empty' => true, 
+                    '--tries'           => 3, 
+                    '--timeout'         => 55, 
+                    '--max-time'        => 55,
+                    '--quiet'           => true,
+                ]);
+            } catch (\Throwable $e) {
+                Log::error('Inline queue worker failed: ' . $e->getMessage(), [
+                    'registration_id' => $registration->id,
+                ]);
+            }
+        
         // ---------- 9. RESPOND ----------
         if ($request->expectsJson()) {
             return response()->json([
@@ -230,43 +247,133 @@ class RegistrationController extends Controller
             'admin_note' => 'nullable|string|max:500',
         ]);
 
-        // ✅ Generate bib number when approved (only once)
-        if ($data['status'] === 'approved' && empty($registration->bib_number)) {
+        $oldStatus = $registration->status;
+        $newStatus = $data['status'];
 
-            // Get first digit of category (7.5K → 7, 15K → 1, 21.5K → 2)
+        $bibJustGenerated = false;
+
+        // ---------- BIB number generate (only on first approval) ----------
+        if ($newStatus === 'approved' && empty($registration->bib_number)) {
+
             $code = substr(trim($registration->category), 0, 1);
 
-            // Find last bib for this event + category
             $lastBib = Registration::where('event_id', $registration->event_id)
                 ->where('category', $registration->category)
                 ->whereNotNull('bib_number')
                 ->where('bib_number', 'like', $code . '%')
                 ->orderByDesc('id')
+                ->lockForUpdate()
                 ->value('bib_number');
 
-            // Increment number (7001 → 7002)
             $next = $lastBib ? (int) substr($lastBib, 1) + 1 : 1;
 
-            // Final bib: 7001, 1001, 2001...
             $data['bib_number'] = $code . str_pad($next, 3, '0', STR_PAD_LEFT);
+            $bibJustGenerated = true;
         }
 
+        // ---------- Update registration ----------
         $registration->update($data);
+        $registration->refresh();
 
-        return redirect()->route('admin.registrations.index')
-            ->with('success', "Registration #{$registration->id} marked as {$data['status']}.");
+        // ==================================================
+        // ✅ INCREMENT / DECREMENT event.registered
+        // ==================================================
+        $event = $registration->event;
+
+        if ($event) {
+
+            // Case 1: new status = approved, old ≠ approved  → INCREMENT
+            if ($newStatus === 'approved' && $oldStatus !== 'approved') {
+                $event->increment('registered');
+            }
+
+            // Case 2: new status ≠ approved, old = approved  → DECREMENT (rollback)
+            elseif ($newStatus !== 'approved' && $oldStatus === 'approved') {
+                // Prevent negative count
+                if ($event->registered > 0) {
+                    $event->decrement('registered');
+                }
+            }
+
+            // Case 3: both approved or both not approved → no change
+            // Nothing to do
+        }
+
+        // ==================================================
+        // ✅ APPROVAL EMAIL
+        // ==================================================
+        $shouldSendApprovalEmail = (
+            $newStatus === 'approved'
+            && $oldStatus !== 'approved'
+            && !empty($registration->email)
+        );
+
+        if ($shouldSendApprovalEmail) {
+            try {
+                Mail::to($registration->email)
+                    ->queue(new RegistrationApprovedMail($registration));
+
+                Log::info('Approval email queued', [
+                    'registration_id' => $registration->id,
+                    'bib_number'      => $registration->bib_number,
+                    'email'           => $registration->email,
+                ]);
+
+                // Instant Worker — email এখনই পাঠাবে
+                try {
+                    Artisan::call('queue:work', [
+                        '--stop-when-empty' => true,
+                        '--tries'           => 3,
+                        '--timeout'         => 55,
+                        '--max-time'        => 55,
+                        '--quiet'           => true,
+                    ]);
+                } catch (\Throwable $e) {
+                    Log::error('Inline queue worker failed (approval): ' . $e->getMessage(), [
+                        'registration_id' => $registration->id,
+                    ]);
+                }
+
+            } catch (\Throwable $e) {
+                Log::error('Failed to queue approval email: ' . $e->getMessage(), [
+                    'registration_id' => $registration->id,
+                    'email'           => $registration->email,
+                ]);
+            }
+        }
+
+        // ==================================================
+        // ✅ SUCCESS MESSAGE
+        // ==================================================
+        $message = "Registration #{$registration->id} marked as {$newStatus}.";
+
+        if ($bibJustGenerated) {
+            $message .= " BIB number {$registration->bib_number} assigned.";
+        }
+
+        if ($shouldSendApprovalEmail) {
+            $message .= " Confirmation email sent to {$registration->email}.";
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', $message);
     }
 
-    public function destroy(Registration $registration)
+
+   public function destroy(Registration $registration)
     {
-        // Delete avatar file if exists
-        if ($registration->avatar && Storage::disk('public')->exists($registration->avatar)) {
-            Storage::disk('public')->delete($registration->avatar);
-        }
+        $event = $registration->event;
+        $wasApproved = $registration->status === 'approved';
 
         $registration->delete();
 
+        // If deleted registration was approved, decrement counter
+        if ($wasApproved && $event && $event->registered > 0) {
+            $event->decrement('registered');
+        }
+
         return redirect()->route('admin.registrations.index')
-            ->with('success', "Registration #{$registration->id} deleted.");
+            ->with('success', "Registration #{$registration->id} deleted successfully.");
     }
 }
