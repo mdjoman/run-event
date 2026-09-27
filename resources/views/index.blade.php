@@ -1757,7 +1757,6 @@
                                 distance for every runner, every goal,
                                 and every generation.
                             </p>
-
                         </div>
                         <div>
                             <div class="section-title">
@@ -1765,424 +1764,308 @@
                                 EVENT OVERVIEW
                             </div>
                             <div class="overview">
-                                <div class="overview-list">
-
-                                    <div class="overview-item">
+                                <div class="overview-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px;">
+                                    <div class="overview-item" style="display: flex; align-items: center; gap: 8px;">
                                         <span class="icon">🏃</span>
-                                        <b>Event</b>
+                                        <b style="min-width: 70px;">Event</b>
                                         <span>:</span>
                                         <span>Winter Half Marathon 2026</span>
                                     </div>
-
-                                    <div class="overview-item">
+                                    <div class="overview-item" style="display: flex; align-items: center; gap: 8px;">
                                         <span class="icon">🏆</span>
-                                        <b>Edition</b>
+                                        <b style="min-width: 70px;">Edition</b>
                                         <span>:</span>
                                         <span>December</span>
                                     </div>
-
-                                    <div class="overview-item">
+                                    <div class="overview-item" style="display: flex; align-items: center; gap: 8px;">
                                         <span class="icon">📅</span>
-                                        <b>Date</b>
+                                        <b style="min-width: 70px;">Date</b>
                                         <span>:</span>
                                         <span>18th December 2026</span>
                                     </div>
-
-                                    <div class="overview-item">
+                                    <div class="overview-item" style="display: flex; align-items: center; gap: 8px;">
                                         <span class="icon">📍</span>
-                                        <b>Location</b>
-                                        <span>  :</span>
+                                        <b style="min-width: 70px;">Location</b>
+                                        <span>:</span>
                                         <span>Hard Point, Sirajganj</span>
                                     </div>
-
-                                    <div class="overview-item">
+                                    <div class="overview-item" style="display: flex; align-items: center; gap: 8px;">
                                         <span class="icon">🏁</span>
-                                        <b>Event </b>
-                                        <span>  :</span>
+                                        <b style="min-width: 70px;">Type</b>
+                                        <span>:</span>
                                         <span>Live Road Race</span>
                                     </div>
-
-                                    <div class="overview-item">
+                                    <div class="overview-item" style="display: flex; align-items: center; gap: 8px;">
                                         <span class="icon">👥</span>
-                                        <b>Organizer</b>
-                                        <span>  :</span>
+                                        <b style="min-width: 70px;">Organizer</b>
+                                        <span>:</span>
                                         <span>Run BURJOWAN</span>
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
 
-
                     <!-- RACE CATEGORIES -->
-
                     <section class="race-section">
-
-                        <div class="section-title">
-                            <span class="section-icon">🏃</span>
-                            RACE CATEGORIES
+                    <div class="section-title">
+                        <span class="section-icon">🏃</span>
+                        RACE CATEGORIES
+                    </div>
+                    <div class="race-grid">
+                        <!-- 21.1K -->
+                        <div class="race-card" style="display: flex; flex-direction: column;">
+                            <div class="race-header">
+                                <div>
+                                    <div class="race-distance">21.1K</div>
+                                    <div class="race-name">BEYOND</div>
+                                </div>
+                                <div class="race-runner-icon">
+                                    🏃
+                                </div>
+                            </div>
+                            <div class="race-body" style="display: flex; flex-direction: column; flex-grow: 1;">
+                                <h4>
+                                    Where Grit Meets Glory.
+                                </h4>
+                                <p>
+                                    Practice the half marathon and take on
+                                    the next level of endurance. Designed for
+                                    runners ready to push their limits,
+                                    test their resilience, and earn every
+                                    kilometre.
+                                </p>
+                                <div class="cutoff" style="margin-top: auto;">
+                                    Cut-Off Time:
+                                    <strong>3 Hours 30 Minutes</strong>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="race-grid">
-
-
-                            <!-- 21.1K -->
-
-                            <div class="race-card">
-
-                                <div class="race-header">
-
-                                    <div>
-                                        <div class="race-distance">BEYOND</div>
-                                        <div class="race-name">CHALLENGE</div>
-                                    </div>
-
-                                    <div class="race-runner-icon">
-                                        🏃
-                                    </div>
-
+                        <!-- 15K -->
+                        <div class="race-card" style="display: flex; flex-direction: column;">
+                            <div class="race-header">
+                                <div>
+                                    <div class="race-distance">15K</div>
+                                    <div class="race-name">BLAST</div>
                                 </div>
-
-                                <div class="race-body">
-
-                                    <h4>
-                                        Where Grit Meets Glory.
-                                    </h4>
-
-                                    <p>
-                                        Practice the half marathon and take on
-                                        the next level of endurance. Designed for
-                                        runners ready to push their limits,
-                                        test their resilience, and earn every
-                                        kilometre.
-                                    </p>
-
-                                    <div class="cutoff">
-                                        Cut-Off Time:
-                                        <strong>3 Hours 30 Minutes</strong>
-                                    </div>
-
+                                <div class="race-runner-icon">
+                                    🏃
                                 </div>
-
                             </div>
-
-
-                            <!-- 15K -->
-
-                            <div class="race-card">
-
-                                <div class="race-header">
-
-                                    <div>
-                                        <div class="race-distance">BLAST</div>
-                                        <div class="race-name">DASH</div>
-                                    </div>
-
-                                    <div class="race-runner-icon">
-                                        🏃
-                                    </div>
-
+                            <div class="race-body" style="display: flex; flex-direction: column; flex-grow: 1;">
+                                <h4>
+                                    Where Speed Meets Stamina.
+                                </h4>
+                                <p>
+                                    A perfect balance of distance, pace,
+                                    and performance — ideal for runners
+                                    looking for a focused and rewarding
+                                    challenge.
+                                </p>
+                                <div class="cutoff" style="margin-top: auto;">
+                                    Cut-Off Time:
+                                    <strong>2 Hours 30 Minutes</strong>
                                 </div>
-
-                                <div class="race-body">
-
-                                    <h4>
-                                        Where Speed Meets Stamina.
-                                    </h4>
-
-                                    <p>
-                                        A perfect balance of distance, pace,
-                                        and performance — ideal for runners
-                                        looking for a focused and rewarding
-                                        challenge.
-                                    </p>
-
-                                    <div class="cutoff">
-                                        Cut-Off Time:
-                                        <strong>2 Hours 30 Minutes</strong>
-                                    </div>
-
-                                </div>
-
                             </div>
-
-
-                            <!-- 7.5K -->
-
-                            <div class="race-card">
-
-                                <div class="race-header">
-
-                                    <div>
-                                        <div class="race-distance">BOLT</div>
-                                        <div class="race-name">RUN</div>
-                                    </div>
-
-                                    <div class="race-runner-icon">
-                                        🏃
-                                    </div>
-
-                                </div>
-
-                                <div class="race-body">
-
-                                    <h4>
-                                        Chase It. Conquer It.
-                                    </h4>
-
-                                    <p>
-                                        A welcoming distance for new runners
-                                        and experienced participants alike.
-                                        Run, jog, or walk — this is your
-                                        opportunity to be part of the race.
-                                    </p>
-
-                                    <div class="cutoff">
-                                        Cut-Off Time:
-                                        <strong>90 Minutes</strong>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
                         </div>
 
+                        <!-- 7.5K -->
+                        <div class="race-card" style="display: flex; flex-direction: column;">
+                            <div class="race-header">
+                                <div>
+                                    <div class="race-distance">7.5K</div>
+                                    <div class="race-name">BOLT</div>
+                                </div>
+                                <div class="race-runner-icon">
+                                    🏃
+                                </div>
+                            </div>
+                            <div class="race-body" style="display: flex; flex-direction: column; flex-grow: 1;">
+                                <h4>
+                                    Chase It. Conquer It.
+                                </h4>
+                                <p>
+                                    A welcoming distance for new runners
+                                    and experienced participants alike.
+                                    Run, jog, or walk — this is your
+                                    opportunity to be part of the race.
+                                </p>
+                                <div class="cutoff" style="margin-top: auto;">
+                                    Cut-Off Time:
+                                    <strong>90 Minutes</strong>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                     </section>
 
-
                     <!-- LOWER SECTION -->
-
                     <div class="lower-grid">
-
-
                         <!-- RUNNER ENTITLEMENTS -->
-
                         <div class="panel">
-
                             <div class="section-title">
                                 <span class="section-icon">🎁</span>
                                 RUNNER ENTITLEMENTS
                             </div>
-
                             <div class="entitlement-grid">
-
                                 <div class="entitlement">
                                     <div class="entitlement-icon">🎪</div>
                                     Race Expo<br>Access
                                 </div>
-
                                 <div class="entitlement">
                                     <div class="entitlement-icon">👕</div>
                                     Run BURJOWAN<br>Race T-Shirt
                                 </div>
-
                                 <div class="entitlement">
                                     <div class="entitlement-icon">🎟️</div>
                                     Race BIB
                                 </div>
-
                                 <div class="entitlement">
                                     <div class="entitlement-icon">🏅</div>
                                     Imported<br> Medal
                                 </div>
-
                                 <div class="entitlement">
                                     <div class="entitlement-icon">🙏</div>
                                     Dedicated<br>Prayer Zone
                                 </div>
-
                                 <div class="entitlement">
                                     <div class="entitlement-icon">💧</div>
                                     On-Course Hydration
                                     and Support
                                 </div>
-
                                 <div class="entitlement">
                                     <div class="entitlement-icon">✚</div>
                                     Medical and First
                                     Aid Support
                                 </div>
-
                                 <div class="entitlement">
                                     <div class="entitlement-icon">🥤</div>
                                     Post-Race
                                     Refreshment Pack
                                 </div>
-
                                 <div class="entitlement">
                                     <div class="entitlement-icon">📜</div>
                                     Digital Finisher
                                     Certificate
                                 </div>
-
                             </div>
-
                         </div>
 
-
                         <!-- AWARDS -->
-
                         <div class="panel">
-
                             <div class="section-title">
                                 <span class="section-icon">🏆</span>
                                 AWARDS AND RECOGNITION
                             </div>
-
                             <div class="award-intro">
                                 <strong>
-                                    <span class="pink">BEYOND, BLAST and BOLT</span>
+                                    <span class="pink">BEYOND (21.1K), BLAST (15K) and BOLT (7.5K)</span>
                                 </strong>
                                 <br>
                                 Top three finishers will be awarded prize money
-                                and commemorative crests.
+                                as below.
                             </div>
-
                             <table class="award-table">
-
                                 <thead>
-
-                                    <tr>
-                                        <th>BEYOND</th>
-                                        <th>BLAST</th>
-                                        <th>BOLT</th>
+                                    <tr style="font-size: 14px;">
+                                        <th>POSITION</th>
+                                        <th>BEYOND (21.1K)</th>
+                                        <th>BLAST (15K)</th>
+                                        <th>BOLT (7.5K)</th>
                                     </tr>
-
                                 </thead>
-
                                 <tbody>
-
-                                    <tr>
-                                        <td>Champion<br>4,000 BDT</td>
-                                        <td>Champion<br>3,000 BDT</td>
-                                        <td>Champion<br>2,000 BDT</td>
+                                    <tr style="font-size: 14px;">
+                                        <td><strong>Champion</strong></td>
+                                        <td>4,000 BDT</td>
+                                        <td>3,000 BDT</td>
+                                        <td>2,000 BDT</td>
                                     </tr>
-
-                                    <tr>
-                                        <td>1st Runner Up<br>3,000 BDT</td>
-                                        <td>1st Runner Up<br>2,000 BDT</td>
-                                        <td>1st Runner Up<br>1,000 BDT</td>
+                                    <tr style="font-size: 14px;">
+                                        <td><strong>1st Runner Up</strong></td>
+                                        <td>3,000 BDT</td>
+                                        <td>2,000 BDT</td>
+                                        <td>1,000 BDT</td>
                                     </tr>
-
-                                    <tr>
-                                        <td>2nd Runner Up<br>2,000 BDT</td>
-                                        <td>2nd Runner Up<br>1,000 BDT</td>
-                                        <td>2nd Runner Up<br>500 BDT</td>
+                                    <tr style="font-size: 14px;">
+                                        <td><strong>2nd Runner Up</strong></td>
+                                        <td>2,000 BDT</td>
+                                        <td>1,000 BDT</td>
+                                        <td>500 BDT</td>
                                     </tr>
-
-                            </tbody>
-
+                                </tbody>
                             </table>
-
                             <div class="notes">
-
                                 <strong>Important Notes:</strong>
-
                                 <br>• Podium positions will be determined
                                 based on Gun Time.
-
                             </div>
-
                         </div>
-
                     </div>
 
-
                     <!-- SCHEDULE + RULES -->
-
                     <div class="bottom-grid">
-
-
                         <!-- SCHEDULE -->
-
                         <div class="schedule">
-
                             <div class="section-title">
                                 <span class="section-icon">📅</span>
                                 RACE DAY SCHEDULE
                             </div>
-
                             <div class="tba">
                                 🕐 TBA
                             </div>
-
                         </div>
 
-
                         <!-- RULES -->
-
                         <div class="rules">
-
                             <div class="section-title">
                                 <span class="section-icon">📋</span>
                                 RULES AND GUIDELINES
                             </div>
-
                             <ul>
-
                                 <li>
                                     Pre-registration is mandatory.
                                     No on-spot registration will be permitted.
                                 </li>
-
                                 <li>
                                     BIBs are strictly non-transferable.
                                     Running under another participant's BIB
                                     will result in disqualification.
                                 </li>
-
                                 <li>
                                     Medals will be awarded only to
                                     participants who complete their respective
                                     races within the official cut-off time.
                                 </li>
-
                                 <li>
                                     No refunds or category changes will be
                                     permitted once registration is confirmed.
                                 </li>
-
                                 <li>
                                     Organizers reserve the right to modify
                                     the race schedule, course, or event logistics
                                     in case of adverse weather conditions or
                                     safety concerns.
                                 </li>
-
                             </ul>
-
                         </div>
-
                     </div>
 
-
                     <!-- FOOTER -->
-
                     <div class="event-footer">
-
                         <div class="footer-main">
                             More Than a Race,
                             <span>It's a Movement.</span>
                         </div>
-
                         <div class="footer-brand">
                             RUN BURJOWAN
                         </div>
-
                         <div class="footer-small">
                             MORE THAN A RACE • A COMMUNITY
                         </div>
-
                     </div>
-
-
                 </div>
-
             </div>
         </div>
     </div>

@@ -279,11 +279,11 @@
 
                 <div class="form-grid-2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
                     <div class="form-group">
-                        <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Emergency Contact Name <span class="required" style="color: #e11d48;">*</span></label>
+                        <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Contact Name <span class="required" style="color: #e11d48;">*</span></label>
                         <input type="text" name="emergency_name" placeholder="Contact Person Name" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
                     </div>
                     <div class="form-group">
-                        <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Emergency Contact Number <span class="required" style="color: #e11d48;">*</span></label>
+                        <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Contact Number <span class="required" style="color: #e11d48;">*</span></label>
                         <input type="tel" name="emergency_phone" id="emergencyPhoneInput" value="+880 " placeholder="+880 1XXXXXXXXX" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none;">
                     </div>
                 </div>
@@ -295,36 +295,27 @@
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">3</div>
                     <div class="section-header-title" style="font-weight: 700; color: #1e293b; font-size: 15px; display: flex; align-items: center; gap: 8px;">
                         <i class="fa-solid fa-shirt" style="color: #459f0a;"></i>
-                        <span>EVENT SPECIFICATIONS &amp; T-SHIRT</span>
+                        <span>RUN SPECIFICATIONS &amp; T-SHIRT</span>
                     </div>
                 </div>
 
                 <div class="form-grid-2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
                     <div class="form-group">
-                        <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Race Categories / Ticket Type <span class="required" style="color: #e11d48;">*</span></label>
+                        <label style="display: block; font-weight: 600; font-size: 13px; color: #334155; margin-bottom: 6px;">Race Categories<span class="required" style="color: #e11d48;">*</span></label>
                         <select name="category" required style="width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #fff;">
                             <option value="" disabled selected>Select Category</option>
                             <?php
                                 $cats = array_filter(array_map('trim', explode('/', $active_event->category ?? '')));
                             ?>
-                            <?php $__empty_1 = true; $__currentLoopData = $cats; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                                <option value="<?php echo e($cat); ?>"><?php echo e($cat); ?> Run</option>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                                <option value="7.5K">7.5K Run</option>
-                                <option value="15K">15K Run</option>
-                                <option value="21.1K">21.1K Run</option>
-                            <?php endif; ?>
+                                <option value="7.5K">7.5K (BOLT)</option>
+                                <option value="15K">15K (BLAST)</option>
+                                <option value="21.1K">21.1K (BEYOND) </option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>T-Shirt Size <span class="required">*</span></label>
                         <div class="radio-options-group" style="display: flex; gap: 10px;">
-
-                            <label class="radio-card tshirt-parent">
-                                <input type="radio" name="tshirt" value="S" required> S
-                                <div class="tshirt-tooltip"><img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt"></div>
-                            </label>
 
                             <label class="radio-card tshirt-parent">
                                 <input type="radio" name="tshirt" value="M"> M
@@ -390,7 +381,7 @@
                     <div class="step-number" style="background: #459f0a; color: #fff; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px;">4</div>
                     <div class="section-header-title" style="font-weight: 700; color: #1e293b; font-size: 15px; display: flex; align-items: center; gap: 8px;">
                         <i class="fa-solid fa-credit-card" style="color: #459f0a;"></i>
-                        <span>PAYMENT METHOD &amp; VERIFICATION</span>
+                        <span>PAYMENT VERIFICATION</span>
                     </div>
                 </div>
 

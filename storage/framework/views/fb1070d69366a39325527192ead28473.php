@@ -245,6 +245,9 @@
                 <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
             </div>
             <p><i class="fa-regular fa-envelope"></i> info@runburjowan.com</p>
+            <p><i class="fa-solid fa-phone"></i> +880 19 1146 9861</p>
+            <p><i class="fa-solid fa-phone"></i> +880 17 1154 3414</p>
+            <p><i class="fa-solid fa-phone"></i> +880 17 1180 8026</p>
             <p><i class="fa-solid fa-location-dot"></i> Dhaka, Bangladesh</p>
         </div>
     </div>
@@ -440,7 +443,7 @@
                     <div class="step-number">3</div>
                     <div class="section-header-title">
                         <i class="fa-solid fa-shirt"></i>
-                        <span>EVENT SPECIFICATIONS & T-SHIRT</span>
+                        <span>RUN SPECIFICATION & T-SHIRT</span>
                     </div>
                 </div>
 
@@ -526,7 +529,7 @@
                     <div class="step-number">4</div>
                     <div class="section-header-title">
                         <i class="fa-solid fa-credit-card"></i>
-                        <span>PAYMENT METHOD & VERIFICATION</span>
+                        <span>PAYMENT VERIFICATION</span>
                     </div>
                 </div>
 
