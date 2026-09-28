@@ -178,15 +178,7 @@
                         </td>
                     </tr>
 
-                    <!-- CTA -->
-                    <tr>
-                        <td style="padding:10px 35px 35px; text-align:center;">
-                            <a href="{{ config('app.url') }}"
-                               style="display:inline-block; background:linear-gradient(135deg,#16a34a 0%,#059669 100%); color:#ffffff; text-decoration:none; font-size:14px; font-weight:600; padding:13px 32px; border-radius:8px; letter-spacing:0.3px;">
-                                Visit Event Page &rarr;
-                            </a>
-                        </td>
-                    </tr>
+                
 
                     <!-- Divider -->
                     <tr>

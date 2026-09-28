@@ -133,20 +133,6 @@
 
                         </td>
                     </tr>
-
-                    <tr>
-                        <td style="padding:10px 35px 35px; text-align:center;">
-                            <a href="{{ route('admin.registrations.show', $registration) }}"
-                               style="display:inline-block; background-color:#2563eb; color:#ffffff; text-decoration:none; font-size:15px; font-weight:600; padding:14px 38px; border-radius:8px; letter-spacing:0.3px;">
-                                View Full Details
-                            </a>
-                            <p style="margin:12px 0 0; font-size:12.5px; color:#a0aec0;">or copy this link:</p>
-                            <p style="margin:4px 0 0; font-size:12px; color:#2563eb; word-break:break-all;">
-                                {{ route('admin.registrations.show', $registration) }}
-                            </p>
-                        </td>
-                    </tr>
-
                     <tr>
                         <td style="padding:0 35px;">
                             <hr style="border:none; border-top:1px solid #e2e8f0; margin:0;">

@@ -96,16 +96,6 @@
 
                         </td>
                     </tr>
-
-                    <tr>
-                        <td style="padding:10px 35px 35px; text-align:center;">
-                            <a href="{{ config('app.url') }}"
-                               style="display:inline-block; background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:#ffffff; text-decoration:none; font-size:14px; font-weight:600; padding:13px 32px; border-radius:8px; letter-spacing:0.3px;">
-                                Visit Our Website &rarr;
-                            </a>
-                        </td>
-                    </tr>
-
                     <tr>
                         <td style="padding:0 35px;">
                             <hr style="border:none; border-top:1px solid #e2e8f0; margin:0;">
