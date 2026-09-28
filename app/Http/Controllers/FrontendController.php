@@ -83,11 +83,17 @@ class FrontendController extends Controller
     {
         return view('gallery');
     }
-    public function form()
+    public function form(Request $request)
     {
-         $active_event = Event::where('event_date', '>=', now())
-        ->orderBy('event_date', 'asc')
-        ->first();
+        $eventId = $request->query('1');
+
+        $active_event = Event::where('event_date', '>=', now())
+            ->when($eventId, function ($query) use ($eventId) {
+                $query->where('id', $eventId);
+            })
+            ->orderBy('event_date', 'asc')
+            ->first();
+
         return view('form', compact('active_event'));
     }
 
