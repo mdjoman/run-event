@@ -1,10 +1,9 @@
-@extends('master')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-@section('body')
+<?php $__env->startSection('body'); ?>
 
-@php
+<?php
     /* ============================================================
        ACTIVE EVENT — CATEGORIES FOR JS
     ============================================================ */
@@ -39,9 +38,9 @@
         }
         return asset($path);
     };
-@endphp
+?>
 
-{{-- ==================== HERO ==================== --}}
+
 <section class="hero">
     <div class="container hero-content">
         <div class="hero-subtitle">RUNNING <span> COMMUNITY</span> and EVENTS</div>
@@ -51,18 +50,18 @@
             track your journey and be part of the community.
         </p>
         <div class="hero-btns">
-            <a href="{{ route('event') }}" class="btn-primary btn-arrow">
+            <a href="<?php echo e(route('event')); ?>" class="btn-primary btn-arrow">
                 Explore Events <i class="fa-solid fa-arrow-right"></i>
             </a>
-            @if ($active_event)
+            <?php if($active_event): ?>
                 <a href="#" class="btn-outline proceedRegistrationBtn"
-                   data-title="{{ $active_event->title }}"
-                   data-price="{{ $active_event->fee }}"
-                   data-event_id="{{ $active_event->id }}"
-                   data-categories='@json($categoriesForJs)'>
+                   data-title="<?php echo e($active_event->title); ?>"
+                   data-price="<?php echo e($active_event->fee); ?>"
+                   data-event_id="<?php echo e($active_event->id); ?>"
+                   data-categories='<?php echo json_encode($categoriesForJs, 15, 512) ?>'>
                     Register Now <i class="fa-solid fa-arrow-right"></i>
                 </a>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
 
@@ -74,14 +73,14 @@
                     <label>Event</label>
                     <select>
                         <option>Select event</option>
-                        @if($active_event)
-                            <option>{{ $active_event->title }}</option>
-                        @endif
-                        @if(isset($events) && $events->count())
-                            @foreach ($events as $event)
-                                <option>{{ $event->title }}</option>
-                            @endforeach
-                        @endif
+                        <?php if($active_event): ?>
+                            <option><?php echo e($active_event->title); ?></option>
+                        <?php endif; ?>
+                        <?php if(isset($events) && $events->count()): ?>
+                            <?php $__currentLoopData = $events; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option><?php echo e($event->title); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
                     </select>
                 </div>
             </div>
@@ -91,14 +90,14 @@
                     <label>Location</label>
                     <select>
                         <option>Select location</option>
-                        @if($active_event && $active_event->location)
-                            <option>{{ $active_event->location }}</option>
-                        @endif
-                        @if(isset($events) && $events->count())
-                            @foreach ($events->pluck('location')->filter()->unique() as $loc)
-                                <option>{{ $loc }}</option>
-                            @endforeach
-                        @endif
+                        <?php if($active_event && $active_event->location): ?>
+                            <option><?php echo e($active_event->location); ?></option>
+                        <?php endif; ?>
+                        <?php if(isset($events) && $events->count()): ?>
+                            <?php $__currentLoopData = $events->pluck('location')->filter()->unique(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option><?php echo e($loc); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
                     </select>
                 </div>
             </div>
@@ -115,21 +114,21 @@
     </div>
 </section>
 
-{{-- ==================== STATS ==================== --}}
+
 <section class="stats-section">
     <div class="container stats-grid">
-        @php
+        <?php
             $totalEvents        = \App\Models\Event::count();
             $totalRegistrations = \App\Models\Registration::where('status', 'approved')->count();
             $completedEvents    = \App\Models\Event::where('status', 'completed')->count();
             $communityMembers   = \App\Models\Registration::distinct('phone')->count('phone');
-        @endphp
+        ?>
 
         <div class="stat-card">
             <div class="stat-icon"><i class="fa-regular fa-calendar-alt"></i></div>
             <div class="stat-info">
                 <span class="stat-title">Upcoming Events</span>
-                <h3>{{ max(1, $totalEvents) }}+</h3>
+                <h3><?php echo e(max(1, $totalEvents)); ?>+</h3>
                 <p>Races this year</p>
             </div>
         </div>
@@ -137,7 +136,7 @@
             <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
             <div class="stat-info">
                 <span class="stat-title">Registered Runners</span>
-                <h3>{{ number_format(max(12, $totalRegistrations)) }}+</h3>
+                <h3><?php echo e(number_format(max(12, $totalRegistrations))); ?>+</h3>
                 <p>Be part of our community</p>
             </div>
         </div>
@@ -145,7 +144,7 @@
             <div class="stat-icon"><i class="fa-solid fa-trophy"></i></div>
             <div class="stat-info">
                 <span class="stat-title">Successful Races</span>
-                <h3>{{ max(1, $completedEvents) }}+</h3>
+                <h3><?php echo e(max(1, $completedEvents)); ?>+</h3>
                 <p>Memorable events</p>
             </div>
         </div>
@@ -153,14 +152,14 @@
             <div class="stat-icon"><i class="fa-solid fa-user-group"></i></div>
             <div class="stat-info">
                 <span class="stat-title">Community Members</span>
-                <h3>{{ number_format(max(52, $communityMembers)) }}+</h3>
+                <h3><?php echo e(number_format(max(52, $communityMembers))); ?>+</h3>
                 <p>Run. Connect. Grow.</p>
             </div>
         </div>
     </div>
 </section>
 
-{{-- ==================== UPCOMING EVENTS ==================== --}}
+
 <section class="events-section">
     <div class="container">
         <div class="flex items-end gap-5 w-full mb-6">
@@ -168,7 +167,7 @@
                 <span class="text-[15px] font-bold text-[#7bb526] tracking-wider uppercase mb-1">FEATURED EVENTS</span>
                 <h2 class="section-title">Upcoming Running Events</h2>
             </div>
-            <a href="{{ route('event') }}" class="text-xs font-bold text-[#031b33] whitespace-nowrap flex items-center gap-1.5 pb-2">
+            <a href="<?php echo e(route('event')); ?>" class="text-xs font-bold text-[#031b33] whitespace-nowrap flex items-center gap-1.5 pb-2">
                 View All Events <i class="fa-solid fa-arrow-right"></i>
             </a>
             <div class="flex-grow h-[1px] bg-[#e2e8f0] mb-3"></div>
@@ -176,9 +175,9 @@
 
         <div class="unique-slider-wrap" style="display: flex; gap: 20px; align-items: center; overflow: hidden;">
 
-            {{-- Active Event Card --}}
-            @if ($active_event)
-                @php
+            
+            <?php if($active_event): ?>
+                <?php
                     $activeEventJson = [
                         'title'           => $active_event->title,
                         'subtitle'        => $active_event->subtitle,
@@ -197,67 +196,68 @@
                     ];
 
                     $activeImageUrl = $imageUrl($active_event->image, 'img/placeholder.png');
-                @endphp
+                ?>
 
                 <div class="unique-card" style="flex-shrink: 0;">
                     <div class="event-img" style="padding-top: 3px; position: relative;">
 
-                        <img src="{{ $activeImageUrl }}"
-                             alt="{{ $active_event->title }}"
-                             onclick='openIndexModal(@json($activeEventJson))'
+                        <img src="<?php echo e($activeImageUrl); ?>"
+                             alt="<?php echo e($active_event->title); ?>"
+                             onclick='openIndexModal(<?php echo json_encode($activeEventJson, 15, 512) ?>)'
                              style="cursor: pointer; height: 197px; width: 100%; object-fit: cover;">
 
                         <button type="button"
-                                onclick='openIndexModal(@json($activeEventJson))'
+                                onclick='openIndexModal(<?php echo json_encode($activeEventJson, 15, 512) ?>)'
                                 style="position: absolute; bottom: 12px; right: 12px; background: #4f9770bf; color: #ffffff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 5px; backdrop-filter: blur(4px);">
                             <i class="fa-solid fa-circle-info"></i> Event Details
                         </button>
 
                         <div class="date-badge">
-                            <span class="day">{{ date('d', strtotime($active_event->event_date)) }}</span>
-                            <span class="month">{{ date('M', strtotime($active_event->event_date)) }}</span>
-                            <span class="year">{{ date('Y', strtotime($active_event->event_date)) }}</span>
+                            <span class="day"><?php echo e(date('d', strtotime($active_event->event_date))); ?></span>
+                            <span class="month"><?php echo e(date('M', strtotime($active_event->event_date))); ?></span>
+                            <span class="year"><?php echo e(date('Y', strtotime($active_event->event_date))); ?></span>
                         </div>
                     </div>
 
                     <div class="event-content">
-                        <h3 onclick='openIndexModal(@json($activeEventJson))' style="cursor: pointer;">
-                            {{ $active_event->title }}
+                        <h3 onclick='openIndexModal(<?php echo json_encode($activeEventJson, 15, 512) ?>)' style="cursor: pointer;">
+                            <?php echo e($active_event->title); ?>
+
                         </h3>
-                        <p class="location"><i class="fa-solid fa-location-dot"></i> {{ $active_event->location }}</p>
+                        <p class="location"><i class="fa-solid fa-location-dot"></i> <?php echo e($active_event->location); ?></p>
                         <div class="tags">
-                            <span>{{ $active_event->category }}</span>
+                            <span><?php echo e($active_event->category); ?></span>
                         </div>
-                        <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK {{ $active_event->fee }}</p>
-                        @if($active_event->status == 'active')
+                        <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK <?php echo e($active_event->fee); ?></p>
+                        <?php if($active_event->status == 'active'): ?>
                             <div class="action-buttons" style="display: flex; gap: 10px; width: 100%;">
                                 <a href="javascript:void(0)" class="btn-primary shareBtn"
                                    style="flex: 1; flex-basis: 0; text-align: center; justify-content: center; box-sizing: border-box; white-space: nowrap;"
-                                   data-url="{{ route('form', $active_event->id) }}"
-                                   data-title="{{ $active_event->title }}">
+                                   data-url="<?php echo e(route('form', $active_event->id)); ?>"
+                                   data-title="<?php echo e($active_event->title); ?>">
                                     Share <i class="fa-solid fa-share-nodes"></i>
                                 </a>
 
                                 <a href="#" class="btn-primary proceedRegistrationBtn"
                                    style="flex: 1; flex-basis: 0; text-align: center; justify-content: center; box-sizing: border-box; white-space: nowrap;"
-                                   data-title="{{ $active_event->title }}"
-                                   data-price="{{ $active_event->fee }}"
-                                   data-event_id="{{ $active_event->id }}"
-                                   data-categories='@json($categoriesForJs)'>
+                                   data-title="<?php echo e($active_event->title); ?>"
+                                   data-price="<?php echo e($active_event->fee); ?>"
+                                   data-event_id="<?php echo e($active_event->id); ?>"
+                                   data-categories='<?php echo json_encode($categoriesForJs, 15, 512) ?>'>
                                     Register Now <i class="fa-solid fa-arrow-right"></i>
                                 </a>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            {{-- Slider Track --}}
+            
             <div style="overflow: hidden; width: 100%;">
                 <div class="unique-track" style="display: flex; gap: 20px; width: max-content;">
-                    @if(isset($events) && $events->count())
-                        @foreach ($events as $event)
-                            @php
+                    <?php if(isset($events) && $events->count()): ?>
+                        <?php $__currentLoopData = $events; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php
                                 $eventJson = [
                                     'title'           => $event->title,
                                     'subtitle'        => $event->subtitle,
@@ -276,37 +276,38 @@
                                 ];
 
                                 $imgUrl = $imageUrl($event->image, 'img/placeholder.png');
-                            @endphp
+                            ?>
 
                             <div class="unique-card" style="flex-shrink: 0;">
                                 <div class="event-img">
-                                    <img src="{{ $imgUrl }}"
-                                         alt="{{ $event->title }}"
-                                         onclick='openIndexModal(@json($eventJson))'
+                                    <img src="<?php echo e($imgUrl); ?>"
+                                         alt="<?php echo e($event->title); ?>"
+                                         onclick='openIndexModal(<?php echo json_encode($eventJson, 15, 512) ?>)'
                                          style="cursor: pointer;">
 
                                     <div class="date-badge">
-                                        <span class="day">{{ date('d', strtotime($event->event_date)) }}</span>
-                                        <span class="month">{{ date('M', strtotime($event->event_date)) }}</span>
-                                        <span class="year">{{ date('Y', strtotime($event->event_date)) }}</span>
+                                        <span class="day"><?php echo e(date('d', strtotime($event->event_date))); ?></span>
+                                        <span class="month"><?php echo e(date('M', strtotime($event->event_date))); ?></span>
+                                        <span class="year"><?php echo e(date('Y', strtotime($event->event_date))); ?></span>
                                     </div>
                                 </div>
 
                                 <div class="event-content">
-                                    <h3 onclick='openIndexModal(@json($eventJson))' style="cursor: pointer;">
-                                        {{ $event->title }}
+                                    <h3 onclick='openIndexModal(<?php echo json_encode($eventJson, 15, 512) ?>)' style="cursor: pointer;">
+                                        <?php echo e($event->title); ?>
+
                                     </h3>
-                                    <p class="location"><i class="fa-solid fa-location-dot"></i> {{ $event->location }}</p>
+                                    <p class="location"><i class="fa-solid fa-location-dot"></i> <?php echo e($event->location); ?></p>
                                     <div class="tags">
-                                        <span>{{ $event->category }}</span>
+                                        <span><?php echo e($event->category); ?></span>
                                     </div>
-                                    <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK {{ $event->fee }}</p>
+                                    <p class="price"><i class="fa-solid fa-ticket"></i> Registration Fee: TK <?php echo e($event->fee); ?></p>
                                     <p></p>
                                     <br>
                                 </div>
                             </div>
-                        @endforeach
-                    @endif
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -314,7 +315,7 @@
     </div>
 </section>
 
-{{-- ==================== FEATURES ==================== --}}
+
 <section class="features-section">
     <div class="container features-grid">
         <div class="features-header">
@@ -346,7 +347,7 @@
     </div>
 </section>
 
-{{-- ==================== STEPS ==================== --}}
+
 <section class="steps-section">
     <div class="container">
         <span class="sub-heading">HOW IT WORKS</span>
@@ -389,8 +390,8 @@
     </div>
 </section>
 
-{{-- ==================== COMMUNITY BANNER ==================== --}}
-<section class="banner-section" style="background-image: url('{{ asset('img/home2.jpg') }}');">
+
+<section class="banner-section" style="background-image: url('<?php echo e(asset('img/home2.jpg')); ?>');">
     <div class="brush-overlay-left"></div>
     <div class="banner-overlay-slanted"></div>
 
@@ -411,7 +412,7 @@
     </div>
 </section>
 
-{{-- ==================== PARTNERS ==================== --}}
+
 <section class="partners-section">
     <div class="container">
         <span class="sub-heading center">OUR PARTNERS and SPONSORS</span>
@@ -426,7 +427,7 @@
     </div>
 </section>
 
-{{-- ==================== GALLERY ==================== --}}
+
 <section class="gallery-section">
     <div class="container">
         <div class="flex items-end gap-5 w-full mb-6">
@@ -434,26 +435,26 @@
                 <span class="text-[15px] font-bold text-[#7bb526] tracking-wider uppercase mb-1">RUNNING MOMENTS</span>
                 <h2 class="section-title">Gallery</h2>
             </div>
-            <a href="{{ route('gallery') }}" class="text-xs font-bold text-[#031b33] whitespace-nowrap flex items-center gap-1.5 pb-2">
+            <a href="<?php echo e(route('gallery')); ?>" class="text-xs font-bold text-[#031b33] whitespace-nowrap flex items-center gap-1.5 pb-2">
                 View All Photos <i class="fa-solid fa-arrow-right"></i>
             </a>
             <div class="flex-grow h-[1px] bg-[#e2e8f0] mb-3"></div>
         </div>
 
         <div class="gallery-grid">
-            <img src="{{ asset('img/ur1.jpeg') }}" alt="Gallery Image 1">
-            <img src="{{ asset('img/ur2.jpeg') }}" alt="Gallery Image 2">
-            <img src="{{ asset('img/ur3.jpeg') }}" alt="Gallery Image 3">
-            <img src="{{ asset('img/ur4.jpeg') }}" alt="Gallery Image 4">
-            <img src="{{ asset('img/ur5.jpeg') }}" alt="Gallery Image 5">
+            <img src="<?php echo e(asset('img/ur1.jpeg')); ?>" alt="Gallery Image 1">
+            <img src="<?php echo e(asset('img/ur2.jpeg')); ?>" alt="Gallery Image 2">
+            <img src="<?php echo e(asset('img/ur3.jpeg')); ?>" alt="Gallery Image 3">
+            <img src="<?php echo e(asset('img/ur4.jpeg')); ?>" alt="Gallery Image 4">
+            <img src="<?php echo e(asset('img/ur5.jpeg')); ?>" alt="Gallery Image 5">
         </div>
     </div>
 </section>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-{{-- ==================== SCRIPTS ==================== --}}
-@push('scripts')
+
+<?php $__env->startPush('scripts'); ?>
 <script>
 $(function () {
 
@@ -706,4 +707,5 @@ $(function () {
 
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\run-event\resources\views/index.blade.php ENDPATH**/ ?>

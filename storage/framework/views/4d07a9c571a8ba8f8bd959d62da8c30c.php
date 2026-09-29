@@ -1,4 +1,3 @@
-@extends('master')
 <style>
     b, strong {
         font-size: 16px !important;
@@ -46,9 +45,9 @@
         }
     }
 </style>
-@section('body')
+<?php $__env->startSection('body'); ?>
 
-@php
+<?php
     // Prepare active event JSON for modal
     $activeEventJson = null;
     if ($active_event) {
@@ -90,9 +89,9 @@
             'fee'      => (float) ($active_event->fee ?? 0),
         ]];
     }
-@endphp
+?>
 
-<section class="ev-hero-section" style="background-image: url('{{ asset('img/event.jpg') }}');">
+<section class="ev-hero-section" style="background-image: url('<?php echo e(asset('img/event.jpg')); ?>');">
     <div class="ev-hero-overlay"></div>
     <div class="container ev-hero-content">
         <span class="ev-sub-tag">• RUN • CONNECT • EXPLORE</span>
@@ -111,14 +110,15 @@
         </button>
     </div>
 
-    @if ($active_event)
+    <?php if($active_event): ?>
         <div id="upcoming-section">
             <div class="ev-section-header">
                 <div>
                     <span class="ev-section-tag">UPCOMING EVENT</span>
-                    <h2 class="ev-section-title">{{ $active_event->title }}</h2>
+                    <h2 class="ev-section-title"><?php echo e($active_event->title); ?></h2>
                     <p class="ev-sub-text">
-                        {{ $active_event->tagline ?? 'Run through the city of dreams!' }}
+                        <?php echo e($active_event->tagline ?? 'Run through the city of dreams!'); ?>
+
                     </p>
                 </div>
                 <a href="#" class="ev-view-all-link">
@@ -129,13 +129,13 @@
             <div class="ev-main-event-card">
                 <div class="ev-event-left-box">
                     <div class="ev-event-img-wrap">
-                        <img src="{{ $active_event->image_url }}"
-                             alt="{{ $active_event->title }}"
-                             onclick='openIndexModal(@json($activeEventJson))'
+                        <img src="<?php echo e($active_event->image_url); ?>"
+                             alt="<?php echo e($active_event->title); ?>"
+                             onclick='openIndexModal(<?php echo json_encode($activeEventJson, 15, 512) ?>)'
                              style="cursor: pointer;">
 
                         <button type="button"
-                                onclick='openIndexModal(@json($activeEventJson))'
+                                onclick='openIndexModal(<?php echo json_encode($activeEventJson, 15, 512) ?>)'
                                 style="position: absolute; top: 12px; right: 12px;
                                        background: #4f9770bf; color: #ffffff;
                                        border: none; padding: 6px 12px; border-radius: 4px;
@@ -146,9 +146,9 @@
                         </button>
 
                         <div class="ev-date-badge">
-                            <span class="day">{{ date('d', strtotime($active_event->event_date)) }}</span>
-                            <span class="month">{{ date('M', strtotime($active_event->event_date)) }}</span>
-                            <span class="year">{{ date('Y', strtotime($active_event->event_date)) }}</span>
+                            <span class="day"><?php echo e(date('d', strtotime($active_event->event_date))); ?></span>
+                            <span class="month"><?php echo e(date('M', strtotime($active_event->event_date))); ?></span>
+                            <span class="year"><?php echo e(date('Y', strtotime($active_event->event_date))); ?></span>
                         </div>
                     </div>
 
@@ -157,27 +157,27 @@
                             <i class="fa-solid fa-location-dot"></i>
                             <div>
                                 <strong>Location</strong><br>
-                                <small>{{ $active_event->location }}</small>
+                                <small><?php echo e($active_event->location); ?></small>
                             </div>
                         </div>
                         <div class="ev-meta-item">
                             <i class="fa-solid fa-route"></i>
                             <div>
                                 <strong>Distance</strong><br>
-                                <small>{{ $active_event->category }}</small>
+                                <small><?php echo e($active_event->category); ?></small>
                             </div>
                         </div>
                         <div class="ev-meta-item">
                             <i class="fa-solid fa-clock"></i>
                             <div>
                                 <strong>Start Time</strong><br>
-                                <small>{{ $active_event->start_time ?? '6:00 AM' }}</small>
+                                <small><?php echo e($active_event->start_time ?? '6:00 AM'); ?></small>
                             </div>
                         </div>
                     </div>
 
-                    {{-- Dynamic Entitlements/Features --}}
-                    @php
+                    
+                    <?php
                         $features = $active_event->entitlements ?? [];
                         $featureIcons = [
                             '👕' => 'fa-shirt',
@@ -189,64 +189,69 @@
                             '🥤' => 'fa-mug-hot',
                             '📜' => 'fa-certificate',
                         ];
-                    @endphp
+                    ?>
 
-                    @if(count($features) > 0)
+                    <?php if(count($features) > 0): ?>
                         <div class="ev-features-list" style="font-size: 14px !important;">
-                            @foreach($features as $feature)
-                                @php
+                            <?php $__currentLoopData = $features; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $feature): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php
                                     $iconKey = $feature['icon'] ?? '🏅';
                                     $faIcon  = $featureIcons[$iconKey] ?? 'fa-award';
                                     $text    = trim(str_replace("\n", ' ', $feature['text'] ?? ''));
-                                @endphp
+                                ?>
                                 <span>
-                                    <i class="fa-solid {{ $faIcon }}"></i>
-                                    {{ \Illuminate\Support\Str::limit($text, 30) }}
+                                    <i class="fa-solid <?php echo e($faIcon); ?>"></i>
+                                    <?php echo e(\Illuminate\Support\Str::limit($text, 30)); ?>
+
                                 </span>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
 
                 <div class="ev-widget-right-box">
                     <div class="ev-offer-banner">
                         <p>
                             Register before
-                            {{ $active_event->event_date->subDays(30)->format('d M Y') }}
+                            <?php echo e($active_event->event_date->subDays(30)->format('d M Y')); ?>
+
                         </p>
                     </div>
 
                     <div class="ev-widget-group">
                         <label class="ev-label">Select Your Category</label>
                         <div class="ev-category-grid">
-                            @php
+                            <?php
                                 $categories = $active_event->categories ?? [];
                                 $first_cat_fee = !empty($categories)
                                 ? ($categories[0]['fee'] ?? $active_event->fee)
                                 : $active_event->fee;
-                            @endphp
+                            ?>
 
-                            @forelse($categories as $index => $cat)
-                                @php
+                            <?php $__empty_1 = true; $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <?php
                                     $isDisabled = $index > 1;
                                     $isActive   = ($index === 0); // Second category active by default (mimics design)
-                                @endphp
-                                <button class="ev-cat-btn {{ $isDisabled ? 'ev-cat-disabled' : '' }} {{ $isActive ? 'ev-cat-active' : '' }}"
-                                        {{ $isDisabled ? 'disabled' : '' }}
-                                        data-distance="{{ $cat['distance'] ?? '' }}"
-                                        data-fee="{{ $cat['fee'] ?? $active_event->fee }}">
-                                    {{ $cat['distance'] ?? '' }}
+                                ?>
+                                <button class="ev-cat-btn <?php echo e($isDisabled ? 'ev-cat-disabled' : ''); ?> <?php echo e($isActive ? 'ev-cat-active' : ''); ?>"
+                                        <?php echo e($isDisabled ? 'disabled' : ''); ?>
+
+                                        data-distance="<?php echo e($cat['distance'] ?? ''); ?>"
+                                        data-fee="<?php echo e($cat['fee'] ?? $active_event->fee); ?>">
+                                    <?php echo e($cat['distance'] ?? ''); ?>
+
                                     <br>
-                                    <span>BDT {{ number_format((float)($cat['fee'] ?? $active_event->fee)) }}</span>
+                                    <span>BDT <?php echo e(number_format((float)($cat['fee'] ?? $active_event->fee))); ?></span>
                                 </button>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <button class="ev-cat-btn ev-cat-active"
-                                        data-fee="{{ $active_event->fee }}">
-                                    {{ $active_event->category }}
+                                        data-fee="<?php echo e($active_event->fee); ?>">
+                                    <?php echo e($active_event->category); ?>
+
                                     <br>
-                                    <span>BDT {{ number_format($active_event->fee) }}</span>
+                                    <span>BDT <?php echo e(number_format($active_event->fee)); ?></span>
                                 </button>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -262,43 +267,44 @@
                     <div class="ev-total-box">
                         <span>Total Amount</span>
                         <h3 class="ev-total-price" id="totalPrice">
-                            BDT {{ number_format($first_cat_fee) }}
+                            BDT <?php echo e(number_format($first_cat_fee)); ?>
+
                         </h3>
                     </div>
 
-                    @if($active_event->status == 'active')
+                    <?php if($active_event->status == 'active'): ?>
                         <div class="action-buttons" style="display: flex; gap: 10px;">
                             <a href="javascript:void(0)"
                                class="btn-primary shareBtn"
                                style="flex: 1; text-align: center; justify-content: center;"
-                               data-url="{{ route('form', $active_event->id) }}"
-                               data-title="{{ $active_event->title }}">
+                               data-url="<?php echo e(route('form', $active_event->id)); ?>"
+                               data-title="<?php echo e($active_event->title); ?>">
                                 Share <i class="fa-solid fa-share-nodes"></i>
                             </a>
 
                             <a href="#"
                                class="btn-primary proceedRegistrationBtn"
                                style="flex: 1; text-align: center; justify-content: center;"
-                               data-title="{{ $active_event->title }}"
-                               data-price="{{ $first_cat_fee }}"
-                                data-categories='@json($categoriesForJs)'
-                               data-event_id="{{ $active_event->id }}">
+                               data-title="<?php echo e($active_event->title); ?>"
+                               data-price="<?php echo e($first_cat_fee); ?>"
+                                data-categories='<?php echo json_encode($categoriesForJs, 15, 512) ?>'
+                               data-event_id="<?php echo e($active_event->id); ?>">
                                 Register <i class="fa-solid fa-arrow-right"></i>
                             </a>
                         </div>
-                    @endif
+                    <?php endif; ?>
 
                     <div class="ev-payment-brands">
-                        <!--<span><img src="{{asset('img/visa.webp')}}" alt="Visa"></span>-->
-                        {{-- <span><img src="{{asset('img/bkash.png')}}" alt="bKash" style="width:60px;"></span> --}}
-                        <!--<span><img src="{{asset('img/nagod.png')}}" alt="Nagad"></span>-->
+                        <!--<span><img src="<?php echo e(asset('img/visa.webp')); ?>" alt="Visa"></span>-->
+                        
+                        <!--<span><img src="<?php echo e(asset('img/nagod.png')); ?>" alt="Nagad"></span>-->
                     </div>
                 </div>
             </div>
         </div>
-    @else
+    <?php else: ?>
 
-        {{-- ============ NO EVENT FALLBACK ============ --}}
+        
         <div id="previous-section" style="display: none;">
             <div class="ev-section-header">
                 <div>
@@ -319,9 +325,9 @@
                 </a>
             </div>
         </div>
-    @endif
+    <?php endif; ?>
 
-    {{-- ============ PREVIOUS EVENTS SECTION ============ --}}
+    
     <div class="ev-section-header ev-mt-50">
         <div>
             <span class="ev-section-tag">EVENT HIGHLIGHTS</span>
@@ -331,8 +337,8 @@
 
     <div class="unique-past-wrapper">
         <div class="unique-past-grid">
-            @forelse($past_events as $pastEvent)
-                @php
+            <?php $__empty_1 = true; $__currentLoopData = $past_events; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pastEvent): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <?php
                     $pastJson = [
                         'id'              => $pastEvent->id,
                         'title'           => $pastEvent->title,
@@ -354,41 +360,45 @@
                         'schedules'       => $pastEvent->schedules    ?? [],
                         'rules'           => $pastEvent->rules        ?? [],
                     ];
-                @endphp
+                ?>
 
                 <div class="unique-past-card">
                     <div class="ev-past-img-box">
-                        <img src="{{ $pastEvent->image_url }}"
-                             alt="{{ $pastEvent->title }}"
-                             onclick='openIndexModal(@json($pastJson))'
+                        <img src="<?php echo e($pastEvent->image_url); ?>"
+                             alt="<?php echo e($pastEvent->title); ?>"
+                             onclick='openIndexModal(<?php echo json_encode($pastJson, 15, 512) ?>)'
                              style="cursor: pointer;">
 
                         <span class="ev-past-date">
-                            {{ $pastEvent->event_date ? strtoupper($pastEvent->event_date->format('d M Y')) : 'N/A' }}
+                            <?php echo e($pastEvent->event_date ? strtoupper($pastEvent->event_date->format('d M Y')) : 'N/A'); ?>
+
                         </span>
                     </div>
 
                     <div class="ev-past-card-body">
                         <h3 class="ev-past-title"
-                            onclick='openIndexModal(@json($pastJson))'
+                            onclick='openIndexModal(<?php echo json_encode($pastJson, 15, 512) ?>)'
                             style="cursor: pointer;">
-                            {{ $pastEvent->title }}
+                            <?php echo e($pastEvent->title); ?>
+
                         </h3>
                         <p class="ev-past-info">
-                            <i class="fa-solid fa-location-dot"></i> {{ $pastEvent->location }}
+                            <i class="fa-solid fa-location-dot"></i> <?php echo e($pastEvent->location); ?>
+
                         </p>
                         <p class="ev-past-info">
                             <i class="fa-solid fa-route"></i>
-                            {{ collect($pastEvent->categories ?? [])->pluck('distance')->filter()->implode(' | ') ?: $pastEvent->category }}
+                            <?php echo e(collect($pastEvent->categories ?? [])->pluck('distance')->filter()->implode(' | ') ?: $pastEvent->category); ?>
+
                         </p>
                         <a href="javascript:void(0)"
-                           onclick='openIndexModal(@json($pastJson))'
+                           onclick='openIndexModal(<?php echo json_encode($pastJson, 15, 512) ?>)'
                            class="ev-btn-view-more">
                             View More <i class="fa-solid fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <div class="unique-past-card" style="min-width: 100% !important; flex: 0 0 100% !important;">
                     <div style="text-align: center; padding: 40px 20px;">
                         <i class="fa-regular fa-folder-open" style="font-size: 40px; color: #cbd5e1; margin-bottom: 12px;"></i>
@@ -396,7 +406,7 @@
                         <p style="font-size: 13px; color: #94a3b8;">Our first event is yet to happen — stay tuned!</p>
                     </div>
                 </div>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 
@@ -530,4 +540,5 @@
     })();
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\run-event\resources\views/event.blade.php ENDPATH**/ ?>

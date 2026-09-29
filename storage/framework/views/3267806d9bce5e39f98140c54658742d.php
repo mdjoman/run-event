@@ -1,20 +1,16 @@
-@extends('master')
+<?php $__env->startSection('title', 'Contact Us - Run Burjowan'); ?>
 
-@section('title', 'Contact Us - Run Burjowan')
+<?php $__env->startSection('body'); ?>
 
-@section('body')
 
-{{-- ============================================================
-     HERO
-     ============================================================ --}}
 <section class="relative bg-gradient-to-br from-[#0b132b] via-[#1c2541] to-[#0b132b] text-white py-16 md:py-20 overflow-hidden">
-    {{-- Decorative circle --}}
+    
     <div class="absolute -top-32 -right-24 w-[500px] h-[500px] rounded-full bg-[#6bad3f]/10 pointer-events-none"></div>
 
     <div class="container mx-auto px-5 relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
 
-            {{-- LEFT --}}
+            
             <div class="md:col-span-3 text-center md:text-left">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-black tracking-wider mb-4 leading-tight">
                     CONTACT US
@@ -23,15 +19,15 @@
                     We're here to help! Reach out to us for any inquiries, bookings or support.
                 </p>
                 <div class="flex items-center justify-center md:justify-start gap-2 text-sm text-slate-300">
-                    <a href="{{ url('/') }}" class="text-[#6bad3f] font-semibold hover:text-white transition">Home</a>
+                    <a href="<?php echo e(url('/')); ?>" class="text-[#6bad3f] font-semibold hover:text-white transition">Home</a>
                     <i class="fa-solid fa-chevron-right text-[10px] text-slate-500"></i>
                     <span>Contact Us</span>
                 </div>
             </div>
 
-            {{-- RIGHT --}}
+            
             <div class="md:col-span-2 flex justify-center md:justify-end">
-                <img src="{{ asset('img/tracking.jpg')}}"
+                <img src="<?php echo e(asset('img/tracking.jpg')); ?>"
                      alt="Contact"
                      class="max-h-[220px] md:max-h-[280px] w-auto object-contain animate-[slideInRight_0.8s_ease-out]">
             </div>
@@ -40,19 +36,17 @@
 </section>
 
 
-{{-- ============================================================
-     MAIN SECTION
-     ============================================================ --}}
+
 <section class="bg-slate-50 py-14 md:py-16">
     <div class="container mx-auto px-5">
 
-        {{-- ============ TOP GRID ============ --}}
+        
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-10">
 
-            {{-- ===== LEFT: INFO CARDS ===== --}}
+            
             <div class="lg:col-span-3 space-y-4">
 
-                {{-- Phone --}}
+                
                 <div class="flex items-start gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:-translate-y-1 hover:shadow-md hover:border-[#6bad3f] transition-all duration-300">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#6bad3f] to-[#4f8a2c] text-white flex items-center justify-center flex-shrink-0 shadow-md">
                         <i class="fa-solid fa-phone text-base"></i>
@@ -65,7 +59,7 @@
                     </div>
                 </div>
 
-                {{-- Email --}}
+                
                 <div class="flex items-start gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:-translate-y-1 hover:shadow-md hover:border-[#6bad3f] transition-all duration-300">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#6bad3f] to-[#4f8a2c] text-white flex items-center justify-center flex-shrink-0 shadow-md">
                         <i class="fa-solid fa-envelope text-base"></i>
@@ -78,7 +72,7 @@
                     </div>
                 </div>
 
-                {{-- WhatsApp --}}
+                
                 <div class="flex items-start gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:-translate-y-1 hover:shadow-md hover:border-[#6bad3f] transition-all duration-300">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#6bad3f] to-[#4f8a2c] text-white flex items-center justify-center flex-shrink-0 shadow-md">
                         <i class="fa-brands fa-whatsapp text-base"></i>
@@ -92,7 +86,7 @@
                     </div>
                 </div>
 
-                {{-- Working Hours --}}
+                
                 <div class="flex items-start gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:-translate-y-1 hover:shadow-md hover:border-[#6bad3f] transition-all duration-300">
                     <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#6bad3f] to-[#4f8a2c] text-white flex items-center justify-center flex-shrink-0 shadow-md">
                         <i class="fa-regular fa-clock text-base"></i>
@@ -108,7 +102,7 @@
                 </div>
             </div>
 
-            {{-- ===== CENTER: MESSAGE FORM ===== --}}
+            
             <div class="lg:col-span-6">
                 <div class="bg-white p-6 md:p-8 rounded-xl border border-slate-200 shadow-sm h-full">
                     <h3 class="text-xl font-black text-[#0b132b] tracking-wider mb-6 relative pb-3">
@@ -141,10 +135,10 @@
                 </div>
             </div>
 
-            {{-- ===== RIGHT: ASSISTANCE CARD ===== --}}
+            
             <div class="lg:col-span-3">
                 <div class="bg-gradient-to-br from-[#0b132b] to-[#1c2541] text-white p-6 rounded-xl shadow-xl flex flex-col items-center text-center h-full">
-                    <img src="{{ asset('img/contact2.png') }}"
+                    <img src="<?php echo e(asset('img/contact2.png')); ?>"
                          alt="Headphone"
                          class="w-20 h-20 object-contain mb-3">
 
@@ -170,10 +164,10 @@
         </div>
 
 
-        {{-- ============ MAP + BRANCH ============ --}}
+        
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-10">
 
-            {{-- MAP --}}
+            
             <div class="w-full h-[320px] lg:h-[380px] rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-white">
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3597.7867835462266!2d55.937396175395456!3d25.612000377446265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ef5dbf9ab06b443%3A0x9486d43c9f0f8ea0!2sRas%20Al%20Khaimah%20International%20Airport!5e0!3m2!1sen!2sbd!4v1786043622451!5m2!1sen!2sbd"
@@ -185,11 +179,11 @@
                 </iframe>
             </div>
 
-            {{-- BRANCH --}}
+            
             <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm group">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-center h-full">
 
-                    {{-- Text --}}
+                    
                     <div>
                         <h3 class="text-lg font-black text-[#6bad3f] tracking-wider mb-3">
                             <i class="fa-solid fa-location-dot mr-1.5"></i> OUR BRANCH
@@ -221,7 +215,7 @@
                         </ul>
                     </div>
 
-                    {{-- Image --}}
+                    
                     <div class="w-full h-full min-h-[240px] rounded-lg overflow-hidden">
                         <img src="https://images.unsplash.com/photo-1625047509168-a7026f36de04?auto=format&fit=crop&q=80&w=600"
                              alt="Branch Workshop"
@@ -232,11 +226,11 @@
         </div>
 
 
-        {{-- ============ FEATURE STRIP ============ --}}
+        
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
 
-                {{-- Book Appointment --}}
+                
                 <div class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-green-50 transition-colors group">
                     <div class="w-11 h-11 rounded-full bg-green-50 text-[#6bad3f] flex items-center justify-center flex-shrink-0 transition-all group-hover:bg-[#6bad3f] group-hover:text-white group-hover:scale-110">
                         <i class="fa-solid fa-car-side text-lg"></i>
@@ -247,7 +241,7 @@
                     </div>
                 </div>
 
-                {{-- Mobile Tyre --}}
+                
                 <div class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-green-50 transition-colors group">
                     <div class="w-11 h-11 rounded-full bg-green-50 text-[#6bad3f] flex items-center justify-center flex-shrink-0 transition-all group-hover:bg-[#6bad3f] group-hover:text-white group-hover:scale-110">
                         <i class="fa-solid fa-van-shuttle text-lg"></i>
@@ -258,7 +252,7 @@
                     </div>
                 </div>
 
-                {{-- Emergency --}}
+                
                 <div class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-green-50 transition-colors group">
                     <div class="w-11 h-11 rounded-full bg-green-50 text-[#6bad3f] flex items-center justify-center flex-shrink-0 transition-all group-hover:bg-[#6bad3f] group-hover:text-white group-hover:scale-110">
                         <i class="fa-solid fa-phone-volume text-lg"></i>
@@ -269,7 +263,7 @@
                     </div>
                 </div>
 
-                {{-- Live Chat --}}
+                
                 <div class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-green-50 transition-colors group">
                     <div class="w-11 h-11 rounded-full bg-green-50 text-[#6bad3f] flex items-center justify-center flex-shrink-0 transition-all group-hover:bg-[#6bad3f] group-hover:text-white group-hover:scale-110">
                         <i class="fa-solid fa-comments text-lg"></i>
@@ -280,7 +274,7 @@
                     </div>
                 </div>
 
-                {{-- Customer Support --}}
+                
                 <div class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-green-50 transition-colors group">
                     <div class="w-11 h-11 rounded-full bg-green-50 text-[#6bad3f] flex items-center justify-center flex-shrink-0 transition-all group-hover:bg-[#6bad3f] group-hover:text-white group-hover:scale-110">
                         <i class="fa-solid fa-headset text-lg"></i>
@@ -297,9 +291,9 @@
     </div>
 </section>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
     @keyframes slideInRight {
         from {
@@ -312,4 +306,5 @@
         }
     }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\run-event\resources\views/contact.blade.php ENDPATH**/ ?>

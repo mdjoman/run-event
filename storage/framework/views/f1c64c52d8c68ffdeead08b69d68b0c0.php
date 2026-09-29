@@ -1,12 +1,10 @@
-@extends('admin.layouts.app')
+<?php $__env->startSection('title', 'Registrations - Admin'); ?>
+<?php $__env->startSection('page-title', 'Registrations'); ?>
+<?php $__env->startSection('page-subtitle', 'Manage runner registrations and payment statuses'); ?>
 
-@section('title', 'Registrations - Admin')
-@section('page-title', 'Registrations')
-@section('page-subtitle', 'Manage runner registrations and payment statuses')
+<?php $__env->startSection('body'); ?>
 
-@section('body')
 
-{{-- ============ FILTERS ============ --}}
 <form method="GET" class="bg-white rounded-xl shadow-sm p-4 mb-5 card-glossy">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
 
@@ -14,7 +12,7 @@
             <label class="block text-xs font-semibold text-slate-600 mb-1">
                 <i class="fa-solid fa-search mr-1 text-brandPink"></i> Search
             </label>
-            <input type="text" name="search" value="{{ request('search') }}"
+            <input type="text" name="search" value="<?php echo e(request('search')); ?>"
                    placeholder="Name, phone, trx id..."
                    class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm
                           focus:ring-2 focus:ring-brandPink focus:border-transparent focus:outline-none transition">
@@ -28,9 +26,9 @@
                     class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm
                            focus:ring-2 focus:ring-brandPink focus:border-transparent focus:outline-none transition">
                 <option value="">All Status</option>
-                @foreach(['pending','approved','rejected','cancelled'] as $s)
-                    <option value="{{ $s }}" @selected(request('status') === $s)>{{ ucfirst($s) }}</option>
-                @endforeach
+                <?php $__currentLoopData = ['pending','approved','rejected','cancelled']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($s); ?>" <?php if(request('status') === $s): echo 'selected'; endif; ?>><?php echo e(ucfirst($s)); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
         </div>
 
@@ -42,9 +40,9 @@
                     class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm
                            focus:ring-2 focus:ring-brandPink focus:border-transparent focus:outline-none transition">
                 <option value="">All Events</option>
-                @foreach($events as $e)
-                    <option value="{{ $e->id }}" @selected(request('event_id') == $e->id)>{{ $e->title }}</option>
-                @endforeach
+                <?php $__currentLoopData = $events; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $e): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($e->id); ?>" <?php if(request('event_id') == $e->id): echo 'selected'; endif; ?>><?php echo e($e->title); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
         </div>
 
@@ -54,27 +52,27 @@
                            transition shadow-md hover:shadow-lg">
                 <i class="fa-solid fa-filter mr-1"></i> Apply Filters
             </button>
-            <a href="{{ route('admin.registrations.index') }}"
+            <a href="<?php echo e(route('admin.registrations.index')); ?>"
                class="flex-1 sm:flex-none px-5 py-2.5 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold
                       hover:bg-slate-200 transition text-center">
                 <i class="fa-solid fa-rotate-left mr-1"></i> Reset
             </a>
 
-            @if(request('search') || request('status') || request('event_id'))
+            <?php if(request('search') || request('status') || request('event_id')): ?>
                 <div class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-blue-50 rounded-lg text-xs text-blue-700 font-medium">
                     <i class="fa-solid fa-info-circle"></i>
-                    <span>{{ $registrations->total() }} results</span>
+                    <span><?php echo e($registrations->total()); ?> results</span>
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
 
     </div>
 </form>
 
-{{-- ============ REGISTRATIONS CARD ============ --}}
+
 <div class="bg-white rounded-xl shadow-sm overflow-hidden card-glossy">
 
-    {{-- ===== DESKTOP TABLE ===== --}}
+    
     <div class="hidden lg:block overflow-x-auto">
         <table class="w-full text-sm">
             <thead class="bg-slate-50 text-slate-600 uppercase text-xs">
@@ -92,70 +90,75 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
-                @forelse($registrations as $reg)
+                <?php $__empty_1 = true; $__currentLoopData = $registrations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <tr class="hover:bg-slate-50 transition">
                           <td class="px-5 py-3 font-semibold text-slate-800">
                         
-                               #{{ $reg->id }}
+                               #<?php echo e($reg->id); ?>
+
                         </td>
                         <td class="px-5 py-3">
-                            @if($reg->bib_number)
+                            <?php if($reg->bib_number): ?>
                                 <span class="inline-block px-2 py-1 rounded-md bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 text-xs font-bold border border-green-100">
-                                    {{ $reg->bib_number }}
+                                    <?php echo e($reg->bib_number); ?>
+
                                 </span>
-                            @else
+                            <?php else: ?>
                                 <span class="text-slate-400 text-xs">—</span>
-                            @endif
+                            <?php endif; ?>
                         </td>
 
                         <td class="px-5 py-3">
-                            <div class="font-semibold text-slate-800">{{ $reg->first_name }} {{ $reg->last_name }}</div>
+                            <div class="font-semibold text-slate-800"><?php echo e($reg->first_name); ?> <?php echo e($reg->last_name); ?></div>
                             <div class="text-xs text-slate-500">
-                                <i class="fa-solid fa-phone text-[10px]"></i> {{ $reg->phone }}
+                                <i class="fa-solid fa-phone text-[10px]"></i> <?php echo e($reg->phone); ?>
+
                             </div>
                         </td>
 
                         <td class="px-5 py-3">
-                            @php $wa = $reg->whatsapp_number ?? null; @endphp
-                            @if($wa)
-                                <a href="https://wa.me/{{ preg_replace('/[^\d]/', '', $wa) }}"
+                            <?php $wa = $reg->whatsapp_number ?? null; ?>
+                            <?php if($wa): ?>
+                                <a href="https://wa.me/<?php echo e(preg_replace('/[^\d]/', '', $wa)); ?>"
                                    target="_blank"
                                    class="inline-flex items-center gap-1 text-green-600 hover:text-green-700 font-semibold text-xs">
-                                    <i class="fa-brands fa-whatsapp"></i> {{ $wa }}
+                                    <i class="fa-brands fa-whatsapp"></i> <?php echo e($wa); ?>
+
                                 </a>
-                            @else
+                            <?php else: ?>
                                 <span class="text-slate-400 text-xs">N/A</span>
-                            @endif
+                            <?php endif; ?>
                         </td>
 
-                        <td class="px-5 py-3 text-slate-700 max-w-[150px] truncate">{{ $reg->event?->title ?? '—' }}</td>
+                        <td class="px-5 py-3 text-slate-700 max-w-[150px] truncate"><?php echo e($reg->event?->title ?? '—'); ?></td>
 
                         <td class="px-5 py-3">
-                            <span class="badge bg-blue-50 text-brandBlue">{{ $reg->category }}</span>
+                            <span class="badge bg-blue-50 text-brandBlue"><?php echo e($reg->category); ?></span>
                         </td>
 
-                        <td class="px-5 py-3 font-semibold text-slate-800">BDT {{ number_format($reg->amount) }}</td>
+                        <td class="px-5 py-3 font-semibold text-slate-800">BDT <?php echo e(number_format($reg->amount)); ?></td>
 
                         <td class="px-5 py-3">
-                            <div class="text-xs text-slate-600">{{ $reg->payment_method }}</div>
-                            <div class="text-[10px] text-slate-400 font-mono">{{ $reg->trx_id ?? '—' }}</div>
+                            <div class="text-xs text-slate-600"><?php echo e($reg->payment_method); ?></div>
+                            <div class="text-[10px] text-slate-400 font-mono"><?php echo e($reg->trx_id ?? '—'); ?></div>
                         </td>
 
                         <td class="px-5 py-3">
-                            @php
+                            <?php
                                 $colors = [
                                     'pending'   => 'bg-yellow-100 text-yellow-700',
                                     'approved'  => 'bg-green-100 text-green-700',
                                     'rejected'  => 'bg-red-100 text-red-700',
                                     'cancelled' => 'bg-slate-100 text-slate-700',
                                 ];
-                            @endphp
-                            <span class="badge {{ $colors[$reg->status] ?? '' }}">
-                                {{ ucfirst($reg->status) }}
+                            ?>
+                            <span class="badge <?php echo e($colors[$reg->status] ?? ''); ?>">
+                                <?php echo e(ucfirst($reg->status)); ?>
+
                             </span>
                         </td>
 
-                        {{-- Actions (inline — কোনো partial নেই) --}}
+                        
                         <td class="px-5 py-3">
                             <div class="flex items-center justify-end gap-1.5">
 
@@ -165,13 +168,13 @@
                                                transition flex-shrink-0"
                                         title="Send WhatsApp"
                                         data-mode="whatsapp"
-                                        data-name="{{ $reg->first_name }} {{ $reg->last_name }}"
-                                        data-phone="{{ $reg->whatsapp_number ?? $reg->phone }}"
-                                        data-event="{{ $reg->event?->title ?? 'Event' }}"
-                                        data-event-date="{{ $reg->event?->event_date ?? '' }}"
-                                        data-event-location="{{ $reg->event?->location ?? '' }}"
-                                        data-bib="{{ $reg->bib_number ?? 'N/A' }}"
-                                        data-category="{{ $reg->category }}">
+                                        data-name="<?php echo e($reg->first_name); ?> <?php echo e($reg->last_name); ?>"
+                                        data-phone="<?php echo e($reg->whatsapp_number ?? $reg->phone); ?>"
+                                        data-event="<?php echo e($reg->event?->title ?? 'Event'); ?>"
+                                        data-event-date="<?php echo e($reg->event?->event_date ?? ''); ?>"
+                                        data-event-location="<?php echo e($reg->event?->location ?? ''); ?>"
+                                        data-bib="<?php echo e($reg->bib_number ?? 'N/A'); ?>"
+                                        data-category="<?php echo e($reg->category); ?>">
                                     <i class="fa-brands fa-whatsapp text-sm"></i>
                                 </button>
 
@@ -181,18 +184,18 @@
                                                transition flex-shrink-0"
                                         title="Send SMS"
                                         data-mode="sms"
-                                        data-name="{{ $reg->first_name }} {{ $reg->last_name }}"
-                                        data-phone="{{ $reg->whatsapp_number ?? $reg->phone }}"
-                                        data-event="{{ $reg->event?->title ?? 'Event' }}"
-                                        data-event-date="{{ $reg->event?->event_date ?? '' }}"
-                                        data-event-location="{{ $reg->event?->location ?? '' }}"
-                                        data-bib="{{ $reg->bib_number ?? 'N/A' }}"
-                                        data-category="{{ $reg->category }}">
+                                        data-name="<?php echo e($reg->first_name); ?> <?php echo e($reg->last_name); ?>"
+                                        data-phone="<?php echo e($reg->whatsapp_number ?? $reg->phone); ?>"
+                                        data-event="<?php echo e($reg->event?->title ?? 'Event'); ?>"
+                                        data-event-date="<?php echo e($reg->event?->event_date ?? ''); ?>"
+                                        data-event-location="<?php echo e($reg->event?->location ?? ''); ?>"
+                                        data-bib="<?php echo e($reg->bib_number ?? 'N/A'); ?>"
+                                        data-category="<?php echo e($reg->category); ?>">
                                     <i class="fa-solid fa-comment-sms text-sm"></i>
                                 </button>
 
                                 <button type="button"
-                                        onclick='openStatusModal(@json($reg))'
+                                        onclick='openStatusModal(<?php echo json_encode($reg, 15, 512) ?>)'
                                         class="w-8 h-8 flex items-center justify-center rounded-lg
                                                bg-purple-50 text-purple-600 hover:bg-purple-100 active:scale-95
                                                transition flex-shrink-0"
@@ -200,7 +203,7 @@
                                     <i class="fa-solid fa-pen-to-square text-xs"></i>
                                 </button>
 
-                                <a href="{{ route('admin.registrations.show', $reg) }}"
+                                <a href="<?php echo e(route('admin.registrations.show', $reg)); ?>"
                                    class="w-8 h-8 flex items-center justify-center rounded-lg
                                           bg-blue-50 text-brandBlue hover:bg-blue-100 active:scale-95
                                           transition flex-shrink-0"
@@ -208,10 +211,10 @@
                                     <i class="fa-solid fa-eye text-xs"></i>
                                 </a>
 
-                                <form action="{{ route('admin.registrations.destroy', $reg) }}" method="POST"
+                                <form action="<?php echo e(route('admin.registrations.destroy', $reg)); ?>" method="POST"
                                       onsubmit="return confirm('Delete this registration?')"
                                       class="flex-shrink-0">
-                                    @csrf @method('DELETE')
+                                    <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
                                     <button class="w-8 h-8 flex items-center justify-center rounded-lg
                                                    bg-red-50 text-red-600 hover:bg-red-100 active:scale-95 transition"
                                             title="Delete">
@@ -221,7 +224,7 @@
                             </div>
                         </td>
                     </tr>
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <tr>
                         <td colspan="9" class="px-5 py-10 text-center text-slate-500">
                             <i class="fa-regular fa-folder-open text-3xl mb-2 block text-slate-300"></i>
@@ -229,15 +232,15 @@
                             <p class="text-xs mt-1">Try clearing the filters.</p>
                         </td>
                     </tr>
-                @endforelse
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
 
-    {{-- ===== MOBILE / TABLET CARD LIST ===== --}}
+    
     <div class="lg:hidden divide-y divide-slate-100">
-        @forelse($registrations as $reg)
-            @php
+        <?php $__empty_1 = true; $__currentLoopData = $registrations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $reg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <?php
                 $colors = [
                     'pending'   => 'bg-yellow-100 text-yellow-700',
                     'approved'  => 'bg-green-100 text-green-700',
@@ -247,85 +250,93 @@
                 $initials = strtoupper(
                     substr($reg->first_name ?? '', 0, 1) . substr($reg->last_name ?? '', 0, 1)
                 );
-            @endphp
+            ?>
 
             <div class="p-4 hover:bg-slate-50 transition">
 
-                {{-- Header row --}}
+                
                 <div class="flex items-start gap-3 mb-3">
                     <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brandPink to-purple-600
                                 flex items-center justify-center text-white font-bold text-sm shadow-md flex-shrink-0">
-                        {{ $initials ?: '?' }}
+                        <?php echo e($initials ?: '?'); ?>
+
                     </div>
 
                     <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between gap-2">
                             <div class="min-w-0">
                                 <p class="font-semibold text-slate-800 truncate text-sm">
-                                    {{ $reg->first_name }} {{ $reg->last_name }}
+                                    <?php echo e($reg->first_name); ?> <?php echo e($reg->last_name); ?>
+
                                 </p>
                                 <p class="text-xs text-slate-500 truncate">
-                                    <i class="fa-solid fa-phone text-[10px]"></i> {{ $reg->phone }}
+                                    <i class="fa-solid fa-phone text-[10px]"></i> <?php echo e($reg->phone); ?>
+
                                 </p>
                             </div>
 
                             <div class="flex flex-col items-end gap-1 flex-shrink-0">
                                     <span class="text-[10px] px-2 py-0.5 text-green-700 font-bold ">
-                                        ID {{ $reg->id }}
+                                        ID <?php echo e($reg->id); ?>
+
                                     </span>
-                                @if($reg->bib_number)
+                                <?php if($reg->bib_number): ?>
                                     <span class="text-[10px] px-2 py-0.5 rounded-md bg-green-50 text-green-700 font-bold border border-green-100">
-                                        BIB {{ $reg->bib_number }}
+                                        BIB <?php echo e($reg->bib_number); ?>
+
                                     </span>
-                                @endif
-                                <span class="badge {{ $colors[$reg->status] ?? '' }}">
-                                    {{ ucfirst($reg->status) }}
+                                <?php endif; ?>
+                                <span class="badge <?php echo e($colors[$reg->status] ?? ''); ?>">
+                                    <?php echo e(ucfirst($reg->status)); ?>
+
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Info grid --}}
+                
                 <div class="grid grid-cols-2 gap-2 mb-3 text-xs">
                     <div class="bg-slate-50 rounded-lg p-2">
                         <p class="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">Event</p>
-                        <p class="font-semibold text-slate-700 truncate">{{ $reg->event?->title ?? '—' }}</p>
+                        <p class="font-semibold text-slate-700 truncate"><?php echo e($reg->event?->title ?? '—'); ?></p>
                     </div>
                     <div class="bg-blue-50 rounded-lg p-2">
                         <p class="text-[10px] text-blue-500 uppercase tracking-wider mb-0.5">Category</p>
-                        <p class="font-semibold text-brandBlue truncate">{{ $reg->category }}</p>
+                        <p class="font-semibold text-brandBlue truncate"><?php echo e($reg->category); ?></p>
                     </div>
                     <div class="bg-green-50 rounded-lg p-2">
                         <p class="text-[10px] text-green-500 uppercase tracking-wider mb-0.5">Amount</p>
-                        <p class="font-bold text-green-700">BDT {{ number_format($reg->amount) }}</p>
+                        <p class="font-bold text-green-700">BDT <?php echo e(number_format($reg->amount)); ?></p>
                     </div>
                     <div class="bg-purple-50 rounded-lg p-2">
                         <p class="text-[10px] text-purple-500 uppercase tracking-wider mb-0.5">Payment</p>
-                        <p class="font-semibold text-purple-700 truncate">{{ $reg->payment_method }}</p>
-                        <p class="text-[10px] text-purple-500 font-mono truncate">{{ $reg->trx_id ?? '—' }}</p>
+                        <p class="font-semibold text-purple-700 truncate"><?php echo e($reg->payment_method); ?></p>
+                        <p class="text-[10px] text-purple-500 font-mono truncate"><?php echo e($reg->trx_id ?? '—'); ?></p>
                     </div>
                 </div>
 
-                {{-- WhatsApp quick link --}}
-                @php $wa = $reg->whatsapp_number ?? null; @endphp
-                @if($wa)
-                    <a href="https://wa.me/{{ preg_replace('/[^\d]/', '', $wa) }}"
+                
+                <?php $wa = $reg->whatsapp_number ?? null; ?>
+                <?php if($wa): ?>
+                    <a href="https://wa.me/<?php echo e(preg_replace('/[^\d]/', '', $wa)); ?>"
                        target="_blank"
                        class="flex items-center justify-between gap-2 px-3 py-2 mb-3 rounded-lg bg-green-50 hover:bg-green-100 transition text-xs">
                         <span class="flex items-center gap-2 text-green-700 font-semibold truncate">
                             <i class="fa-brands fa-whatsapp text-base"></i>
-                            {{ $wa }}
+                            <?php echo e($wa); ?>
+
                         </span>
                         <i class="fa-solid fa-arrow-up-right-from-square text-green-500 text-[10px] flex-shrink-0"></i>
                     </a>
-                @endif
+                <?php endif; ?>
 
-                {{-- Actions (inline — কোনো partial নেই) --}}
+                
                 <div class="flex items-center justify-between gap-2 pt-3 border-t border-slate-100">
                     <p class="text-[10px] text-slate-400 flex-shrink-0">
                         <i class="fa-regular fa-clock mr-1"></i>
-                        {{ $reg->created_at->diffForHumans() }}
+                        <?php echo e($reg->created_at->diffForHumans()); ?>
+
                     </p>
 
                     <div class="flex items-center gap-1.5">
@@ -336,13 +347,13 @@
                                        transition flex-shrink-0"
                                 title="Send WhatsApp"
                                 data-mode="whatsapp"
-                                data-name="{{ $reg->first_name }} {{ $reg->last_name }}"
-                                data-phone="{{ $reg->whatsapp_number ?? $reg->phone }}"
-                                data-event="{{ $reg->event?->title ?? 'Event' }}"
-                                data-event-date="{{ $reg->event?->event_date ?? '' }}"
-                                data-event-location="{{ $reg->event?->location ?? '' }}"
-                                data-bib="{{ $reg->bib_number ?? 'N/A' }}"
-                                data-category="{{ $reg->category }}">
+                                data-name="<?php echo e($reg->first_name); ?> <?php echo e($reg->last_name); ?>"
+                                data-phone="<?php echo e($reg->whatsapp_number ?? $reg->phone); ?>"
+                                data-event="<?php echo e($reg->event?->title ?? 'Event'); ?>"
+                                data-event-date="<?php echo e($reg->event?->event_date ?? ''); ?>"
+                                data-event-location="<?php echo e($reg->event?->location ?? ''); ?>"
+                                data-bib="<?php echo e($reg->bib_number ?? 'N/A'); ?>"
+                                data-category="<?php echo e($reg->category); ?>">
                             <i class="fa-brands fa-whatsapp text-sm"></i>
                         </button>
 
@@ -352,18 +363,18 @@
                                        transition flex-shrink-0"
                                 title="Send SMS"
                                 data-mode="sms"
-                                data-name="{{ $reg->first_name }} {{ $reg->last_name }}"
-                                data-phone="{{ $reg->whatsapp_number ?? $reg->phone }}"
-                                data-event="{{ $reg->event?->title ?? 'Event' }}"
-                                data-event-date="{{ $reg->event?->event_date ?? '' }}"
-                                data-event-location="{{ $reg->event?->location ?? '' }}"
-                                data-bib="{{ $reg->bib_number ?? 'N/A' }}"
-                                data-category="{{ $reg->category }}">
+                                data-name="<?php echo e($reg->first_name); ?> <?php echo e($reg->last_name); ?>"
+                                data-phone="<?php echo e($reg->whatsapp_number ?? $reg->phone); ?>"
+                                data-event="<?php echo e($reg->event?->title ?? 'Event'); ?>"
+                                data-event-date="<?php echo e($reg->event?->event_date ?? ''); ?>"
+                                data-event-location="<?php echo e($reg->event?->location ?? ''); ?>"
+                                data-bib="<?php echo e($reg->bib_number ?? 'N/A'); ?>"
+                                data-category="<?php echo e($reg->category); ?>">
                             <i class="fa-solid fa-comment-sms text-sm"></i>
                         </button>
 
                         <button type="button"
-                                onclick='openStatusModal(@json($reg))'
+                                onclick='openStatusModal(<?php echo json_encode($reg, 15, 512) ?>)'
                                 class="w-9 h-9 flex items-center justify-center rounded-lg
                                        bg-purple-50 text-purple-600 hover:bg-purple-100 active:scale-95
                                        transition flex-shrink-0"
@@ -371,7 +382,7 @@
                             <i class="fa-solid fa-pen-to-square text-xs"></i>
                         </button>
 
-                        <a href="{{ route('admin.registrations.show', $reg) }}"
+                        <a href="<?php echo e(route('admin.registrations.show', $reg)); ?>"
                            class="w-9 h-9 flex items-center justify-center rounded-lg
                                   bg-blue-50 text-brandBlue hover:bg-blue-100 active:scale-95
                                   transition flex-shrink-0"
@@ -379,10 +390,10 @@
                             <i class="fa-solid fa-eye text-xs"></i>
                         </a>
 
-                        <form action="{{ route('admin.registrations.destroy', $reg) }}" method="POST"
+                        <form action="<?php echo e(route('admin.registrations.destroy', $reg)); ?>" method="POST"
                               onsubmit="return confirm('Delete this registration?')"
                               class="flex-shrink-0">
-                            @csrf @method('DELETE')
+                            <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
                             <button class="w-9 h-9 flex items-center justify-center rounded-lg
                                            bg-red-50 text-red-600 hover:bg-red-100 active:scale-95 transition"
                                     title="Delete">
@@ -392,23 +403,24 @@
                     </div>
                 </div>
             </div>
-        @empty
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
             <div class="p-10 text-center text-slate-500">
                 <i class="fa-regular fa-folder-open text-4xl mb-3 block text-slate-300"></i>
                 <p class="text-sm font-medium mb-1">No registrations found</p>
                 <p class="text-xs">Try adjusting your filters.</p>
             </div>
-        @endforelse
+        <?php endif; ?>
     </div>
 
-    @if($registrations->hasPages())
+    <?php if($registrations->hasPages()): ?>
         <div class="px-4 sm:px-5 py-3 border-t border-slate-100">
-            {{ $registrations->links() }}
+            <?php echo e($registrations->links()); ?>
+
         </div>
-    @endif
+    <?php endif; ?>
 </div>
 
-{{-- ============= STATUS MODAL ============= --}}
+
 <div id="statusModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] overflow-y-auto animate-fade-in">
 
@@ -424,8 +436,8 @@
         </div>
 
         <form id="statusForm" method="POST" action="" class="p-5 sm:p-6 space-y-4">
-            @csrf
-            @method('PUT')
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
 
             <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg p-3 text-sm border border-pink-100">
                 <p class="font-bold text-slate-800" id="sm_runner"></p>
@@ -484,7 +496,7 @@
     </div>
 </div>
 
-{{-- ============= NOTIFY MODAL ============= --}}
+
 <div id="notifyModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-[60] items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[95vh] overflow-y-auto animate-fade-in">
 
@@ -540,7 +552,7 @@
     </div>
 </div>
 
-{{-- Toast --}}
+
 <div id="notifyToast"
      class="fixed bottom-8 left-1/2 -translate-x-1/2 translate-y-5
             bg-slate-900 text-white px-6 py-3 rounded-full text-sm font-bold
@@ -548,7 +560,7 @@
     ✅ Copied!
 </div>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     // ================= STATUS MODAL =================
     function openStatusModal(reg) {
@@ -558,7 +570,7 @@
         document.getElementById('sm_note').value         = reg.admin_note ?? '';
 
         document.getElementById('statusForm').action =
-            "{{ url('admin/registrations') }}/" + reg.id + "/status";
+            "<?php echo e(url('admin/registrations')); ?>/" + reg.id + "/status";
 
         document.getElementById('sm_status').value = reg.status ?? '';
 
@@ -746,6 +758,7 @@ Contact (WhatsApp):
         }
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\run-event\resources\views/admin/registrations/index.blade.php ENDPATH**/ ?>

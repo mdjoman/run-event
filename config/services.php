@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'zendsms' => [
+        'api_key'   => env('ZENDSMS_API_KEY'),
+        'sender_id' => env('ZENDSMS_SENDER_ID'),
+        'api_url'   => env('ZENDSMS_API_URL', 'https://api.zendsms.com/api/simple/send'),
+        'timeout'   => env('ZENDSMS_TIMEOUT', 30),
+    ],
+
 ];

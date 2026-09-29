@@ -1,10 +1,8 @@
-@extends('master')
+<?php $__env->startSection('title', 'Event Registration - Run Burjowan'); ?>
 
-@section('title', 'Event Registration - Run Burjowan')
+<?php $__env->startSection('body'); ?>
 
-@section('body')
-
-@php
+<?php
     /* ============================================================
        PREPARE CATEGORIES
        ============================================================ */
@@ -17,17 +15,15 @@
             'fee'      => (float) ($active_event->fee ?? 0),
         ]];
     }
-@endphp
+?>
 
 <div class="reg-page-wrapper">
     <div class="reg-page-container">
 
-        {{-- ============================================================
-             BANNER HEADER
-             ============================================================ --}}
+        
         <div class="reg-banner-header">
             <div class="reg-brand-area">
-                <img src="{{ asset('img/logo.png') }}"
+                <img src="<?php echo e(asset('img/logo.png')); ?>"
                      alt="Logo"
                      class="reg-header-logo">
                 <div class="reg-header-text">
@@ -39,60 +35,58 @@
             </div>
         </div>
 
-        {{-- ============================================================
-             EVENT INFO STRIP
-             ============================================================ --}}
-        @if(isset($active_event) && $active_event)
+        
+        <?php if(isset($active_event) && $active_event): ?>
         <div class="reg-info-strip">
 
-            {{-- Status + Slots + Days left --}}
+            
             <div class="reg-info-status-row">
 
                 <div class="reg-status-badges">
                     <span class="reg-status-badge">
                         <i class="fa-solid fa-circle-check"></i>
-                        @if($active_event->status === 'active')
+                        <?php if($active_event->status === 'active'): ?>
                             Registration Open
-                        @else
+                        <?php else: ?>
                             Registration Closed
-                        @endif
+                        <?php endif; ?>
                     </span>
 
-                    @if(isset($active_event->slots) && isset($active_event->registered))
+                    <?php if(isset($active_event->slots) && isset($active_event->registered)): ?>
                         <span class="reg-slots-text">
                             <i class="fa-solid fa-users"></i>
-                            {{ $active_event->registered }} / {{ $active_event->slots }} slots filled
+                            <?php echo e($active_event->registered); ?> / <?php echo e($active_event->slots); ?> slots filled
                         </span>
-                    @endif
+                    <?php endif; ?>
                 </div>
 
-                @php
+                <?php
                     $eventDate = \Carbon\Carbon::parse($active_event->event_date)->startOfDay();
                     $today     = now()->startOfDay();
                     $days      = (int) $today->diffInDays($eventDate, false);
-                @endphp
+                ?>
 
-                @if($days > 0)
+                <?php if($days > 0): ?>
                     <span class="reg-days-badge">
                         <i class="fa-solid fa-hourglass-half"></i>
-                        {{ $days }} {{ $days == 1 ? 'day' : 'days' }} left
+                        <?php echo e($days); ?> <?php echo e($days == 1 ? 'day' : 'days'); ?> left
                     </span>
-                @elseif($days === 0)
+                <?php elseif($days === 0): ?>
                     <span class="reg-days-badge reg-days-today">
                         <i class="fa-solid fa-fire"></i>
                         Race Day!
                     </span>
-                @endif
+                <?php endif; ?>
             </div>
 
-            {{-- Event Info Grid --}}
+            
             <div class="reg-info-grid">
 
                 <div class="reg-info-item">
                     <i class="fa-solid fa-flag-checkered reg-info-icon"></i>
                     <div class="reg-info-content">
                         <p class="reg-info-label">Event</p>
-                        <p class="reg-info-value">{{ $active_event->title }}</p>
+                        <p class="reg-info-value"><?php echo e($active_event->title); ?></p>
                     </div>
                 </div>
 
@@ -101,28 +95,30 @@
                     <div class="reg-info-content">
                         <p class="reg-info-label">Date</p>
                         <p class="reg-info-value">
-                            {{ \Carbon\Carbon::parse($active_event->event_date)->format('d M Y') }}
+                            <?php echo e(\Carbon\Carbon::parse($active_event->event_date)->format('d M Y')); ?>
+
                         </p>
                     </div>
                 </div>
 
-                @if($active_event->start_time)
+                <?php if($active_event->start_time): ?>
                 <div class="reg-info-item">
                     <i class="fa-regular fa-clock reg-info-icon"></i>
                     <div class="reg-info-content">
                         <p class="reg-info-label">Start Time</p>
                         <p class="reg-info-value">
-                            {{ \Carbon\Carbon::parse($active_event->start_time)->format('h:i A') }}
+                            <?php echo e(\Carbon\Carbon::parse($active_event->start_time)->format('h:i A')); ?>
+
                         </p>
                     </div>
                 </div>
-                @endif
+                <?php endif; ?>
 
                 <div class="reg-info-item">
                     <i class="fa-solid fa-location-dot reg-info-icon"></i>
                     <div class="reg-info-content">
                         <p class="reg-info-label">Location</p>
-                        <p class="reg-info-value">{{ $active_event->location }}</p>
+                        <p class="reg-info-value"><?php echo e($active_event->location); ?></p>
                     </div>
                 </div>
 
@@ -131,7 +127,8 @@
                     <div class="reg-info-content">
                         <p class="reg-info-label">Categories</p>
                         <p class="reg-info-value">
-                            {{ collect($eventCategories)->pluck('distance')->filter()->implode(' • ') }}
+                            <?php echo e(collect($eventCategories)->pluck('distance')->filter()->implode(' • ')); ?>
+
                         </p>
                     </div>
                 </div>
@@ -141,33 +138,30 @@
                     <div class="reg-info-content">
                         <p class="reg-info-label">Fee</p>
                         <p class="reg-info-value reg-info-fee">
-                            BDT {{ number_format($active_event->fee) }}
+                            BDT <?php echo e(number_format($active_event->fee)); ?>
+
                         </p>
                     </div>
                 </div>
 
             </div>
         </div>
-        @endif
+        <?php endif; ?>
 
 
-        {{-- ============================================================
-             FORM BODY
-             ============================================================ --}}
+        
         <form id="registrationForm"
               method="POST"
-              action="{{ route('registrations.store') }}"
+              action="<?php echo e(route('registrations.store')); ?>"
               enctype="multipart/form-data"
               novalidate
               class="reg-form-body">
 
-            @csrf
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="event_id" id="event_id_field"
-                   value="{{ $active_event->id ?? 1 }}">
+                   value="<?php echo e($active_event->id ?? 1); ?>">
 
-            {{-- ============================================================
-                 SECTION 1: PERSONAL DETAILS
-                 ============================================================ --}}
+            
             <div class="reg-section-card">
 
                 <div class="reg-section-header">
@@ -180,7 +174,7 @@
 
                 <div class="reg-form-grid-2">
 
-                    {{-- Profile Image Uploader --}}
+                    
                     <div class="reg-form-group" style="grid-column: 1 / -1;">
                         <label class="reg-label">
                             Profile Image
@@ -226,7 +220,7 @@
                         <small id="profile_error" class="reg-field-error"></small>
                     </div>
 
-                    {{-- First Name --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             First Name <span class="reg-required">*</span>
@@ -238,7 +232,7 @@
                                required>
                     </div>
 
-                    {{-- Last Name --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             Last Name <span class="reg-required">*</span>
@@ -250,7 +244,7 @@
                                required>
                     </div>
 
-                    {{-- Mobile Number --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             Mobile Number <span class="reg-required">*</span>
@@ -264,7 +258,7 @@
                                required>
                     </div>
 
-                    {{-- WhatsApp --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             WhatsApp Number <span class="reg-required">*</span>
@@ -278,7 +272,7 @@
                                required>
                     </div>
 
-                    {{-- Email --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             Email Address <span class="reg-optional">(Optional)</span>
@@ -289,7 +283,7 @@
                                class="reg-input">
                     </div>
 
-                    {{-- Blood Group --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             Blood Group <span class="reg-required">*</span>
@@ -307,7 +301,7 @@
                         </select>
                     </div>
 
-                    {{-- Gender --}}
+                    
                     <div class="reg-form-group" style="grid-column: 1 / -1;">
                         <label class="reg-label">
                             Gender <span class="reg-required">*</span>
@@ -328,7 +322,7 @@
                         </div>
                     </div>
 
-                    {{-- DOB --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             Date of Birth <span class="reg-required">*</span>
@@ -341,7 +335,7 @@
                                required>
                     </div>
 
-                    {{-- NID --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             NID / Any Identification <span class="reg-required">*</span>
@@ -353,7 +347,7 @@
                                required>
                     </div>
 
-                    {{-- Address --}}
+                    
                     <div class="reg-form-group" style="grid-column: 1 / -1;">
                         <label class="reg-label">
                             Address <span class="reg-optional">(Optional)</span>
@@ -367,9 +361,7 @@
                 </div>
             </div>
 
-            {{-- ============================================================
-                 SECTION 2: EMERGENCY CONTACT
-                 ============================================================ --}}
+            
             <div class="reg-section-card">
 
                 <div class="reg-section-header">
@@ -407,9 +399,7 @@
                 </div>
             </div>
 
-            {{-- ============================================================
-                 SECTION 3: RUN SPECIFICATION (DYNAMIC CATEGORIES)
-                 ============================================================ --}}
+            
             <div class="reg-section-card">
 
                 <div class="reg-section-header">
@@ -422,7 +412,7 @@
 
                 <div class="reg-form-grid-2">
 
-                    {{-- Dynamic Category Dropdown --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             Race Categories <span class="reg-required">*</span>
@@ -430,26 +420,27 @@
                         <select name="category" id="categorySelect" class="reg-input" required>
                             <option value="" disabled selected>Select Category</option>
 
-                            @foreach($eventCategories as $cat)
-                                @php
+                            <?php $__currentLoopData = $eventCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php
                                     $distance = $cat['distance'] ?? '';
                                     $name     = $cat['name'] ?? '';
                                     $fee      = isset($cat['fee']) ? (float) $cat['fee'] : null;
-                                @endphp
+                                ?>
 
-                                <option value="{{ $distance }}"
-                                        data-fee="{{ $fee ?? '' }}"
-                                        data-name="{{ $name }}">
-                                    {{ $name }} ({{ $distance }})
-                                    @if($fee !== null)
-                                        — BDT {{ number_format($fee) }}
-                                    @endif
+                                <option value="<?php echo e($distance); ?>"
+                                        data-fee="<?php echo e($fee ?? ''); ?>"
+                                        data-name="<?php echo e($name); ?>">
+                                    <?php echo e($name); ?> (<?php echo e($distance); ?>)
+                                    <?php if($fee !== null): ?>
+                                        — BDT <?php echo e(number_format($fee)); ?>
+
+                                    <?php endif; ?>
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
 
-                    {{-- T-Shirt --}}
+                    
                     <div class="reg-form-group">
                         <label class="reg-label">
                             T-Shirt Size <span class="reg-required">*</span>
@@ -459,28 +450,28 @@
                                 <input type="radio" name="tshirt" value="M">
                                 <span>M</span>
                                 <div class="tshirt-tooltip">
-                                    <img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt">
+                                    <img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt">
                                 </div>
                             </label>
                             <label class="reg-radio-card tshirt-parent">
                                 <input type="radio" name="tshirt" value="L">
                                 <span>L</span>
                                 <div class="tshirt-tooltip">
-                                    <img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt">
+                                    <img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt">
                                 </div>
                             </label>
                             <label class="reg-radio-card tshirt-parent">
                                 <input type="radio" name="tshirt" value="XL">
                                 <span>XL</span>
                                 <div class="tshirt-tooltip">
-                                    <img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt">
+                                    <img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt">
                                 </div>
                             </label>
                             <label class="reg-radio-card tshirt-parent">
                                 <input type="radio" name="tshirt" value="XXL">
                                 <span>XXL</span>
                                 <div class="tshirt-tooltip">
-                                    <img src="{{ asset('img/t-shirt.png') }}" alt="T-Shirt">
+                                    <img src="<?php echo e(asset('img/t-shirt.png')); ?>" alt="T-Shirt">
                                 </div>
                             </label>
                         </div>
@@ -489,9 +480,7 @@
                 </div>
             </div>
 
-            {{-- ============================================================
-                 SECTION 4: PAYMENT VERIFICATION
-                 ============================================================ --}}
+            
             <div class="reg-section-card" style="margin-bottom: 20px;">
 
                 <div class="reg-section-header">
@@ -536,7 +525,7 @@
                             <input type="text"
                                    name="event_price"
                                    id="eventPrice"
-                                   value="{{ number_format($active_event->fee ?? 0) }}"
+                                   value="<?php echo e(number_format($active_event->fee ?? 0)); ?>"
                                    class="reg-input reg-input-readonly"
                                    readonly>
                         </div>
@@ -567,9 +556,7 @@
                 </div>
             </div>
 
-            {{-- ============================================================
-                 TERMS + SUBMIT
-                 ============================================================ --}}
+            
             <div class="reg-confirmation-box">
                 <input type="checkbox"
                        id="confirm_terms"
@@ -593,10 +580,10 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 $(function () {
     'use strict';
@@ -617,10 +604,10 @@ $(function () {
     });
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <style>
 /* ============================================================================
    REGISTRATION FORM PAGE — Styles
@@ -1403,4 +1390,5 @@ $(function () {
     }
 }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\run-event\resources\views/form.blade.php ENDPATH**/ ?>

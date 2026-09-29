@@ -4,23 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'RUN BURJOWAN - Running Events & Community')</title>
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title><?php echo $__env->yieldContent('title', 'RUN BURJOWAN - Running Events & Community'); ?></title>
 
-    <link rel="icon" type="image/webp" href="{{ asset('img/logo.png') }}">
+    <link rel="icon" type="image/webp" href="<?php echo e(asset('img/logo.png')); ?>">
 
-    {{-- ============ FONTS & ICONS ============ --}}
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    {{-- ============ CSS ============ --}}
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
+    
+    <link rel="stylesheet" href="<?php echo e(asset('css/style.css')); ?>?v=<?php echo e(time()); ?>">
 
-    {{-- ============ JS LIBRARIES ============ --}}
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    {{-- ============ GLOBAL STYLES ============ --}}
+    
     <style>
         /* ============ SWEETALERT THEME ============ */
         .swal2-popup {
@@ -773,39 +773,37 @@
         }
     </style>
 
-    @stack('styles')
+    <?php echo $__env->yieldPushContent('styles'); ?>
 </head>
 
 <body>
 
-    {{-- =========================================================
-         HEADER
-         ========================================================= --}}
+    
     <header class="header">
         <div class="container nav-container">
-            <a href="{{ route('home') }}" class="logo">
-                <img src="{{ asset('img/logo.png') }}" alt="Run Burjowan">
+            <a href="<?php echo e(route('home')); ?>" class="logo">
+                <img src="<?php echo e(asset('img/logo.png')); ?>" alt="Run Burjowan">
             </a>
 
-            {{-- Mobile hamburger --}}
+            
             <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
                 <i class="fa-solid fa-bars"></i>
             </button>
 
-            {{-- Nav drawer --}}
+            
             <nav class="nav-links" id="mainNavLinks">
                 <button type="button" class="mobile-nav-close" id="mobileNavClose" aria-label="Close">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
 
-                <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
-                <a class="nav-link {{ request()->routeIs('event') ? 'active' : '' }}" href="{{ route('event') }}">Events</a>
-                <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About</a>
-                <a class="nav-link {{ request()->routeIs('activity') ? 'active' : '' }}" href="{{ route('activity') }}">Activities</a>
-                <a class="nav-link {{ request()->routeIs('blog') ? 'active' : '' }}" href="{{ route('blog') }}">Blog</a>
-                <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
+                <a class="nav-link <?php echo e(request()->routeIs('home') ? 'active' : ''); ?>" href="<?php echo e(route('home')); ?>">Home</a>
+                <a class="nav-link <?php echo e(request()->routeIs('event') ? 'active' : ''); ?>" href="<?php echo e(route('event')); ?>">Events</a>
+                <a class="nav-link <?php echo e(request()->routeIs('about') ? 'active' : ''); ?>" href="<?php echo e(route('about')); ?>">About</a>
+                <a class="nav-link <?php echo e(request()->routeIs('activity') ? 'active' : ''); ?>" href="<?php echo e(route('activity')); ?>">Activities</a>
+                <a class="nav-link <?php echo e(request()->routeIs('blog') ? 'active' : ''); ?>" href="<?php echo e(route('blog')); ?>">Blog</a>
+                <a class="nav-link <?php echo e(request()->routeIs('contact') ? 'active' : ''); ?>" href="<?php echo e(route('contact')); ?>">Contact</a>
                 <a href="#">Results</a>
-                <a class="nav-link {{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">Gallery</a>
+                <a class="nav-link <?php echo e(request()->routeIs('gallery') ? 'active' : ''); ?>" href="<?php echo e(route('gallery')); ?>">Gallery</a>
 
                 <div class="mobile-only-actions">
                     <a href="#" class="btn-login" style="display:block; text-align:center; padding:10px; border:1px solid #cbd5e1; border-radius:10px; color:#1c2541; font-weight:600; text-decoration:none;">Login</a>
@@ -813,7 +811,7 @@
                 </div>
             </nav>
 
-            {{-- Desktop actions --}}
+            
             <div class="nav-actions">
                 <button class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
                 <a href="#" class="btn-login">Login</a>
@@ -822,15 +820,11 @@
         </div>
     </header>
 
-    {{-- =========================================================
-         PAGE CONTENT
-         ========================================================= --}}
-    @yield('body')
+    
+    <?php echo $__env->yieldContent('body'); ?>
 
-    {{-- =========================================================
-         CTA BANNER
-         ========================================================= --}}
-    <section class="cta-banner" style="background-image: url('{{ asset('img/home3.jpg') }}');">
+    
+    <section class="cta-banner" style="background-image: url('<?php echo e(asset('img/home3.jpg')); ?>');">
         <div class="cta-overlay"></div>
         <div class="cta-brush-left"></div>
 
@@ -839,15 +833,13 @@
                 <h2>Your Next Finish Line<br><span class="highlight">Starts Here</span></h2>
                 <p>Be part of the journey. Register for upcoming events and take the first step towards a healthier, stronger you.</p>
             </div>
-            <a href="{{ route('event') }}" class="btn-cta">
+            <a href="<?php echo e(route('event')); ?>" class="btn-cta">
                 Explore Events <i class="fa-solid fa-arrow-right"></i>
             </a>
         </div>
     </section>
 
-    {{-- =========================================================
-         EVENT DETAILS MODAL
-         ========================================================= --}}
+    
     <div class="event-modal" id="indexEventModal">
         <div class="event-modal-box">
             <button class="modal-close" onclick="closeEventModal()">&times;</button>
@@ -860,9 +852,7 @@
         </div>
     </div>
 
-    {{-- =========================================================
-         SHARE MODAL
-         ========================================================= --}}
+    
     <div id="shareModal"
         style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:9999; align-items:center; justify-content:center; padding:16px;">
         <div style="background:#fff; padding:20px; border-radius:12px; width:340px; max-width:100%; text-align:center; position:relative;">
@@ -881,9 +871,7 @@
         </div>
     </div>
 
-    {{-- =========================================================
-         SUCCESS MODAL
-         ========================================================= --}}
+    
     <div id="successModal">
         <div class="success-card">
             <div class="success-header">
@@ -903,31 +891,27 @@
         </div>
     </div>
 
-    {{-- =========================================================
-         REGISTRATION MODAL
-         ========================================================= --}}
-    @include('registration-modal')
+    
+    <?php echo $__env->make('registration-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-    {{-- =========================================================
-         FOOTER
-         ========================================================= --}}
+    
     <footer class="footer">
         <div class="container footer-top">
             <div class="footer-brand">
-                <a href="{{ route('home') }}" class="logo">
-                    <img src="{{ asset('img/logo2.png') }}" alt="Run Burjowan">
+                <a href="<?php echo e(route('home')); ?>" class="logo">
+                    <img src="<?php echo e(asset('img/logo2.png')); ?>" alt="Run Burjowan">
                 </a>
             </div>
 
             <div class="footer-links">
-                <a href="{{ route('home') }}">Home</a>
-                <a href="{{ route('event') }}">Events</a>
-                <a href="{{ route('activity') }}">Activities</a>
-                <a href="{{ route('about') }}">About</a>
-                <a href="{{ route('blog') }}">Blog</a>
-                <a href="{{ route('contact') }}">Contact</a>
+                <a href="<?php echo e(route('home')); ?>">Home</a>
+                <a href="<?php echo e(route('event')); ?>">Events</a>
+                <a href="<?php echo e(route('activity')); ?>">Activities</a>
+                <a href="<?php echo e(route('about')); ?>">About</a>
+                <a href="<?php echo e(route('blog')); ?>">Blog</a>
+                <a href="<?php echo e(route('contact')); ?>">Contact</a>
                 <a href="#">Results</a>
-                <a href="{{ route('gallery') }}">Gallery</a>
+                <a href="<?php echo e(route('gallery')); ?>">Gallery</a>
             </div>
 
             <div class="footer-contact">
@@ -951,13 +935,11 @@
         </div>
     </footer>
 
-    {{-- =========================================================
-         SCRIPTS
-         ========================================================= --}}
+    
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    {{-- Event details modal (dynamic) --}}
-    @include('event-details-js')
+    
+    <?php echo $__env->make('event-details-js', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <script>
         $(function () {
@@ -1761,7 +1743,7 @@
         };
     </script>
 
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 
-</html>
+</html><?php /**PATH D:\laragon\www\run-event\resources\views/master.blade.php ENDPATH**/ ?>
