@@ -10,6 +10,7 @@ use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RegistrationConfirmationMail extends Mailable implements ShouldQueue
 {
@@ -26,7 +27,7 @@ class RegistrationConfirmationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Registration Received — #' . $this->registration->id,
+            subject: 'Registration Received - #' . $this->registration->id,
             replyTo: [
                 new Address(
                     config('mail.from.address'),
@@ -39,11 +40,22 @@ class RegistrationConfirmationMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.registration-confirmation',
+            text: 'emails.registration-confirmation-text',
             with: [
                 'registration' => $this->registration,
                 'event'        => $this->registration->event,
             ],
         );
+    }
+
+    /**
+     * Queue job permanently failed — log it.
+     */
+    public function failed(\Throwable $e): void
+    {
+        Log::error('RegistrationConfirmationMail permanently failed', [
+            'registration_id' => $this->registration->id,
+            'error'           => $e->getMessage(),
+        ]);
     }
 }

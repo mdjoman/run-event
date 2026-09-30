@@ -39,7 +39,7 @@ class NewRegistrationAdminMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.new-registration-admin',
+            text: 'emails.new-registration-admin-text',
             with: [
                 'registration' => $this->registration,
                 'event'        => $this->registration->event,

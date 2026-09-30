@@ -8,6 +8,7 @@ use App\Models\Registration;
 use App\Models\User;
 use App\Mail\NewRegistrationAdminMail;
 use App\Mail\RegistrationConfirmationMail;
+use App\Mail\RegistrationRejectedMail;
 use App\Mail\RegistrationApprovedMail;
 use App\Services\SmsService;
 use Carbon\Carbon;
@@ -296,6 +297,20 @@ class RegistrationController extends Controller
             }
         }
 
+        // ---------- REJECT EMAIL ----------
+        $shouldSendRejectionEmail = $isFirstRejection && !empty($registration->email);
+
+        if ($shouldSendRejectionEmail) {
+            try {
+                Mail::to($registration->email)
+                    ->queue(new RegistrationRejectedMail($registration));
+            } catch (\Throwable $e) {
+                Log::error('Rejection email queue failed: ' . $e->getMessage(), [
+                    'registration_id' => $registration->id,
+                ]);
+            }
+        }
+
         // ---------- APPROVAL SMS ----------
         $smsTo = null;
 
@@ -392,7 +407,7 @@ class RegistrationController extends Controller
                  . "Amount: BDT " . number_format($registration->amount) . "\n"
                  . "Status: Pending review\n\n"
                  . "We will notify you once it is approved.\n"
-                 . "- Run Burjowan Team";
+                 . "- Run BURJOWAN Team";
 
         $this->sendSmsSafe($sms, $to, $message, 'Customer SMS', $registration->id);
     }
@@ -414,7 +429,7 @@ class RegistrationController extends Controller
             return;
         }
 
-        $message = "[NEW REGISTRATION]\n\n"
+        $message = "NEW REGISTRATION REQUEST ALERT\n\n"
                  . "ID: #{$registration->id}\n"
                  . "Name: {$registration->first_name} {$registration->last_name}\n"
                  . "Event: {$event->title}\n"
@@ -484,7 +499,7 @@ class RegistrationController extends Controller
              . "Amount: BDT " . number_format($registration->amount) . "\n\n"
              . "Please collect your BIB and Race Kit before race day.\n\n"
              . "See you at the starting line!\n"
-             . "- Run Burjowan Team";
+             . "- Run BURJOWAN Team";
     }
 
     private function buildRejectionSmsText(Registration $registration, Event $event): string
@@ -498,7 +513,7 @@ class RegistrationController extends Controller
              . "for {$event->title} has been REJECTED.\n\n"
              . $reason
              . "Please contact the organizers for more details.\n"
-             . "- Run Burjowan Team";
+             . "- Run BURJOWAN Team";
     }
 
     /* =========================================================
