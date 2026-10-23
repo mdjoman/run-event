@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Blog; 
+use App\Models\Gallery;
+use App\Models\GalleryCategory;
 use Illuminate\Http\Request;
 
 class FrontendController extends Controller
@@ -44,50 +46,88 @@ class FrontendController extends Controller
 
     public function blog()
     {
-        $blogs = Blog::where('is_approved', 1)->latest()->paginate(6);
-        return view('blog', compact('blogs'));
+        $blogs = Blog::where('is_approved', 1)->latest()->paginate(4);
+        $recentPosts = Blog::where('is_approved', 1)->latest()->take(4)->get();
+
+        return view('blog', compact('blogs', 'recentPosts'));
     }
 
     public function storeBlog(Request $request)
     {
-        if ($request->passcode !== 'secret123') {
-            return back()->withErrors(['passcode' => 'Incorrect Passcode! Article not published.']);
-        }
-
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required',
+            'description' => 'required|string',
             'date' => 'required|date',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $imagePath = $request->file('image')->store('blog_images', 'public');
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('blogs', 'public');
+        }
 
         Blog::create([
             'title' => $request->title,
             'description' => $request->description,
             'date' => $request->date,
-            'comments_count' => $request->comments_count ?? 0,
             'image' => $imagePath,
             'is_approved' => 0,
         ]);
 
-        return back()->with('success', 'Article submitted successfully! Waiting for admin approval.');
+        return back()->with('success', 'Your article has been submitted successfully! It will be visible after admin approval.');
     }
 
+    public function gallery()
+    {
+        $galleries = Gallery::where('status', 1)->latest()->get();
+        $categories = GalleryCategory::all();
+
+        return view('gallery', compact('galleries', 'categories'));
+    }
+
+    public function storeGallery(Request $request)
+    {
+        $request->validate([
+            'category' => 'required|string',
+            'gallery_images' => 'required|array',
+            'gallery_images.*' => 'image|mimes:jpeg,png,jpg,webp|max:5120', 
+        ]);
+
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $image) {
+                $imagePath = $image->store('gallery', 'public');
+
+                Gallery::create([
+                    'category' => $request->category,
+                    'image' => $imagePath,
+                    'status' => 0,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Images uploaded successfully! They will be visible after admin approval.');
+    }
+
+    public function createGallery()
+    {
+        $categories = GalleryCategory::all();
+        return view('admin.gallery.create', compact('categories'));
+    }
     public function contact()
     {
         return view('contact');
     }
-    public function gallery()
+    public function form(Request $request)
     {
-        return view('gallery');
-    }
-    public function form()
-    {
-         $active_event = Event::where('event_date', '>=', now())
-        ->orderBy('event_date', 'asc')
-        ->first();
+        $eventId = $request->query('1');
+
+        $active_event = Event::where('event_date', '>=', now())
+            ->when($eventId, function ($query) use ($eventId) {
+                $query->where('id', $eventId);
+            })
+            ->orderBy('event_date', 'asc')
+            ->first();
+
         return view('form', compact('active_event'));
     }
 

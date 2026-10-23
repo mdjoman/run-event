@@ -252,7 +252,7 @@
             <p class="text-xs uppercase text-slate-500 font-semibold px-3 mb-2 tracking-wider">Main</p>
 
             <a href="{{ route('admin.dashboard') }}"
-               class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="fa-solid fa-gauge-high w-5"></i>
                 <span>Dashboard</span>
             </a>
@@ -260,13 +260,13 @@
             <p class="text-xs uppercase text-slate-500 font-semibold px-3 mt-5 mb-2 tracking-wider">Manage</p>
 
             <a href="{{ route('admin.events.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.events.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('admin.events.*') ? 'active' : '' }}">
                 <i class="fa-regular fa-calendar-check w-5"></i>
                 <span>Events</span>
             </a>
 
             <a href="{{ route('admin.registrations.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.registrations.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('admin.registrations.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-users w-5"></i>
                 <span>Registrations</span>
                 @if(isset($pendingCount) && $pendingCount > 0)
@@ -276,8 +276,38 @@
                 @endif
             </a>
 
+             <a href="{{ route('admin.sms.index') }}"
+            class="sidebar-link {{ request()->routeIs('admin.sms*') ? 'active' : '' }}">
+                <i class="fa-solid fa-users w-5"></i>
+                <span>SMS LOG</span>
+
+
+            </a>
+
+
+
+            <a href="{{ route('admin.blog.index') }}"
+            class="sidebar-link {{ request()->routeIs('admin.blog.*') ? 'active' : '' }}">
+                <i class="fa-regular fa-calendar-check w-5"></i>
+                <span>Blogs</span>
+            </a>
+
+            <!-- Gallery Menu -->
+            <a href="{{ route('admin.gallery.index') }}"
+            class="sidebar-link {{ request()->routeIs('admin.gallery.index') ? 'active' : '' }}">
+                <i class="fa-solid fa-images w-5"></i>
+                <span>Gallery</span>
+            </a>
+
+            <!-- Gallery Categories Menu (Added here) -->
+            <a href="{{ route('admin.gallery.category.index') }}"
+            class="sidebar-link pl-11 {{ request()->routeIs('admin.gallery.category.*') ? 'active' : '' }}">
+                <i class="fa-solid fa-folder-tree w-5 text-sm"></i>
+                <span>Categories</span>
+            </a>
+
             <a href="{{ route('admin.users.index') }}"
-               class="sidebar-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                 <i class="fa-solid fa-user-gear w-5"></i>
                 <span>Users</span>
             </a>

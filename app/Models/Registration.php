@@ -20,11 +20,37 @@ class Registration extends Model
         'bib_number',
         'blood_group',
         'whatsapp_number',     // ← add this
+        'attended',
+        'start_time',
+        'end_time',
+        'time_taken',
     ];
     protected $casts = [
         'dob' => 'date',
         'amount' => 'decimal:2',
+        'attended'   => 'boolean',
+        'start_time' => 'datetime:H:i',
+        'end_time'   => 'datetime:H:i',
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(function (Registration $reg) {
+            if ($reg->start_time && $reg->end_time) {
+                $start = \Carbon\Carbon::parse($reg->start_time);
+                $end   = \Carbon\Carbon::parse($reg->end_time);
+
+                if ($end->lessThan($start)) {
+                    $end->addDay(); // cross-midnight
+                }
+
+                $diff = $start->diff($end);
+                $reg->time_taken = sprintf('%02d:%02d:%02d', $diff->h, $diff->i, $diff->s);
+            } else {
+                $reg->time_taken = null;
+            }
+        });
+    }
 
     public function event()
     {

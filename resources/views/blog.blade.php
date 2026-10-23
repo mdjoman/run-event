@@ -211,7 +211,7 @@
     }
 
     .widget {
-        background: #fff;
+        background: #eff7e9;
         padding: 25px;
         border-radius: 12px;
         box-shadow: 0 4px 15px rgba(0,0,0,0.04);
@@ -491,129 +491,61 @@
         <main class="blog-content">
             <div class="flex flex-col" style="padding-bottom: 10px;">
                 <h2 class="text-[30px] font-bold text-[#7bb526] tracking-wider uppercase mb-1">LATEST BLOGS</h2>
-                {{-- <h2 class="section-title">Upcoming Running Events</h2> --}}
             </div>
+
             <div class="blog-grid">
-                <!-- Blog Card 1 -->
-                <article class="blog-card">
-                    <div class="blog-img-wrapper">
-                        <img src="{{asset('img/home1.jpg')}}" alt="Running Tips">
-                    </div>
-                    <div class="blog-details">
-                        <h2>10 Essential Running Tips for Beginners</h2>
-                        <p>Starting your running journey? Here are 10 simple and effective tips to help you run safer, stay motivated and achieve your goals.</p>
-                        <div class="blog-meta">
-                            <span><i class="fa-regular fa-calendar"></i> May 20, 2025</span>
-                            <span><i class="fa-regular fa-comment"></i> 3 Comments</span>
+                @foreach($blogs as $blog)
+                    <article class="blog-card cursor-pointer" onclick='openBlogModal(@json($blog))'>
+                        <div class="blog-img-wrapper">
+                            <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}">
                         </div>
-                        <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </article>
+                        <div class="blog-details">
+                            <h2>{{ $blog->title }}</h2>
+                            <p>{{ Str::limit($blog->description, 120) }}</p>
+                            <div class="blog-meta">
+                                <span><i class="fa-regular fa-calendar"></i> {{ \Carbon\Carbon::parse($blog->date ?? $blog->created_at)->format('M d, Y') }}</span>
+                                {{-- <span><i class="fa-regular fa-comment"></i> {{ $blog->comments_count ?? '0' }} Comments</span> --}}
+                                <span class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></span>
+                            </div>
 
-                <!-- Blog Card 2 -->
-                <article class="blog-card">
-                    <div class="blog-img-wrapper">
-                        <img src="{{asset('img/dhakarun.jpeg')}}" alt="Event Updates">
-                    </div>
-                    <div class="blog-details">
-                        <h2>Run Sirajganj 2025: A Journey of Unity and Fitness</h2>
-                        <p>Relive the excitement, energy and unforgettable moments from Run Sirajganj 2025. Thank you to everyone who made it special!</p>
-                        <div class="blog-meta">
-                            <span><i class="fa-regular fa-calendar"></i> Apr 15, 2025</span>
-                            <span><i class="fa-regular fa-comment"></i> 5 Comments</span>
                         </div>
-                        <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </article>
-
-                <!-- Blog Card 3 -->
-                <article class="blog-card">
-                    <div class="blog-img-wrapper">
-                        <img src="{{asset('img/ur1.jpeg')}}" alt="Health & Fitness">
-                    </div>
-                    <div class="blog-details">
-                        <h2>How Running Improves Your Mental Health</h2>
-                        <p>Running isn’t just good for your body — it’s also great for your mind. Discover how regular runs can reduce stress and boost your mood.</p>
-                        <div class="blog-meta">
-                            <span><i class="fa-regular fa-calendar"></i> Apr 03, 2025</span>
-                            <span><i class="fa-regular fa-comment"></i> 2 Comments</span>
-                        </div>
-                        <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </article>
-
-                <!-- Blog Card 4 -->
-                <article class="blog-card">
-                    <div class="blog-img-wrapper">
-                        <img src="{{asset('img/ur2.jpeg')}}" alt="Gear & Equipment">
-                    </div>
-                    <div class="blog-details">
-                        <h2>Choosing the Right Running Shoes for Your Needs</h2>
-                        <p>The right pair of running shoes can make a big difference. Learn how to choose the best shoes based on your running style and goals.</p>
-                        <div class="blog-meta">
-                            <span><i class="fa-regular fa-calendar"></i> Apr 18, 2025</span>
-                            <span><i class="fa-regular fa-comment"></i> 4 Comments</span>
-                        </div>
-                        <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </article>
-
-                <!-- Blog Card 5 -->
-                <article class="blog-card">
-                    <div class="blog-img-wrapper">
-                        <img src="{{asset('img/ur5.jpeg')}}" alt="Community">
-                    </div>
-                    <div class="blog-details">
-                        <h2>The Power of Running Communities</h2>
-                        <p>Running is better together! Find out how running communities like Run Burjowan bring people together, create friendships and build a healthier lifestyle.</p>
-                        <div class="blog-meta">
-                            <span><i class="fa-regular fa-calendar"></i> Mar 05, 2025</span>
-                            <span><i class="fa-regular fa-comment"></i> 1 Comment</span>
-                        </div>
-                        <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </article>
-
-                <!-- Blog Card 6 -->
-                <article class="blog-card">
-                    <div class="blog-img-wrapper">
-                        <img src="{{asset('img/ur4.jpeg')}}" alt="Event Updates">
-                    </div>
-                    <div class="blog-details">
-                        <h2>What to Expect in Our Next Event</h2>
-                        <p>Get ready for the next Run Burjowan event! Here’s a quick look at what you can expect, from the route to the activities and special highlights.</p>
-                        <div class="blog-meta">
-                            <span><i class="fa-regular fa-calendar"></i> Feb 20, 2025</span>
-                            <span><i class="fa-regular fa-comment"></i> 3 Comments</span>
-                        </div>
-                        <a href="#" class="read-more">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </article>
+                    </article>
+                @endforeach
             </div>
 
-            <!-- Pagination -->
             <div class="pagination">
-                <a href="#" class="page-btn"><i class="fa-solid fa-chevron-left"></i></a>
-                <a href="#" class="page-btn active">1</a>
-                <a href="#" class="page-btn">2</a>
-                <a href="#" class="page-btn">3</a>
-                <span class="dots">...</span>
-                <a href="#" class="page-btn">5</a>
-                <a href="#" class="page-btn"><i class="fa-solid fa-chevron-right"></i></a>
+                {{ $blogs->links() }}
             </div>
             <br>
         </main>
-
         <aside class="sidebar">
             <div class="widget search-widget">
                 <h3>Search Blog</h3>
-                <div class="search-box">
-                    <input type="text" placeholder="Search articles...">
+                <div class="search-box relative">
+                    <input type="text" id="blogSearchInput" placeholder="Search articles..." onkeyup="filterBlogs(this.value)" class="w-full">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </div>
             </div>
 
-            <div class="widget categories-widget">
+            <script>
+                function filterBlogs(keyword) {
+                    const query = keyword.toLowerCase().trim();
+                    const cards = document.querySelectorAll('.blog-card');
+
+                    cards.forEach(card => {
+                        const title = card.querySelector('h2').innerText.toLowerCase();
+                        const desc = card.querySelector('p').innerText.toLowerCase();
+
+                        if (title.includes(query) || desc.includes(query)) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                }
+            </script>
+
+            {{-- <div class="widget categories-widget">
                 <h3>Categories</h3>
                 <ul>
                     <li><a href="#"><span>All Posts</span> <span class="count active-count">24</span></a></li>
@@ -623,61 +555,58 @@
                     <li><a href="#"><span>Gear & Equipment</span> <span class="count">3</span></a></li>
                     <li><a href="#"><span>Community</span> <span class="count">2</span></a></li>
                 </ul>
-            </div>
-
-            <!-- Recent Posts Widget -->
-            <div class="widget recent-posts-widget">
-                <h3>Recent Posts</h3>
-                <div class="recent-post-item">
-                    <img src="{{asset('img/home1.jpg')}}" alt="Post">
-                    <div>
-                        <h4><a href="#">10 Essential Running Tips for Beginners</a></h4>
-                        <span><i class="fa-regular fa-calendar"></i> May 20, 2025</span>
-                    </div>
-                </div>
-                <div class="recent-post-item">
-                    <img src="{{asset('img/ur1.jpeg')}}" alt="Post">
-                    <div>
-                        <h4><a href="#">Run Sirajganj 2025: A Journey of Unity...</a></h4>
-                        <span><i class="fa-regular fa-calendar"></i> Apr 15, 2025</span>
-                    </div>
-                </div>
-                <div class="recent-post-item">
-                    <img src="{{asset('img/ur2.jpeg')}}" alt="Post">
-                    <div>
-                        <h4><a href="#">Choosing the Right Running Shoes...</a></h4>
-                        <span><i class="fa-regular fa-calendar"></i> Mar 18, 2025</span>
-                    </div>
-                </div>
-                <div class="recent-post-item">
-                    <img src="{{asset('img/ur3.jpeg')}}" alt="Post">
-                    <div>
-                        <h4><a href="#">How Running Improves Your Mental Health</a></h4>
-                        <span><i class="fa-regular fa-calendar"></i> Apr 02, 2025</span>
-                    </div>
-                </div>
-            </div>
-
+            </div> --}}
             <div class="widget story-banner">
                 <div class="story-content">
                     <h3>Have a story to share?</h3>
                     <p>Write for our blog and inspire the running community!</p>
-                    <a href="#" id="openModalBtn" class="btn-green">Submit Your Article <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#" id="openModalBtn" class="btn-green">Write Your Blog <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
+            <!-- Recent Posts Widget -->
+            <div class="widget recent-posts-widget">
+                <h3>Recent Posts</h3>
+                @php
+                    $recentBlogs = \App\Models\Blog::latest()->take(4)->get();
+                @endphp
+
+                @foreach($recentBlogs as $blog)
+                    <div class="recent-post-item" onclick='openBlogModal(@json($blog))'>
+                        <img src="{{ asset('storage/' . $blog->image) }}" alt="{{ $blog->title }}">
+                        <div>
+                            <h4><a href="#">{{ $blog->title }}</a></h4>
+                            <span><i class="fa-regular fa-calendar"></i> {{ \Carbon\Carbon::parse($blog->date ?? $blog->created_at)->format('M d, Y') }}</span>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
         </aside>
+        <br>
     </div>
     <!-- Submit Article Modal -->
-    <div id="articleModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99999; justify-content: center; align-items: center;">
+    <div id="successModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99999; justify-content: center; align-items: center;">
+        <div style="background: #ffffff; padding: 40px 30px; border-radius: 16px; width: 100%; max-width: 420px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); text-align: center;">
+            <div style="width: 70px; height: 70px; background: #e6f4ea; color: #137333; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 20px auto;">✓</div>
+            <h3 style="font-size: 22px; color: #021540; margin-bottom: 15px;">Success!</h3>
+            <p style="font-size: 15px; color: #555; line-height: 1.5; margin-bottom: 25px;">Your article has been submitted successfully! It will be visible after admin approval.</p>
+            <button type="button" id="closeSuccessModalBtn" style="padding: 12px 30px; background: #7bb526; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; width: 100%;">OK</button>
+        </div>
+    </div>
+
+    <div id="articleModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 99998; justify-content: center; align-items: center;">
         <div style="background: #f0f5f2; padding: 30px; border-radius: 12px; width: 100%; max-width: 500px; position: relative; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">
-            <span class="modal-close" id="closeModalBtn" style="position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #777;">&times;</span>
+            <span id="closeModalBtn" style="position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #777;">&times;</span>
             <h2 style="font-size: 20px; margin-bottom: 20px; color: #021540;">Submit Your Article</h2>
 
-            <form action="{{ route('blog.store') }}" method="POST" enctype="multipart/form-data">
+            <div id="formErrors" style="display: none; background: #f8d7da; color: #721c24; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 13px;">
+                <ul id="errorList" style="margin: 0; padding-left: 15px;"></ul>
+            </div>
+
+            <form id="ajaxBlogForm" enctype="multipart/form-data">
                 @csrf
                 <div style="margin-bottom: 15px;">
                     <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #444;">Article Title</label>
-                    <input type="text" name="title" required placeholder="Enter title..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                    <input type="text" name="title" required autocomplete="off" placeholder="Enter title..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
                 </div>
 
                 <div style="margin-bottom: 15px;">
@@ -695,40 +624,69 @@
                     <input type="file" name="image" accept="image/*" required style="width: 100%;">
                 </div>
 
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #444;">Passcode</label>
-                    <input type="password" name="passcode" required placeholder="Enter secret passcode..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
-                </div>
-
-                <button type="submit" style="width: 100%; padding: 12px; background: #7bb526; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Publish Article</button>
+                <button type="submit" id="submitBlogBtn" style="width: 100%; padding: 12px; background: #7bb526; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Publish Article</button>
             </form>
         </div>
     </div>
+
+    <div id="blogDetailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden relative max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-slate-800 text-lg" id="modalBlogTitle">Blog Title</h3>
+                <button type="button" onclick="closeBlogModal()" class="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-6 overflow-y-auto space-y-4">
+                <div id="modalBlogImgWrapper" class="w-full h-64 rounded-xl overflow-hidden hidden">
+                    <img id="modalBlogImg" src="" alt="" class="w-full h-full object-cover">
+                </div>
+                <p class="text-xs text-slate-400" id="modalBlogDate"></p>
+                <div class="text-slate-600 text-sm leading-relaxed whitespace-pre-line" id="modalBlogDesc"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const searchInput = document.querySelector('.search-box input');
-        if (searchInput) {
-            searchInput.addEventListener('keyup', (e) => {
-                const term = e.target.value.toLowerCase();
-                const blogCards = document.querySelectorAll('.blog-card');
+        function openBlogModal(blog) {
+            document.getElementById('modalBlogTitle').innerText = blog.title;
+            document.getElementById('modalBlogDesc').innerText = blog.description;
 
-                blogCards.forEach(card => {
-                    const title = card.querySelector('h2').innerText.toLowerCase();
-                    const desc = card.querySelector('p').innerText.toLowerCase();
+            const dateStr = blog.date || blog.created_at;
+            const formattedDate = dateStr ? new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+            document.getElementById('modalBlogDate').innerText = formattedDate;
 
-                    if (title.includes(term) || desc.includes(term)) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
+            const imgWrapper = document.getElementById('modalBlogImgWrapper');
+            const imgTag = document.getElementById('modalBlogImg');
+            if (blog.image) {
+                imgTag.src = "{{ asset('storage/') }}/" + blog.image;
+                imgWrapper.classList.remove('hidden');
+            } else {
+                imgWrapper.classList.add('hidden');
+            }
+
+            document.getElementById('blogDetailModal').classList.remove('hidden');
         }
-        /*=======================================================*/
-        // Modal Functionality
+
+        function closeBlogModal() {
+            document.getElementById('blogDetailModal').classList.add('hidden');
+        }
+
+        document.getElementById('blogDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeBlogModal();
+            }
+        });
+    </script>
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             const modal = document.getElementById('articleModal');
+            const successModal = document.getElementById('successModal');
             const submitBtn = document.querySelector('.btn-green');
             const closeBtn = document.getElementById('closeModalBtn');
+            const closeSuccessBtn = document.getElementById('closeSuccessModalBtn');
+            const blogForm = document.getElementById('ajaxBlogForm');
 
             if (submitBtn) {
                 submitBtn.addEventListener('click', function (e) {
@@ -743,11 +701,84 @@
                 });
             }
 
+            if (closeSuccessBtn) {
+                closeSuccessBtn.addEventListener('click', function () {
+                    successModal.style.display = 'none';
+                });
+            }
+
             window.addEventListener('click', function (e) {
                 if (e.target === modal) {
                     modal.style.display = 'none';
                 }
+                if (e.target === successModal) {
+                    successModal.style.display = 'none';
+                }
             });
+
+            if (blogForm) {
+                blogForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(blogForm);
+                    const submitButton = document.getElementById('submitBlogBtn');
+                    submitButton.disabled = true;
+                    submitButton.innerText = 'Submitting...';
+
+                    fetch("{{ route('blog.store') }}", {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json().catch(() => ({}));
+                        } else if (response.status === 422) {
+                            return response.json().then(data => { throw data; });
+                        } else {
+                            throw new Error('Something went wrong!');
+                        }
+                    })
+                    .then(data => {
+                        modal.style.display = 'none';
+                        blogForm.reset();
+                        submitButton.disabled = false;
+                        submitButton.innerText = 'Publish Article';
+
+                        const errorDiv = document.getElementById('formErrors');
+                        if (errorDiv) {
+                            errorDiv.style.display = 'none';
+                        }
+
+                        successModal.style.display = 'flex';
+                    })
+                    .catch(errorData => {
+                        submitButton.disabled = false;
+                        submitButton.innerText = 'Publish Article';
+
+                        const errorDiv = document.getElementById('formErrors');
+                        const errorList = document.getElementById('errorList');
+
+                        if (errorList) {
+                            errorList.innerHTML = '';
+
+                            if (errorData.errors) {
+                                Object.values(errorData.errors).forEach(messages => {
+                                    messages.forEach(msg => {
+                                        const li = document.createElement('li');
+                                        li.innerText = msg;
+                                        errorList.appendChild(li);
+                                    });
+                                });
+                                if (errorDiv) {
+                                    errorDiv.style.display = 'block';
+                                }
+                            }
+                        }
+                    });
+                });
+            }
         });
     </script>
 @endsection

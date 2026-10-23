@@ -59,6 +59,12 @@
                       hover:bg-slate-200 transition text-center">
                 <i class="fa-solid fa-rotate-left mr-1"></i> Reset
             </a>
+            <button type="button" onclick="exportRegistrations()"
+        class="flex-1 sm:flex-none px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-green-600
+               hover:from-green-600 hover:to-emerald-500 text-white rounded-lg text-sm font-semibold
+               transition shadow-md hover:shadow-lg">
+    <i class="fa-solid fa-file-excel mr-1"></i> Export Excel
+</button>
 
             @if(request('search') || request('status') || request('event_id'))
                 <div class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-blue-50 rounded-lg text-xs text-blue-700 font-medium">
@@ -75,159 +81,223 @@
 <div class="bg-white rounded-xl shadow-sm overflow-hidden card-glossy">
 
     {{-- ===== DESKTOP TABLE ===== --}}
-    <div class="hidden lg:block overflow-x-auto">
-        <table class="w-full text-sm">
-            <thead class="bg-slate-50 text-slate-600 uppercase text-xs">
-                <tr>
-                    <th class="px-5 py-3 text-left font-semibold">BIB</th>
-                    <th class="px-5 py-3 text-left font-semibold">Runner</th>
-                    <th class="px-5 py-3 text-left font-semibold">WhatsApp</th>
-                    <th class="px-5 py-3 text-left font-semibold">Event</th>
-                    <th class="px-5 py-3 text-left font-semibold">Category</th>
-                    <th class="px-5 py-3 text-left font-semibold">Amount</th>
-                    <th class="px-5 py-3 text-left font-semibold">Payment</th>
-                    <th class="px-5 py-3 text-left font-semibold">Status</th>
-                    <th class="px-5 py-3 text-right font-semibold">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-100">
-                @forelse($registrations as $reg)
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="px-5 py-3">
-                            @if($reg->bib_number)
-                                <span class="inline-block px-2 py-1 rounded-md bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 text-xs font-bold border border-green-100">
-                                    {{ $reg->bib_number }}
-                                </span>
-                            @else
-                                <span class="text-slate-400 text-xs">—</span>
-                            @endif
-                        </td>
+ {{-- ============ COMPACT CARD ROWS ============ --}}
+<div class="hidden lg:flex flex-col gap-2 p-3 bg-slate-50/50">
 
-                        <td class="px-5 py-3">
-                            <div class="font-semibold text-slate-800">{{ $reg->first_name }} {{ $reg->last_name }}</div>
-                            <div class="text-xs text-slate-500">
-                                <i class="fa-solid fa-phone text-[10px]"></i> {{ $reg->phone }}
-                            </div>
-                        </td>
+    @forelse($registrations as $reg)
 
-                        <td class="px-5 py-3">
-                            @php $wa = $reg->whatsapp_number ?? null; @endphp
-                            @if($wa)
-                                <a href="https://wa.me/{{ preg_replace('/[^\d]/', '', $wa) }}"
-                                   target="_blank"
-                                   class="inline-flex items-center gap-1 text-green-600 hover:text-green-700 font-semibold text-xs">
-                                    <i class="fa-brands fa-whatsapp"></i> {{ $wa }}
-                                </a>
-                            @else
-                                <span class="text-slate-400 text-xs">N/A</span>
-                            @endif
-                        </td>
+        @php
+            $exportRow = [
+                'id'          => $reg->id,
+                'bib'         => $reg->bib_number,
+                'first_name'  => $reg->first_name,
+                'last_name'   => $reg->last_name,
+                'phone'       => $reg->phone,
+                'whatsapp'    => $reg->whatsapp_number,
+                'email'       => $reg->email,
+                'gender'      => $reg->gender,
+                'blood_group' => $reg->blood_group,
+                'dob'         => $reg->dob?->format('d M Y'),
+                'nid'         => $reg->nid,
+                'event'       => $reg->event?->title,
+                'category'    => $reg->category,
+                'tshirt'      => $reg->tshirt_size,
+                'amount'      => $reg->amount,
+                'payment'     => $reg->payment_method,
+                'trx'         => $reg->trx_id,
+                'status'      => $reg->status,
+                'attended'    => $reg->attended ? 'Yes' : 'No',
+                'start_time'  => $reg->start_time ? \Carbon\Carbon::parse($reg->start_time)->format('h:i A') : '',
+                'end_time'    => $reg->end_time   ? \Carbon\Carbon::parse($reg->end_time)->format('h:i A')   : '',
+                'time_taken'  => $reg->time_taken,
+                'created'     => $reg->created_at->format('d M Y H:i'),
+            ];
 
-                        <td class="px-5 py-3 text-slate-700 max-w-[150px] truncate">{{ $reg->event?->title ?? '—' }}</td>
+            $statusColors = [
+                'pending'   => 'bg-yellow-100 text-yellow-700',
+                'approved'  => 'bg-green-100 text-green-700',
+                'rejected'  => 'bg-red-100 text-red-700',
+                'cancelled' => 'bg-slate-100 text-slate-700',
+            ];
 
-                        <td class="px-5 py-3">
-                            <span class="badge bg-blue-50 text-brandBlue">{{ $reg->category }}</span>
-                        </td>
+            $initials = strtoupper(
+                substr($reg->first_name ?? '', 0, 1) . substr($reg->last_name ?? '', 0, 1)
+            );
 
-                        <td class="px-5 py-3 font-semibold text-slate-800">BDT {{ number_format($reg->amount) }}</td>
+            $wa = $reg->whatsapp_number ?? null;
+        @endphp
 
-                        <td class="px-5 py-3">
-                            <div class="text-xs text-slate-600">{{ $reg->payment_method }}</div>
-                            <div class="text-[10px] text-slate-400 font-mono">{{ $reg->trx_id ?? '—' }}</div>
-                        </td>
+        <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition border border-slate-100
+                    px-3 py-2 flex items-center gap-3"
+             data-export='@json($exportRow)'>
 
-                        <td class="px-5 py-3">
-                            @php
-                                $colors = [
-                                    'pending'   => 'bg-yellow-100 text-yellow-700',
-                                    'approved'  => 'bg-green-100 text-green-700',
-                                    'rejected'  => 'bg-red-100 text-red-700',
-                                    'cancelled' => 'bg-slate-100 text-slate-700',
-                                ];
-                            @endphp
-                            <span class="badge {{ $colors[$reg->status] ?? '' }}">
-                                {{ ucfirst($reg->status) }}
-                            </span>
-                        </td>
+            {{-- ===== AVATAR + ID (fixed width) ===== --}}
+            <div class="flex items-center gap-2 w-32 flex-shrink-0">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brandPink to-purple-600
+                            flex items-center justify-center text-white font-bold text-[11px] shadow-sm flex-shrink-0">
+                    {{ $initials ?: '?' }}
+                </div>
+                <div class="min-w-0">
+                    <p class="text-[10px] font-bold text-slate-500 leading-none">#{{ $reg->id }}</p>
+                    @if($reg->bib_number)
+                        <p class="text-[10px] font-bold text-green-700 leading-none mt-1 truncate">
+                            {{ $reg->bib_number }}
+                        </p>
+                    @else
+                        <p class="text-[10px] text-slate-300 leading-none mt-1">—</p>
+                    @endif
+                </div>
+            </div>
 
-                        {{-- Actions (inline — কোনো partial নেই) --}}
-                        <td class="px-5 py-3">
-                            <div class="flex items-center justify-end gap-1.5">
+            {{-- ===== NAME + PHONE (flexible) ===== --}}
+            <div class="min-w-0 w-44 flex-shrink-0">
+                <p class="text-xs font-bold text-slate-800 truncate leading-tight">
+                    {{ $reg->first_name }} {{ $reg->last_name }}
+                </p>
+                <p class="text-[10px] text-slate-500 truncate leading-tight mt-0.5">
+                    <i class="fa-solid fa-phone text-[8px]"></i> {{ $reg->phone }}
+                </p>
+            </div>
 
-                                <button type="button"
-                                        class="notifyBtn w-8 h-8 flex items-center justify-center rounded-lg
-                                               bg-green-50 text-green-600 hover:bg-green-100 active:scale-95
-                                               transition flex-shrink-0"
-                                        title="Send WhatsApp"
-                                        data-mode="whatsapp"
-                                        data-name="{{ $reg->first_name }} {{ $reg->last_name }}"
-                                        data-phone="{{ $reg->whatsapp_number ?? $reg->phone }}"
-                                        data-event="{{ $reg->event?->title ?? 'Event' }}"
-                                        data-event-date="{{ $reg->event?->event_date ?? '' }}"
-                                        data-event-location="{{ $reg->event?->location ?? '' }}"
-                                        data-bib="{{ $reg->bib_number ?? 'N/A' }}"
-                                        data-category="{{ $reg->category }}">
-                                    <i class="fa-brands fa-whatsapp text-sm"></i>
-                                </button>
+            {{-- ===== EVENT + CATEGORY (flexible) ===== --}}
+            <div class="min-w-0 flex-1">
+                <p class="text-[11px] font-semibold text-slate-700 truncate leading-tight"
+                   title="{{ $reg->event?->title }}">
+                    {{ $reg->event?->title ?? '—' }}
+                </p>
+                <div class="flex items-center gap-1.5 mt-0.5">
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-50 text-brandBlue font-bold leading-none">
+                        {{ $reg->category }}
+                    </span>
+                    <span class="text-[9px] text-slate-400 truncate">
+                        T-{{ $reg->tshirt_size ?? '—' }}
+                    </span>
+                </div>
+            </div>
 
-                                <button type="button"
-                                        class="notifyBtn w-8 h-8 flex items-center justify-center rounded-lg
-                                               bg-sky-50 text-sky-600 hover:bg-sky-100 active:scale-95
-                                               transition flex-shrink-0"
-                                        title="Send SMS"
-                                        data-mode="sms"
-                                        data-name="{{ $reg->first_name }} {{ $reg->last_name }}"
-                                        data-phone="{{ $reg->whatsapp_number ?? $reg->phone }}"
-                                        data-event="{{ $reg->event?->title ?? 'Event' }}"
-                                        data-event-date="{{ $reg->event?->event_date ?? '' }}"
-                                        data-event-location="{{ $reg->event?->location ?? '' }}"
-                                        data-bib="{{ $reg->bib_number ?? 'N/A' }}"
-                                        data-category="{{ $reg->category }}">
-                                    <i class="fa-solid fa-comment-sms text-sm"></i>
-                                </button>
+            {{-- ===== PAYMENT + TRX ===== --}}
+            <div class="w-28 flex-shrink-0 text-right">
+                <p class="text-xs font-bold text-slate-800 leading-tight">
+                    BDT {{ number_format($reg->amount) }}
+                </p>
+                <p class="text-[9px] text-slate-500 leading-tight mt-0.5 truncate" title="{{ $reg->trx_id }}">
+                    {{ $reg->payment_method }} · {{ $reg->trx_id ?? '—' }}
+                </p>
+            </div>
 
-                                <button type="button"
-                                        onclick='openStatusModal(@json($reg))'
-                                        class="w-8 h-8 flex items-center justify-center rounded-lg
-                                               bg-purple-50 text-purple-600 hover:bg-purple-100 active:scale-95
-                                               transition flex-shrink-0"
-                                        title="Update Status">
-                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
-                                </button>
+            {{-- ===== WHATSAPP (icon link) ===== --}}
+            <div class="w-20 flex-shrink-0">
+                @if($wa)
+                    <a href="https://wa.me/{{ preg_replace('/[^\d]/', '', $wa) }}"
+                       target="_blank"
+                       class="inline-flex items-center gap-1 text-[10px] text-green-600 hover:text-green-700 font-semibold truncate">
+                        <i class="fa-brands fa-whatsapp text-xs"></i>
+                        <span class="truncate">{{ \Illuminate\Support\Str::limit($wa, 10, '…') }}</span>
+                    </a>
+                @else
+                    <span class="text-[10px] text-slate-300">N/A</span>
+                @endif
+            </div>
 
-                                <a href="{{ route('admin.registrations.show', $reg) }}"
-                                   class="w-8 h-8 flex items-center justify-center rounded-lg
-                                          bg-blue-50 text-brandBlue hover:bg-blue-100 active:scale-95
-                                          transition flex-shrink-0"
-                                   title="View Details">
-                                    <i class="fa-solid fa-eye text-xs"></i>
-                                </a>
+            {{-- ===== RACE TIME (compact) ===== --}}
+            <div class="w-24 flex-shrink-0 text-center">
+                @if($reg->start_time || $reg->end_time)
+                    <p class="text-[9px] text-slate-500 font-mono leading-tight">
+                        {{ $reg->start_time ? \Carbon\Carbon::parse($reg->start_time)->format('H:i') : '—' }}
+                        →
+                        {{ $reg->end_time ? \Carbon\Carbon::parse($reg->end_time)->format('H:i') : '—' }}
+                    </p>
+                    @if($reg->time_taken)
+                        <p class="text-[10px] text-brandPink font-bold leading-tight mt-0.5">
+                            <i class="fa-solid fa-stopwatch text-[8px]"></i> {{ $reg->time_taken }}
+                        </p>
+                    @endif
+                @else
+                    <span class="text-[10px] text-slate-300">—</span>
+                @endif
+            </div>
 
-                                <form action="{{ route('admin.registrations.destroy', $reg) }}" method="POST"
-                                      onsubmit="return confirm('Delete this registration?')"
-                                      class="flex-shrink-0">
-                                    @csrf @method('DELETE')
-                                    <button class="w-8 h-8 flex items-center justify-center rounded-lg
-                                                   bg-red-50 text-red-600 hover:bg-red-100 active:scale-95 transition"
-                                            title="Delete">
-                                        <i class="fa-solid fa-trash text-xs"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="9" class="px-5 py-10 text-center text-slate-500">
-                            <i class="fa-regular fa-folder-open text-3xl mb-2 block text-slate-300"></i>
-                            <p class="text-sm font-medium">No registrations found.</p>
-                            <p class="text-xs mt-1">Try clearing the filters.</p>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+            {{-- ===== STATUS + ATTENDED ===== --}}
+            <div class="w-24 flex-shrink-0 flex flex-col items-start gap-1">
+                <span class="badge {{ $statusColors[$reg->status] ?? '' }} text-[9px] leading-none">
+                    {{ ucfirst($reg->status) }}
+                </span>
+                @if($reg->attended)
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold leading-none">
+                        <i class="fa-solid fa-check text-[8px]"></i> Yes
+                    </span>
+                @else
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-400 leading-none">No</span>
+                @endif
+            </div>
+
+            {{-- ===== ACTIONS ===== --}}
+            <div class="flex items-center gap-1 flex-shrink-0">
+                <button type="button"
+                        class="notifyBtn w-7 h-7 flex items-center justify-center rounded-md
+                               bg-green-50 text-green-600 hover:bg-green-100 active:scale-95 transition"
+                        title="Send WhatsApp"
+                        data-mode="whatsapp"
+                        data-name="{{ $reg->first_name }} {{ $reg->last_name }}"
+                        data-phone="{{ $reg->whatsapp_number ?? $reg->phone }}"
+                        data-event="{{ $reg->event?->title ?? 'Event' }}"
+                        data-event-date="{{ $reg->event?->event_date ?? '' }}"
+                        data-event-location="{{ $reg->event?->location ?? '' }}"
+                        data-bib="{{ $reg->bib_number ?? 'N/A' }}"
+                        data-category="{{ $reg->category }}">
+                    <i class="fa-brands fa-whatsapp text-xs"></i>
+                </button>
+
+                <button type="button"
+                        class="notifyBtn w-7 h-7 flex items-center justify-center rounded-md
+                               bg-sky-50 text-sky-600 hover:bg-sky-100 active:scale-95 transition"
+                        title="Send SMS"
+                        data-mode="sms"
+                        data-name="{{ $reg->first_name }} {{ $reg->last_name }}"
+                        data-phone="{{ $reg->whatsapp_number ?? $reg->phone }}"
+                        data-event="{{ $reg->event?->title ?? 'Event' }}"
+                        data-event-date="{{ $reg->event?->event_date ?? '' }}"
+                        data-event-location="{{ $reg->event?->location ?? '' }}"
+                        data-bib="{{ $reg->bib_number ?? 'N/A' }}"
+                        data-category="{{ $reg->category }}">
+                    <i class="fa-solid fa-comment-sms text-xs"></i>
+                </button>
+
+                <button type="button"
+                        onclick='openStatusModal(@json($reg))'
+                        class="w-7 h-7 flex items-center justify-center rounded-md
+                               bg-purple-50 text-purple-600 hover:bg-purple-100 active:scale-95 transition"
+                        title="Update Status">
+                    <i class="fa-solid fa-pen-to-square text-[10px]"></i>
+                </button>
+
+                <a href="{{ route('admin.registrations.show', $reg) }}"
+                   class="w-7 h-7 flex items-center justify-center rounded-md
+                          bg-blue-50 text-brandBlue hover:bg-blue-100 active:scale-95 transition"
+                   title="View">
+                    <i class="fa-solid fa-eye text-[10px]"></i>
+                </a>
+
+                <form action="{{ route('admin.registrations.destroy', $reg) }}" method="POST"
+                      onsubmit="return confirm('Delete this registration?')">
+                    @csrf @method('DELETE')
+                    <button class="w-7 h-7 flex items-center justify-center rounded-md
+                                   bg-red-50 text-red-600 hover:bg-red-100 active:scale-95 transition"
+                            title="Delete">
+                        <i class="fa-solid fa-trash text-[10px]"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    @empty
+        <div class="bg-white rounded-lg shadow-sm p-10 text-center text-slate-500">
+            <i class="fa-regular fa-folder-open text-4xl mb-3 block text-slate-300"></i>
+            <p class="text-sm font-medium mb-1">No registrations found</p>
+            <p class="text-xs">Try adjusting your filters.</p>
+        </div>
+    @endforelse
+</div>
 
     {{-- ===== MOBILE / TABLET CARD LIST ===== --}}
     <div class="lg:hidden divide-y divide-slate-100">
@@ -265,6 +335,9 @@
                             </div>
 
                             <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                                    <span class="text-[10px] px-2 py-0.5 text-green-700 font-bold ">
+                                        ID {{ $reg->id }}
+                                    </span>
                                 @if($reg->bib_number)
                                     <span class="text-[10px] px-2 py-0.5 rounded-md bg-green-50 text-green-700 font-bold border border-green-100">
                                         BIB {{ $reg->bib_number }}
@@ -298,6 +371,35 @@
                         <p class="text-[10px] text-purple-500 font-mono truncate">{{ $reg->trx_id ?? '—' }}</p>
                     </div>
                 </div>
+                @if($reg->attended || $reg->start_time || $reg->end_time)
+                <div class="rounded-lg bg-gradient-to-r from-emerald-50 to-teal-50 ring-1 ring-emerald-100 p-2.5 mb-3">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <p class="text-[10px] text-emerald-700 uppercase tracking-wider font-bold">
+                            <i class="fa-solid fa-stopwatch"></i> Race Timing
+                        </p>
+                        @if($reg->attended)
+                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500 text-white font-bold">
+                                ✓ Attended
+                            </span>
+                        @endif
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 text-[11px]">
+                        <div>
+                            <p class="text-[9px] text-slate-500 uppercase">Start</p>
+                            <p class="font-mono font-bold text-slate-800">{{ \Carbon\Carbon::parse($reg->start_time)->format('h:i A') }}
+</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] text-slate-500 uppercase">End</p>
+                            <p class="font-mono font-bold text-slate-800">{{ \Carbon\Carbon::parse($reg->end_time)->format('h:i A') }}</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] text-slate-500 uppercase">Total</p>
+                            <p class="font-mono font-bold text-brandPink">{{ $reg->time_taken ?? '—' }}</p>
+                        </div>
+                    </div>
+                </div>
+                @endif
 
                 {{-- WhatsApp quick link --}}
                 @php $wa = $reg->whatsapp_number ?? null; @endphp
@@ -443,6 +545,37 @@
                 </select>
             </div>
 
+            {{-- Attended --}}
+            <div>
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" name="attended" id="sm_attended" value="1"
+                        class="w-4 h-4 accent-brandPink cursor-pointer">
+                    <span class="text-sm font-semibold text-slate-700">
+                        <i class="fa-solid fa-check-circle text-emerald-600"></i> Attended the race
+                    </span>
+                </label>
+            </div>
+
+            {{-- Timing --}}
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">
+                        <i class="fa-solid fa-play text-emerald-600 text-xs"></i> Start Time
+                    </label>
+                    <input type="time" name="start_time" id="sm_start_time"
+                        class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm
+                                focus:ring-2 focus:ring-brandPink focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">
+                        <i class="fa-solid fa-flag-checkered text-rose-600 text-xs"></i> End Time
+                    </label>
+                    <input type="time" name="end_time" id="sm_end_time"
+                        class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm
+                                focus:ring-2 focus:ring-brandPink focus:outline-none">
+                </div>
+            </div>
+
             <div>
                 <label class="block text-sm font-semibold text-slate-700 mb-1">
                     Admin Note <span class="text-slate-400 font-normal text-xs">(optional)</span>
@@ -541,6 +674,88 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+function exportRegistrations() {
+    const rows = [];
+
+    document.querySelectorAll('tr[data-export]').forEach(tr => {
+        try {
+            rows.push(JSON.parse(tr.dataset.export));
+        } catch (e) {
+            console.warn('Bad row', tr, e);
+        }
+    });
+
+    if (!rows.length) {
+        alert('No data to export.');
+        return;
+    }
+
+    // Column order + friendly headers
+    const headers = [
+        ['id',           'ID'],
+        ['bib',          'BIB'],
+        ['first_name',   'First Name'],
+        ['last_name',    'Last Name'],
+        ['phone',        'Phone'],
+        ['whatsapp',     'WhatsApp'],
+        ['email',        'Email'],
+        ['gender',       'Gender'],
+        ['blood_group',  'Blood Group'],
+        ['dob',          'DOB'],
+        ['nid',          'NID'],
+        ['event',        'Event'],
+        ['category',     'Category'],
+        ['tshirt',       'T-Shirt'],
+        ['amount',       'Amount'],
+        ['payment',      'Payment Method'],
+        ['trx',          'Trx ID'],
+        ['status',       'Status'],
+        ['attended',     'Attended'],
+        ['start_time',   'Start Time'],
+        ['end_time',     'End Time'],
+        ['time_taken',   'Time Taken'],
+        ['created',      'Created At'],
+    ];
+
+    // Build AOA (array of arrays)
+    const aoa = [headers.map(h => h[1])];
+    rows.forEach(r => {
+        aoa.push(headers.map(h => {
+            const v = r[h[0]];
+            return v === null || v === undefined ? '' : v;
+        }));
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+
+    // Auto column width
+    ws['!cols'] = headers.map(h => {
+        let max = h[1].length;
+        rows.forEach(r => {
+            const v = String(r[h[0]] ?? '');
+            if (v.length > max) max = v.length;
+        });
+        return { wch: Math.min(max + 2, 40) };
+    });
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
+
+    const ts = new Date();
+    const fname =
+        'registrations_' +
+        ts.getFullYear() +
+        String(ts.getMonth() + 1).padStart(2, '0') +
+        String(ts.getDate()).padStart(2, '0') + '_' +
+        String(ts.getHours()).padStart(2, '0') +
+        String(ts.getMinutes()).padStart(2, '0') +
+        '.xlsx';
+
+    XLSX.writeFile(wb, fname);
+}
+</script>
 <script>
     // ================= STATUS MODAL =================
     function openStatusModal(reg) {
@@ -548,6 +763,9 @@
         document.getElementById('sm_event').textContent  = reg.event ? reg.event.title : '—';
         document.getElementById('sm_amount').textContent = 'BDT ' + Number(reg.amount).toLocaleString();
         document.getElementById('sm_note').value         = reg.admin_note ?? '';
+        document.getElementById('sm_attended').checked   = !!reg.attended;
+        document.getElementById('sm_start_time').value   = reg.start_time ? reg.start_time.substring(0, 5) : '';
+        document.getElementById('sm_end_time').value     = reg.end_time   ? reg.end_time.substring(0, 5)   : '';
 
         document.getElementById('statusForm').action =
             "{{ url('admin/registrations') }}/" + reg.id + "/status";

@@ -27,7 +27,7 @@ class RegistrationApprovedMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Registration Approved — BIB #' . $this->registration->bib_number,
+            subject: 'Registration Approved - BIB #' . $this->registration->bib_number,
             replyTo: [
                 new Address(
                     config('mail.from.address'),
@@ -40,7 +40,7 @@ class RegistrationApprovedMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            view: 'emails.registration-approved',
+            text: 'emails.registration-approved-text',
             with: [
                 'registration' => $this->registration,
                 'event'        => $this->registration->event,

@@ -74,6 +74,22 @@
             'rules'           => $active_event->rules        ?? [],
         ];
     }
+
+    $categoriesForJs = collect($active_event->categories ?? [])->map(function ($cat) use ($active_event) {
+        return [
+            'distance' => $cat['distance'] ?? '',
+            'name'     => $cat['name'] ?? '',
+            'fee'      => (float) ($cat['fee'] ?? $active_event->fee),
+        ];
+    })->values()->toArray();
+
+    if (empty($categoriesForJs)) {
+        $categoriesForJs = [[
+            'distance' => $active_event->category ?? '',
+            'name'     => $active_event->category ?? 'General',
+            'fee'      => (float) ($active_event->fee ?? 0),
+        ]];
+    }
 @endphp
 
 <section class="ev-hero-section" style="background-image: url('{{ asset('img/event.jpg') }}');">
@@ -205,15 +221,19 @@
                         <div class="ev-category-grid">
                             @php
                                 $categories = $active_event->categories ?? [];
+                                $first_cat_fee = !empty($categories)
+                                ? ($categories[0]['fee'] ?? $active_event->fee)
+                                : $active_event->fee;
                             @endphp
 
                             @forelse($categories as $index => $cat)
                                 @php
-                                    $isDisabled = $index > 2;
-                                    $isActive   = ($index === 1); // Second category active by default (mimics design)
+                                    $isDisabled = false;
+                                    $isActive   = ($index === 0);
                                 @endphp
-                                <button class="ev-cat-btn {{ $isDisabled ? 'ev-cat-disabled' : '' }} {{ $isActive ? 'ev-cat-active' : '' }}"
+                                <button type="button" class="ev-cat-btn {{ $isDisabled ? 'ev-cat-disabled' : '' }} {{ $isActive ? 'ev-cat-active' : '' }}"
                                         {{ $isDisabled ? 'disabled' : '' }}
+                                        data-index="{{ $index }}"
                                         data-distance="{{ $cat['distance'] ?? '' }}"
                                         data-fee="{{ $cat['fee'] ?? $active_event->fee }}">
                                     {{ $cat['distance'] ?? '' }}
@@ -221,7 +241,8 @@
                                     <span>BDT {{ number_format((float)($cat['fee'] ?? $active_event->fee)) }}</span>
                                 </button>
                             @empty
-                                <button class="ev-cat-btn ev-cat-active"
+                                <button type="button" class="ev-cat-btn ev-cat-active"
+                                        data-index="0"
                                         data-fee="{{ $active_event->fee }}">
                                     {{ $active_event->category }}
                                     <br>
@@ -231,38 +252,24 @@
                         </div>
                     </div>
 
-                    <div class="ev-widget-group">
-                        <label class="ev-label">Participant</label>
-                        <div class="ev-qty-picker">
-                            <button class="ev-qty-btn" type="button" onclick="decrementQty()">-</button>
-                            <input type="text" value="1" readonly class="ev-qty-input" id="participantQty">
-                            <button class="ev-qty-btn" type="button" onclick="incrementQty()">+</button>
-                        </div>
-                    </div>
-
-                    <div class="ev-total-box">
-                        <span>Total Amount</span>
-                        <h3 class="ev-total-price" id="totalPrice">
-                            BDT {{ number_format($active_event->fee) }}
-                        </h3>
-                    </div>
-
                     @if($active_event->status == 'active')
                         <div class="action-buttons" style="display: flex; gap: 10px;">
                             <a href="javascript:void(0)"
-                               class="btn-primary shareBtn"
-                               style="flex: 1; text-align: center; justify-content: center;"
-                               data-url="{{ route('form', $active_event->id) }}"
-                               data-title="{{ $active_event->title }}">
+                            class="btn-primary shareBtn"
+                            style="flex: 1; text-align: center; justify-content: center;"
+                            data-url="{{ route('form', $active_event->id) }}"
+                            data-title="{{ $active_event->title }}">
                                 Share <i class="fa-solid fa-share-nodes"></i>
                             </a>
 
                             <a href="#"
-                               class="btn-primary proceedRegistrationBtn"
-                               style="flex: 1; text-align: center; justify-content: center;"
-                               data-title="{{ $active_event->title }}"
-                               data-price="{{ $active_event->fee }}"
-                               data-event_id="{{ $active_event->id }}">
+                            class="btn-primary proceedRegistrationBtn"
+                            style="flex: 1; text-align: center; justify-content: center;"
+                            data-title="{{ $active_event->title }}"
+                            data-price="{{ $first_cat_fee }}"
+                            data-categories='@json($categoriesForJs)'
+                            data-selected-index="0"
+                            data-event_id="{{ $active_event->id }}">
                                 Register <i class="fa-solid fa-arrow-right"></i>
                             </a>
                         </div>

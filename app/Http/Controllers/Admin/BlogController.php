@@ -1,6 +1,5 @@
 <?php
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
@@ -10,22 +9,45 @@ class BlogController extends Controller
     public function index()
     {
         $blogs = Blog::latest()->paginate(10);
-        return view('admin.blogs.index', compact('blogs'));
+        return view('admin.blog.index', compact('blogs'));
     }
 
-    public function approve($id)
+    public function toggleStatus($id)
     {
         $blog = Blog::findOrFail($id);
-        $blog->update(['is_approved' => 1]);
 
-        return back()->with('success', 'Blog approved successfully and now visible on frontend!');
+        $blog->is_approved = !($blog->is_approved ?? false);
+        $blog->save();
+
+        return back()->with('success', 'Blog approval status updated successfully!');
     }
 
-    // Blog delete korar jonno
+    public function edit($id)
+    {
+        $blog = Blog::findOrFail($id);
+        return view('admin.blog.edit', compact('blog'));
+    }
+
+    public function update(Request $request, Blog $blog)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'date' => 'required|date',
+            'description' => 'required|string',
+        ]);
+
+        $blog->update([
+            'title' => $request->title,
+            'date' => $request->date,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('admin.blog.index')->with('success', 'Blog updated successfully!');
+    }
+
     public function destroy($id)
     {
         $blog = Blog::findOrFail($id);
-        // Image delete code (optional)
         $blog->delete();
 
         return back()->with('success', 'Blog deleted successfully.');
