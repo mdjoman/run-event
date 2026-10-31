@@ -155,6 +155,17 @@ public function index(Request $request)
 
         // ---------- 3. FETCH EVENT ----------
         $event = Event::findOrFail($validated['event_id']);
+        
+        // ✅ SLOT FULL CHECK
+        if ($event->registered >= $event->slots) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry, this event is full. No more registrations are allowed.'
+                ], 422);
+            }
+            return back()->withErrors(['error' => 'Sorry, this event is full. No more registrations are allowed.'])->withInput();
+        }
 
         // ---------- 4. CREATE ----------
         $registration = Registration::create([
