@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\DB;
 class RegistrationController extends Controller
 {
     /* =========================================================
@@ -294,18 +294,27 @@ public function index(Request $request)
         // ---------- BIB NUMBER (only on first approval) ----------
         if ($newStatus === 'approved' && empty($registration->bib_number)) {
             $code = substr(trim($registration->category), 0, 1);
-
-            $lastBib = Registration::where('event_id', $registration->event_id)
-                ->where('category', $registration->category)
-                ->whereNotNull('bib_number')
-                ->where('bib_number', 'like', $code . '%')
-                ->orderByDesc('id')
-                ->lockForUpdate()
-                ->value('bib_number');
-
-            $next = $lastBib ? (int) substr($lastBib, 1) + 1 : 1;
-
-            $data['bib_number'] = $code . str_pad($next, 3, '0', STR_PAD_LEFT);
+        
+            $bib = DB::transaction(function () use ($registration, $code) {
+                // Serialize concurrent approvals for the same event
+                Event::where('id', $registration->event_id)->lockForUpdate()->first();
+        
+                // Highest BIB NUMBER (not highest id)
+                $lastRow = Registration::where('event_id', $registration->event_id)
+                    ->where('category', $registration->category)
+                    ->whereNotNull('bib_number')
+                    ->orderByRaw('CAST(SUBSTRING(bib_number, 2) AS UNSIGNED) DESC')
+                    ->lockForUpdate()
+                    ->first();
+        
+                $lastBib = $lastRow?->bib_number;
+        
+                $next = $lastBib ? (int) substr($lastBib, 1) + 1 : 1;
+        
+                return $code . str_pad($next, 3, '0', STR_PAD_LEFT);
+            });
+        
+            $data['bib_number'] = $bib;
             $bibJustGenerated = true;
         }
 
